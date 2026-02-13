@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/USS/main%20menu.uss?fileID=7433441132597879392&amp;guid=0bc041f9531c6b046b460760c2a027b5&amp;type=3#main menu"/>
+    <ui:VisualElement name="AboutPanel" class="panel" style="flex-grow: 1;">
+        <ui:Button text="Back" name="BackButton" style="align-self: flex-start; width: auto; max-width: none; min-width: 100px;"/>
+        <ui:ScrollView name="InfoContainer" class="menu" style="height: 300px; max-height: 300px; flex-direction: column; flex-wrap: nowrap; align-content: auto;">
+            <ui:GroupBox name="AboutBox" class="group">
+                <ui:Label text="About the Game&#10;" name="AboutHeader" class="text" style="-unity-text-align: middle-center;"/>
+                <ui:Label text="This game starts off with you receiving bare land of which you will have to develop by earning artifacts that represent different parts of the city that need to be taken care of. You will navigate thrugh a maze, unlocking treasure chests and answering questions on how to build a sustainable city, seeing if we can trust you to be the leader of these not so happy citizens!&#10;" name="AboutLabel" style="flex-wrap: wrap; flex-direction: column; overflow: visible; width: auto; justify-content: flex-start; align-self: stretch; white-space: normal;"/>
+            </ui:GroupBox>
+            <ui:GroupBox name="HowToBox" class="group">
+                <ui:Label text="How to Play" name="HowToHeader" class="text"/>
+                <ui:Label text="1. Login or create an account if you don&apos;t have one&#10;2. Select your character to play with.&#10;3. Watch your world unfold and start (or keep) developing it&#10;4. Find city artifacts while navigating the maze or find treasure chests to answer questions.&#10;5. You can view your city at any point in time." name="HowToLabel" triple-click-selects-line="false" style="flex-wrap: wrap; white-space: normal;"/>
+            </ui:GroupBox>
+        </ui:ScrollView>
+    </ui:VisualElement>
+</ui:UXML>

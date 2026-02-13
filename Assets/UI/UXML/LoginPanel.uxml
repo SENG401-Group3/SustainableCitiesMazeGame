@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/USS/main%20menu.uss?fileID=7433441132597879392&amp;guid=0bc041f9531c6b046b460760c2a027b5&amp;type=3#main menu"/>
+    <ui:VisualElement name="Panel" class="panel" style="flex-grow: 1; visibility: visible;">
+        <ui:Label text="Login&#10;" name="LoginLabel" class="text" style="color: rgb(255, 228, 181);"/>
+        <ui:VisualElement name="Form" class="menu" style="flex-grow: 1;">
+            <ui:TextField label="username:" placeholder-text="Enter username" name="UsernameField" multiline="true" class="unity-text-field__input field" style="align-self: center;"/>
+            <ui:TextField label="password:" placeholder-text="Enter password" name="PasswordField" password="true" multiline="true" class="field" style="align-self: center;"/>
+            <ui:Toggle label="Show Password" name="ShowPasswordToggle" toggle-on-label-click="false" class="field" style="width: auto; max-width: none; align-self: stretch; font-size: 10px;"/>
+            <ui:VisualElement name="ButtonBar" style="flex-grow: 1; flex-direction: row; justify-content: center;">
+                <ui:Button text="Back to Home" name="BackButton"/>
+                <ui:Button text="Log back in" name="LoginButton"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:Label text="Logged in successfully!" name="SuccessStatement" triple-click-selects-line="false" style="font-size: 10px; align-content: flex-start; align-self: center; color: rgb(255, 228, 181); visibility: hidden;"/>
+    </ui:VisualElement>
+</ui:UXML>
