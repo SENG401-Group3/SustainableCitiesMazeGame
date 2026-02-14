@@ -10,10 +10,10 @@
 }
 
 .menu {
-    width: 300px;
+    width: auto;
     height: auto;
     align-items: stretch;
-    max-height: 200px;
+    max-height: none;
     background-color: rgba(255, 0, 89, 0);
     border-left-color: rgb(0, 0, 0);
     border-right-color: rgb(0, 0, 0);
@@ -27,6 +27,8 @@
     border-top-right-radius: 25px;
     border-bottom-right-radius: 25px;
     border-bottom-left-radius: 25px;
+    aspect-ratio: auto;
+    justify-content: center;
 }
 
 .unity-button {
@@ -99,8 +101,6 @@
     -unity-font-style: bold;
     font-size: 12px;
 }
-
-
 
 .group {
     flex-wrap: nowrap;

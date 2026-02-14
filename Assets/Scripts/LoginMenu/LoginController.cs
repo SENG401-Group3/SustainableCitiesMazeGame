@@ -8,20 +8,20 @@ public class LoginController : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private VisualElement root;
-    [SerializeField] private UIDocument welcomeDoc;
-    private VisualElement welcomePanel;
+    [SerializeField] private UIManager uiManager;
+    //private VisualElement welcomePanel;
     private TextField usernameInput;
     private TextField passwordInput;
 
     private Button registerButton;
     private Button backButton;
-    private Button createButton;
+    private Button loginButton;
 
     private void Awake()
     {
         // fetch the panel as soon as it is initialized
         root = GetComponent<UIDocument>().rootVisualElement;
-        welcomePanel = welcomeDoc.rootVisualElement;
+        //welcomePanel = welcomeDoc.rootVisualElement;
     }
 
     private void OnEnable()
@@ -29,18 +29,19 @@ public class LoginController : MonoBehaviour
         backButton = root.Q<Button>("BackButton");
         backButton.clicked += OnBackClicked;
 
-        createButton = root.Q<Button>("CreateAccountButton");
-        createButton.clicked += OnCreateAccountClicked;
+        loginButton = root.Q<Button>("LoginButton");
+        loginButton.clicked += OnLoginClicked;
     }
 
     private void OnBackClicked()
     {
-        root.style.display = DisplayStyle.None;
-        welcomePanel.style.display = DisplayStyle.Flex;
+        uiManager.ShowWelcome();
     }
 
-    private void OnCreateAccountClicked()
-    {}
+    private void OnLoginClicked()
+    {
+        root.style.display = DisplayStyle.None;
+    }
 
     public void CallRegister()
     {

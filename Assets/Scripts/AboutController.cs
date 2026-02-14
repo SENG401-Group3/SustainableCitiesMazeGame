@@ -4,14 +4,15 @@ using UnityEngine.UIElements;
 public class AboutController : MonoBehaviour
 {
     private VisualElement root;
-    [SerializeField] private UIDocument welcomeDoc;
-    private VisualElement welcomePanel;
+    //[SerializeField] private UIDocument welcomeDoc;
+    //private VisualElement welcomePanel;
+    [SerializeField] private UIManager uiManager;
     private Button backButton;
 
     private void Awake()
     {
         root = GetComponent<UIDocument>().rootVisualElement;
-        welcomePanel = welcomeDoc.rootVisualElement;
+        //welcomePanel = welcomeDoc.rootVisualElement;
     }
 
     private void OnEnable()
@@ -22,8 +23,7 @@ public class AboutController : MonoBehaviour
 
     private void GoBack()
     {
-        root.style.display = DisplayStyle.None;
-        welcomePanel.style.display = DisplayStyle.Flex;
+        uiManager.ShowWelcome();
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
