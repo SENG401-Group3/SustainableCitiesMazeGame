@@ -8,6 +8,7 @@ public class MainMenuController : MonoBehaviour
     [SerializeField] private UIManager uiManager;
     public Button loginButton;
     public Button signUpButton;
+    public Button guestButton;
     public Button aboutButton;
     private void Awake()
     {
@@ -23,6 +24,8 @@ public class MainMenuController : MonoBehaviour
         signUpButton = root.Q<Button>("SignUpButton");
         signUpButton.clicked += OnSignUpClicked;
 
+        guestButton = root.Q<Button>("GuestButton");
+        guestButton.clicked += OnGuestClicked;
 
         aboutButton = root.Q<Button>("AboutButton");
         aboutButton.clicked += OnAboutClicked;
@@ -36,6 +39,11 @@ public class MainMenuController : MonoBehaviour
     private void OnSignUpClicked()
     {
        uiManager.ShowSignup();
+    }
+
+    private void OnGuestClicked()
+    {
+         UnityEngine.SceneManagement.SceneManager.LoadScene(0);
     }
 
     private void OnAboutClicked()
