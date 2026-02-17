@@ -71,6 +71,7 @@ public class PlayerController : MonoBehaviour
         return;
       }
       float velocityScalar = Math.Abs((float)(-4*maxVel*curDist*(curDist-targetDistance)/(Math.Pow(targetDistance,2)))) + minVel;
+      Debug.Log(velocityScalar);
       velocity = velocityScalar*(mouseClickPosition - (Vector2)player.transform.position)/curDist;
 
       rb.linearVelocity = velocity;
@@ -98,6 +99,7 @@ public class PlayerController : MonoBehaviour
 
         // convert that to a point on the screen
         mousePos = Camera.main.ScreenToWorldPoint(mousePos);
+        Debug.Log(mousePos);
 
 
         targetPosition.x = mousePos.x;
@@ -129,5 +131,11 @@ public class PlayerController : MonoBehaviour
       else
         updateVelocity(pressedDirections);
     }
+
+    void OnCollisionEnter(Collision c)
+{
+    if (c.gameObject.CompareTag("Wall"))
+        Debug.Log("Hit wall");
+}
 
 }

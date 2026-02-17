@@ -541,10 +541,10 @@ CircleCollider2D:
     m_Bits: 1
   m_ContactCaptureLayers:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 0
   m_CallbackLayers:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 0
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
@@ -586,17 +586,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2532305017817465754, guid: 9d894f2e167dfa3418706e048e8eedc8, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4631306740067662719, guid: 9d894f2e167dfa3418706e048e8eedc8, type: 3}
       propertyPath: m_Name
       value: SustainabilityArtifact
       objectReference: {fileID: 0}
     - target: {fileID: 9127094619804657350, guid: 9d894f2e167dfa3418706e048e8eedc8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.74
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9127094619804657350, guid: 9d894f2e167dfa3418706e048e8eedc8, type: 3}
       propertyPath: m_LocalPosition.y

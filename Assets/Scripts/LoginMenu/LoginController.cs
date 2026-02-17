@@ -12,10 +12,8 @@ public class LoginController : MonoBehaviour
     //private VisualElement welcomePanel;
     private TextField usernameInput;
     private TextField passwordInput;
-    private Label successLabel;
-    private Toggle passwordToggle;
 
-    //private Button registerButton;
+    private Button registerButton;
     private Button backButton;
     private Button loginButton;
 
@@ -33,22 +31,6 @@ public class LoginController : MonoBehaviour
 
         loginButton = root.Q<Button>("LoginButton");
         loginButton.clicked += OnLoginClicked;
-
-        // Retrieve the input fields
-        usernameInput = root.Q<TextField>("UsernameField");
-        successLabel = root.Q<Label>("SuccessStatement");
-
-        passwordInput = root.Q<TextField>("PasswordField");
-        passwordToggle = root.Q<Toggle>("ShowPasswordToggle");
-
-        // Set password field to masked initially
-        passwordInput.isPasswordField = true;
-
-        // Adding listener to toggle
-        passwordToggle.RegisterValueChangedCallback(evt =>
-        {
-            passwordInput.isPasswordField = !evt.newValue; // true = masked, false = visible
-        });
     }
 
     private void OnBackClicked()
@@ -58,42 +40,29 @@ public class LoginController : MonoBehaviour
 
     private void OnLoginClicked()
     {
-        CallLogin();
+        root.style.display = DisplayStyle.None;
     }
 
-    public void CallLogin()
+    public void CallRegister()
     {
-        StartCoroutine(LoginPlayer());
+        StartCoroutine(Register());
     }
 
-    IEnumerator LoginPlayer()
+    IEnumerator Register()
     {
         WWWForm form = new WWWForm();
-        form.AddField("username", usernameInput.value.Trim());
-        form.AddField("password", passwordInput.value.Trim());
-
-        WWW www = new WWW("http://localhost/SQLConnect/login.php", form);
+        form.AddField("username", usernameInput.text);
+        form.AddField("password", passwordInput.text);
+        WWW www = new WWW("http://localhost/SQLConnect/register.php", form);
         yield return www;
-
-        string response = www.text.Trim();
-        Debug.Log("Server response: " + response);
-
-        if (response == "0")
+        if (www.text == "0")
         {
-            DBManager.username = usernameInput.value;
-
-            usernameInput.value = "";
-            passwordInput.value = "";
-            successLabel.style.visibility = Visibility.Visible;
-
-            yield return new WaitForSeconds(3f);
-            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+            Debug.Log("User created successfully");
+            UnityEngine.SceneManagement.SceneManager.LoadScene(0); // replace 0 with going to login or main menu scene
         }
         else
         {
-            successLabel.text = "Login failed!";
-            successLabel.style.visibility = Visibility.Visible;
-            Debug.Log("User login failed. Error #" + response);
+            Debug.Log("User creation failed. Error #" + www.text);
         }
     }
 
