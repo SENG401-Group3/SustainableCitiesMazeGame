@@ -1,5 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/TextMesh Pro/Examples & Extras/Scenes/28 - HDRP Shader Example.unity.meta
 guid: eea2b7206368b444e84fbec4ec32b64a
+========
+guid: 983e25052a3514631841e6c1b3edaf07
+folderAsset: yes
+>>>>>>>> 4ebfbbcae71ca93f6800a21f382d84e60aeab216:Assets/Scripts/QuestionPrompt.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

@@ -1,5 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/TextMesh Pro/Examples & Extras/Scenes/27 - Double Pass Shader Example.unity.meta
 guid: 3b38a6ba32b869f48812e595baf39746
+========
+guid: fad13cb5f73854f76a163fecc82d7688
+folderAsset: yes
+>>>>>>>> 4ebfbbcae71ca93f6800a21f382d84e60aeab216:Assets/Scripts/CitiesMenu.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
