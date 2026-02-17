@@ -414,6 +414,7 @@ GameObject:
   m_Component:
   - component: {fileID: 374299072}
   - component: {fileID: 374299071}
+  - component: {fileID: 374299073}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -473,6 +474,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &374299073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 374299070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25ee73e90362a5a4ca38ec8cdffd0fbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TreasurePlacer
+  treasureBoxPrefab: {fileID: 2167835021174534365, guid: 67f9a83af9a48734897cfbb5a2d28489, type: 3}
+  floorTag: Floor
+  heightOffset: 0
 --- !u!1 &424119716
 GameObject:
   m_ObjectHideFlags: 0
