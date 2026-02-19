@@ -7,11 +7,27 @@ public class CitySelectionMenu : MonoBehaviour
 {
     [Header("Menu Panels")]
     public GameObject mainMenuPanel;
-    public GameObject playMenuPanel;
     public GameObject tutorialPanel;
     public GameObject scoresPanel;
     public GameObject settingsPanel;
     public GameObject creditsPanel;
+    public GameObject messagePanel; // New panel for sustainability message
+
+    [Header("Background")]
+    public Image backgroundImage; // The background image of the main menu
+    public Sprite[] cityBackgrounds; // 5 sprites, one per city
+    private int currentCityIndex = 1; // 1 = least sustainable
+
+    [Header("Message")]
+    public TMPro.TextMeshProUGUI messageText;
+    public string[] sustainabilityMessages = new string[]
+    {
+        "The city has become a little more sustainable!",
+        "Recycling programs have started! The city is cleaner.",
+        "Solar panels are appearing! The city is greener.",
+        "The city is much more sustainable now!",
+        "Congratulations! You've reached the most sustainable city!"
+    };
 
     [Header("Scores Panel")]
     public Text[] cityScoreTexts;
@@ -22,9 +38,7 @@ public class CitySelectionMenu : MonoBehaviour
     public Button resetProgressButton;
 
     [Header("Tutorial Panel")]
-    public Text tutorialTitleText;
     public Text tutorialContentText;
-    public Image tutorialImage;
     public Button[] tutorialPageButtons;
     public Text pageNumberText;
 
@@ -55,7 +69,10 @@ public class CitySelectionMenu : MonoBehaviour
     void Start()
     {
         InitializeAudio();
+        LoadProgress();
+        UpdateBackground();
         ShowMainMenu();
+        CheckForMessage();
     }
 
     void InitializeAudio()
@@ -65,15 +82,55 @@ public class CitySelectionMenu : MonoBehaviour
             audioSource = gameObject.AddComponent<AudioSource>();
     }
 
+    void LoadProgress()
+    {
+        currentCityIndex = PlayerPrefs.GetInt("CurrentCity", 1);
+    }
+
+    void UpdateBackground()
+    {
+        if (backgroundImage != null && cityBackgrounds.Length >= currentCityIndex)
+        {
+            backgroundImage.sprite = cityBackgrounds[currentCityIndex - 1];
+        }
+    }
+
+    void CheckForMessage()
+    {
+        int cityJustUnlocked = PlayerPrefs.GetInt("ShowSustainabilityMessage", 0);
+        if (cityJustUnlocked > 0 && cityJustUnlocked <= sustainabilityMessages.Length)
+        {
+            ShowMessage(sustainabilityMessages[cityJustUnlocked - 1]);
+            PlayerPrefs.SetInt("ShowSustainabilityMessage", 0);
+            PlayerPrefs.Save();
+        }
+    }
+
+    void ShowMessage(string msg)
+    {
+        if (messagePanel != null && messageText != null)
+        {
+            messageText.text = msg;
+            messagePanel.SetActive(true);
+            Invoke("HideMessage", 3f);
+        }
+    }
+
+    void HideMessage()
+    {
+        if (messagePanel != null)
+            messagePanel.SetActive(false);
+    }
+
     public void ShowMainMenu()
     {
         PlayButtonSound();
         mainMenuPanel.SetActive(true);
-        if (playMenuPanel != null) playMenuPanel.SetActive(false);
         if (tutorialPanel != null) tutorialPanel.SetActive(false);
         if (scoresPanel != null) scoresPanel.SetActive(false);
         if (settingsPanel != null) settingsPanel.SetActive(false);
         if (creditsPanel != null) creditsPanel.SetActive(false);
+        if (messagePanel != null) messagePanel.SetActive(false);
     }
 
     public void ShowTutorial()
@@ -90,6 +147,7 @@ public class CitySelectionMenu : MonoBehaviour
         PlayButtonSound();
         mainMenuPanel.SetActive(false);
         scoresPanel.SetActive(true);
+        // Load and display scores here
     }
 
     public void ShowSettings()
@@ -143,7 +201,7 @@ public class CitySelectionMenu : MonoBehaviour
     public void StartGame()
     {
         PlayButtonSound();
-        SceneManager.LoadScene("City1_LeastSustainable");
+        SceneManager.LoadScene("City1_LeastSustainable"); // Same maze for all cities
     }
 
     public void QuitGame()
@@ -170,5 +228,12 @@ public class CitySelectionMenu : MonoBehaviour
         {
             audioSource.PlayOneShot(buttonHoverSound);
         }
+    }
+
+    public void ResetProgress()
+    {
+        PlayerPrefs.DeleteAll();
+        LoadProgress();
+        UpdateBackground();
     }
 }
