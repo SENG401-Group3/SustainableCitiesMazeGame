@@ -6,6 +6,7 @@
             <ui:Button text="Login" name="LoginButton"/>
             <ui:Button text="Sign Up" name="SignUpButton"/>
             <ui:Button text="Play as Guest" name="GuestButton" parse-escape-sequences="false"/>
+            <ui:Button text="Leaderboards" name="LeaderboardButton" parse-escape-sequences="false" emoji-fallback-support="false"/>
             <ui:Button text="About Game" name="AboutButton"/>
         </ui:VisualElement>
     </ui:VisualElement>

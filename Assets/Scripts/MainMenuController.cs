@@ -9,6 +9,7 @@ public class MainMenuController : MonoBehaviour
     public Button loginButton;
     public Button signUpButton;
     public Button guestButton;
+    public Button leaderboardButton;
     public Button aboutButton;
     private void Awake()
     {
@@ -27,6 +28,9 @@ public class MainMenuController : MonoBehaviour
         guestButton = root.Q<Button>("GuestButton");
         guestButton.clicked += OnGuestClicked;
 
+        leaderboardButton = root.Q<Button>("LeaderboardButton");
+        leaderboardButton.clicked += OnLeaderboardClicked;
+
         aboutButton = root.Q<Button>("AboutButton");
         aboutButton.clicked += OnAboutClicked;
     }
@@ -44,6 +48,11 @@ public class MainMenuController : MonoBehaviour
     private void OnGuestClicked()
     {
          UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+    }
+
+    private void OnLeaderboardClicked()
+    {
+        uiManager.ShowLeaderboard();
     }
 
     private void OnAboutClicked()
