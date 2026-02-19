@@ -76,22 +76,10 @@ public class PlayerController : MonoBehaviour
       rb.linearVelocity = velocity;
     }
   
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-      player = gameObject;
-      rb = GetComponent<Rigidbody2D>();
-        
-      velocity = new Vector2(0,0);
-      targetPosition = new Vector2((float)invalidPos, (float)invalidPos);
-      pressedDirections = new List<Directions>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
+    private void handleInputs(){
       pressedDirections.Clear();
 
+      // prioritize mouse movement
       if(Mouse.current.leftButton.wasPressedThisFrame){
         // read the mouse click point
         Vector3 mousePos = Mouse.current.position.ReadValue();
@@ -103,6 +91,8 @@ public class PlayerController : MonoBehaviour
         targetPosition.x = mousePos.x;
         targetPosition.y = mousePos.y;
         targetDistance = Vector2.Distance(targetPosition, (Vector2)player.transform.position);
+        
+      // allow for keyboard control
       }else{
 
         if(Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed){
@@ -119,6 +109,7 @@ public class PlayerController : MonoBehaviour
         }
       }
 
+      // update the velocity if there are keyboard inputs, decay it otherwise, and prioritize the mouse
       if(pressedDirections.Count > 0){
         updateVelocity(pressedDirections);
         targetPosition.x = (float)invalidPos;
@@ -128,6 +119,24 @@ public class PlayerController : MonoBehaviour
         updateVelocity(targetPosition);
       else
         updateVelocity(pressedDirections);
+    }
+
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+      player = gameObject;
+      rb = GetComponent<Rigidbody2D>();
+        
+      velocity = new Vector2(0,0);
+      targetPosition = new Vector2((float)invalidPos, (float)invalidPos);
+      pressedDirections = new List<Directions>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+      handleInputs();
     }
 
 }

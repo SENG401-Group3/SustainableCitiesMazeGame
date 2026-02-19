@@ -14,23 +14,26 @@ public class CameraController : MonoBehaviour
   public void SetCameraPosition(Vector2 position){
     Camera.main.transform.position = new Vector3(position.x, position.y, -100.0f);
   }
-  
+
   public void SetCameraSize(float size){
     Camera.main.orthographicSize = size;
   }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-      SetCameraPosition(new Vector2(0,0));
-    }
+  void trackCamera(){
+    SetCameraPosition(
+        new Vector2(player.transform.position.x,
+          player.transform.position.y));
+  }
 
-    // Update is called once per frame
-    void Update()
-    {
-      SetCameraPosition(
-          new Vector2(player.transform.position.x,
-            player.transform.position.y));
-        
-    }
+  // Start is called once before the first execution of Update after the MonoBehaviour is created
+  void Start()
+  {
+    SetCameraPosition(new Vector2(0,0));
+  }
+
+  // Update is called once per frame
+  void Update()
+  {
+    trackCamera();
+  }
 }
