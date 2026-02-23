@@ -6,15 +6,14 @@ using System.Collections.Generic;
 public class CityGameManager : MonoBehaviour
 {
     [Header("City Configuration")]
-    public int cityNumber = 1;
-    public string cityName = "Least Sustainable City";
+    public int cityNumber = 1; // Set in Inspector per scene (but now only one scene used)
 
     [Header("Game Objects")]
     public GameObject maze;
     public GameObject treasureBox;
     public GameObject questionPanel;
     public GameObject artifactCollectionPanel;
-    public GameObject completePanel;
+    public GameObject messagePanel; // New: for sustainability message
 
     [Header("UI Elements")]
     public Text questionText;
@@ -23,6 +22,7 @@ public class CityGameManager : MonoBehaviour
     public Text artifactsText;
     public Text timeText;
     public Text feedbackText;
+    public Text messageText; // New: for showing "city is more sustainable"
 
     [Header("Game Settings")]
     public int scorePerQuestion = 100;
@@ -51,6 +51,8 @@ public class CityGameManager : MonoBehaviour
     void Start()
     {
         currentTime = timeLimit;
+        // Load current city progress from PlayerPrefs
+        cityNumber = PlayerPrefs.GetInt("CurrentCity", 1);
         LoadDefaultQuestions();
         LoadPlayerProgress();
         UpdateUI();
@@ -254,6 +256,7 @@ public class CityGameManager : MonoBehaviour
     {
         hasCompleted = true;
 
+        // Save progress
         int totalScore = PlayerPrefs.GetInt("TotalScore", 0);
         PlayerPrefs.SetInt("TotalScore", totalScore + playerScore);
 
@@ -264,68 +267,21 @@ public class CityGameManager : MonoBehaviour
         PlayerPrefs.SetInt($"City{cityNumber}Completed", 1);
         PlayerPrefs.SetInt($"City{cityNumber}Artifacts", artifactsCollected);
 
+        // Unlock next city
         if (cityNumber < 5)
         {
+            PlayerPrefs.SetInt("CurrentCity", cityNumber + 1);
             PlayerPrefs.SetInt("LastCompletedCity", cityNumber);
+            PlayerPrefs.SetInt("ShowSustainabilityMessage", cityNumber + 1); // Flag for menu
+        }
+        else
+        {
+            PlayerPrefs.SetInt("CurrentCity", 5);
         }
 
         PlayerPrefs.Save();
 
-        if (completePanel != null)
-        {
-            completePanel.SetActive(true);
-            Text completeText = completePanel.GetComponentInChildren<Text>();
-            if (completeText != null)
-            {
-                if (cityNumber < 5)
-                {
-                    completeText.text = $"CITY COMPLETE!\n\nScore: {playerScore}\nArtifacts: {artifactsCollected}\n\nYou've unlocked the next city!";
-                }
-                else
-                {
-                    completeText.text = $"CONGRATULATIONS!\n\nYou completed all 5 cities!\n\nFinal Score: {PlayerPrefs.GetInt("TotalScore", 0)}";
-                }
-            }
-        }
-
-        Time.timeScale = 0;
-    }
-
-    public void GoToNextCity()
-    {
-        Time.timeScale = 1;
-        if (cityNumber < 5)
-        {
-            string nextScene = GetCitySceneName(cityNumber + 1);
-            SceneManager.LoadScene(nextScene);
-        }
-        else
-        {
-            SceneManager.LoadScene("CitySelection");
-        }
-    }
-
-    string GetCitySceneName(int cityNumber)
-    {
-        switch (cityNumber)
-        {
-            case 1: return "City1_LeastSustainable";
-            case 2: return "City2_SomewhatSustainable";
-            case 3: return "City3_ModeratelySustainable";
-            case 4: return "City4_VerySustainable";
-            case 5: return "City5_MostSustainable";
-            default: return "City1_LeastSustainable";
-        }
-    }
-
-    public void RestartCity()
-    {
-        Time.timeScale = 1;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
-
-    public void ReturnToCitySelection()
-    {
+        // Return to main menu with message
         Time.timeScale = 1;
         SceneManager.LoadScene("CitySelection");
     }
