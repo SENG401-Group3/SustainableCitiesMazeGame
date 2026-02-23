@@ -12,6 +12,8 @@ public class MazeController : MonoBehaviour
   [SerializeField]
   CameraController cam;
 
+  [SerializeField]
+  GameObject art;
 
   // variables and containers
   [SerializeField]
@@ -19,6 +21,9 @@ public class MazeController : MonoBehaviour
 
   [SerializeField]
   int mazeDimsY;
+
+  [SerializeField]
+  float camTilesZoom;
 
   Wall[,] mazeWalls = null;
   Wall[,] boundaries = new Wall[2,2];
@@ -40,7 +45,7 @@ public class MazeController : MonoBehaviour
   private void setCamera(){
     Vector2 dims = GetRoomSize();
 
-    float minValue = Mathf.Max(5.5f * (dims.x - 1), 5.5f * (dims.y - 1));
+    float minValue = Mathf.Max(camTilesZoom * (dims.x - 1), camTilesZoom * (dims.y - 1));
     cam.SetCameraSize(minValue * 0.75f);
   }
   
@@ -94,6 +99,20 @@ public class MazeController : MonoBehaviour
 
   }
 
+  private void spawnArtifact(){
+    // create the artifact and get the interactable component
+    GameObject artifact = Instantiate(art,
+        new Vector3(-100, -100, -100),
+        Quaternion.identity);
+    Interactable interactable = artifact.GetComponent<Artifact>();
+    
+    // get the maximum distance found in the maze
+    int maxDist = maze.getMaxDistance();
+
+    // spawn the artifact at a given depth
+    interactable.spawn(new Vector2Int((int)(maxDist * 0.8), maxDist), maze, GetRoomSize());
+
+  }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -113,6 +132,7 @@ public class MazeController : MonoBehaviour
       renderMaze(maze.generateMaze());
         
       // add the artifact to the maze
+      spawnArtifact();
       
       // populate the maze with other items
     }
