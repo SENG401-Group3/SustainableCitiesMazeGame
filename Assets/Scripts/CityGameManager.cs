@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class CityGameManager : MonoBehaviour
@@ -7,18 +6,13 @@ public class CityGameManager : MonoBehaviour
     [Header("City Configuration")]
     public int cityNumber = 1; // 1 = least sustainable, 5 = most
 
-    [Header("Game Objects")]
-    public GameObject maze;
-    public GameObject treasureBox;
-    public GameObject artifactCollectionPanel; // For the progress message
-
     [Header("UI Elements")]
     public Text scoreText;
     public Text artifactsText;
 
     [Header("Game Settings")]
-    public int scorePerQuestion = 100;      // Kept for future use
-    public int artifactReward = 1;           // Kept for future use
+    public int scorePerQuestion = 100;
+    public int artifactReward = 1;
 
     private int playerScore = 0;
     private int artifactsCollected = 0;
@@ -33,71 +27,22 @@ public class CityGameManager : MonoBehaviour
         UpdateUI();
     }
 
-    // Called by TreasureBox script when player touches the box
+    // Called by ArtifactPickup.cs when player touches the treasure box
     public void OnTreasureBoxFound()
     {
         if (!hasCompleted)
         {
-            // TEMPORARY: Just show a message and complete the city
-            ShowProgressMessage("You found the treasure! Moving to next city...");
-            Invoke("CompleteCity", 2f); // Wait 2 seconds, then complete
+            // Load the question scene
+            UnityEngine.SceneManagement.SceneManager.LoadScene("QuestionScene");
         }
     }
 
-    // Shows a temporary message (will be replaced by question panel later)
-    void ShowProgressMessage(string message)
+    // Called by QuestionManager.cs after all questions are answered correctly
+    public void AddScoreAndArtifacts()
     {
-        if (artifactCollectionPanel != null)
-        {
-            artifactCollectionPanel.SetActive(true);
-            Text artifactText = artifactCollectionPanel.GetComponentInChildren<Text>();
-            if (artifactText != null)
-            {
-                artifactText.text = message;
-            }
-        }
-    }
-
-    void CompleteCity()
-    {
-        hasCompleted = true;
-
-        // Award points (temporary – will be tied to questions later)
         playerScore += scorePerQuestion;
         artifactsCollected += artifactReward;
-
-        // Save total progress
-        int totalScore = PlayerPrefs.GetInt("TotalScore", 0);
-        PlayerPrefs.SetInt("TotalScore", totalScore + playerScore);
-
-        int totalArtifacts = PlayerPrefs.GetInt("ArtifactsCollected", 0);
-        PlayerPrefs.SetInt("ArtifactsCollected", totalArtifacts + artifactsCollected);
-
-        // Save per-city progress
-        PlayerPrefs.SetInt($"City{cityNumber}Score", playerScore);
-        PlayerPrefs.SetInt($"City{cityNumber}Completed", 1);
-        PlayerPrefs.SetInt($"City{cityNumber}Artifacts", artifactsCollected);
-
-        // Unlock next city (if not the last)
-        if (cityNumber < 5)
-        {
-            PlayerPrefs.SetInt("CurrentCity", cityNumber + 1);
-            PlayerPrefs.SetInt("LastCompletedCity", cityNumber);
-            PlayerPrefs.SetInt("ShowSustainabilityMessage", cityNumber + 1);
-        }
-        else
-        {
-            PlayerPrefs.SetInt("CurrentCity", 5);
-        }
-
-        PlayerPrefs.Save();
-
-        // Hide the message panel
-        if (artifactCollectionPanel != null)
-            artifactCollectionPanel.SetActive(false);
-
-        // Return to main menu
-        SceneManager.LoadScene("CitySelection");
+        UpdateUI();
     }
 
     void LoadPlayerProgress()
@@ -119,4 +64,9 @@ public class CityGameManager : MonoBehaviour
         if (artifactsText != null)
             artifactsText.text = $"Artifacts: {artifactsCollected}";
     }
+
+    // Public getters for other scripts
+    public int GetCurrentCity() { return cityNumber; }
+    public int GetPlayerScore() { return playerScore; }
+    public int GetArtifactsCollected() { return artifactsCollected; }
 }
