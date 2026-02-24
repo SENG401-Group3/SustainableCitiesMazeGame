@@ -25,8 +25,10 @@ public class Artifact : Interactable
             // Destroy the artifact after 1 second (after animation finishes)
             Destroy(gameObject, 1f);
 
-            // TODO: Later we'll add code to show question screen here
             Debug.Log("Artifact collected! Show question screen next.");
+            // load question scene
+            // TODO: find proper scene for the questions. Currently boots back to tutorial
+            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
         }
     }
 
