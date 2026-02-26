@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//using UnityEngine.Networking;
+using UnityEngine.Networking;
 using UnityEngine.UIElements;
+using System.Text.RegularExpressions;
 
 public class Registration : MonoBehaviour
 {
@@ -14,14 +15,12 @@ public class Registration : MonoBehaviour
     private TextField passwordInput;
     private Label successLabel;
     private Toggle passwordToggle;
-
-    //public Button submitButton;
     private Button backButton;
     private Button createButton;
 
     private void Awake()
     {
-        // fetch the panel as soon as it is initialized
+        // Fetch the panel as soon as it is initialized
         root = GetComponent<UIDocument>().rootVisualElement;
     }
 
@@ -61,7 +60,8 @@ public class Registration : MonoBehaviour
 
     private void OnCreateAccountClicked()
     {
-        CallRegister();
+        bool verified = VerifyInputs();
+        if (verified) CallRegister();
     }
 
     public void CallRegister()
@@ -76,31 +76,85 @@ public class Registration : MonoBehaviour
         form.AddField("lastname", lastnameInput.value.Trim());
         form.AddField("username", usernameInput.value.Trim());
         form.AddField("password", passwordInput.value.Trim());
-        WWW www = new WWW("http://localhost/SQLConnect/register.php", form);
-        
 
-        yield return www;
-        if (www.text == "0")
+        using (UnityWebRequest request = UnityWebRequest.Post("http://localhost/SQLConnect/register.php", form))
         {
-            Debug.Log("User created successfully");
-            successLabel.style.visibility = Visibility.Visible;
+            yield return request.SendWebRequest();
 
-            usernameInput.value = "";
-            passwordInput.value = "";
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                string response = request.downloadHandler.text;
 
-            yield return new WaitForSeconds(3f); //wait 3 seconds
-            UnityEngine.SceneManagement.SceneManager.LoadScene(0); // replace 0 with going to login or main menu scene
-        }
-        else
-        {
-            Debug.Log("User creation failed. Error #" + www.text);
-            successLabel.text = "Failed to create user";
-            successLabel.style.visibility = Visibility.Visible;
+                if (response == "0")
+                {
+                    Debug.Log("User created successfully");
+                    successLabel.text = "Account created successfully!";
+                    successLabel.style.visibility = Visibility.Visible;
+
+                    firstnameInput.value = "";
+                    lastnameInput.value = "";
+                    usernameInput.value = "";
+                    passwordInput.value = "";
+
+                    yield return new WaitForSeconds(2f);
+                    UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+                }
+                else
+                {
+                    Debug.Log("User creation failed. Error #" + response);
+                    successLabel.text = "Failed to create user";
+                    successLabel.style.visibility = Visibility.Visible;
+                }
+            }
+            else
+            {
+                Debug.Log("Network Error: " + request.error);
+                ShowError("Connection failed. Check server.");
+            }
         }
     }
 
-    public void VerifyInputs()
+    public bool VerifyInputs()
     {
-        // place constraints on input fields here, such as length, special characters, etc.
+        // Placing constraints on input fields, such as length, special characters, and more
+        string firstname = firstnameInput.value.Trim();
+        string lastname = lastnameInput.value.Trim();
+        string username = usernameInput.value.Trim();
+        string password = passwordInput.value.Trim();
+
+        if (string.IsNullOrEmpty(firstname) ||
+        string.IsNullOrEmpty(lastname) ||
+        string.IsNullOrEmpty(username) ||
+        string.IsNullOrEmpty(password))
+        {
+            ShowError("All fields must be filled!");
+            return false;
+        }
+
+        if (username.Length < 6 || password.Length < 8 || password.Length > 20)
+        {
+            ShowError("Your username should be at least 6 characters long and your password should be 8 - 20 charcters long.");
+            return false;
+        }
+
+        if (!Regex.IsMatch(username, @"^[a-zA-Z0-9_@!]+$"))
+        {
+            ShowError("Only letters, numbers, and a few special characters (_ @ !)");
+            return false;
+        }
+
+        if (!Regex.IsMatch(password, @"^(?=.*[A-Z])(?=.*[\W_]).+$"))
+        {
+            ShowError("Password must contain at least 1 uppercase letter and 1 special character");
+            return false;
+        }
+
+        return true;
+    }
+
+    public void ShowError(string message)
+    {
+        successLabel.text = message;
+        successLabel.style.visibility = Visibility.Visible;
     }
 }

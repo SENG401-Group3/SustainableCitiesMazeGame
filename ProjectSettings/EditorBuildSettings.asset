@@ -9,20 +9,8 @@ EditorBuildSettings:
     path: Assets/Scenes/CitySelection.unity
     guid: becc0f1a3e04d014f9be05107883217c
   - enabled: 1
-    path: Assets/Scenes/City1_LeastSustainable.unity
-    guid: f701653c1023ff245a34d9dfe8b1fbca
-  - enabled: 1
-    path: Assets/Scenes/City2_SomewhatSustainable.unity
-    guid: 26c4a65a507f1fa46a4b04aa70f12513
-  - enabled: 1
-    path: Assets/Scenes/City3_ModeratelySustainable.unity
-    guid: f84a92a9f890d6b45a186e3568182bdb
-  - enabled: 1
-    path: Assets/Scenes/City4_VerySustainable.unity
-    guid: fa53036e1a97e094f930faedfd4f3a2d
-  - enabled: 1
-    path: Assets/Scenes/City5_MostSustainable.unity
-    guid: 574b24ce19d43914d85b3354eed69740
+    path: Assets/Scenes/Maze/0.unity
+    guid: 99589be6ea3b2451d960a1516a51a1bb
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

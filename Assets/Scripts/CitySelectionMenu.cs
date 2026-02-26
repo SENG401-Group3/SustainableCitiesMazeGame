@@ -11,7 +11,7 @@ public class CitySelectionMenu : MonoBehaviour
     public GameObject scoresPanel;
     public GameObject settingsPanel;
     public GameObject creditsPanel;
-    public GameObject messagePanel; // New panel for sustainability message
+    public GameObject messagePanel;
 
     [Header("Background")]
     public Image backgroundImage; // The background image of the main menu
@@ -38,9 +38,8 @@ public class CitySelectionMenu : MonoBehaviour
     public Button resetProgressButton;
 
     [Header("Tutorial Panel")]
-    public Text tutorialContentText;
-    public Button[] tutorialPageButtons;
-    public Text pageNumberText;
+    public TMPro.TextMeshProUGUI tutorialContentText; // The main text area for the tutorial
+    public Button backButton; // Button to return to main menu
 
     [Header("Settings Panel")]
     public Slider musicVolumeSlider;
@@ -55,16 +54,7 @@ public class CitySelectionMenu : MonoBehaviour
     public AudioClip gameStartSound;
     private AudioSource audioSource;
 
-    private string[] tutorialPages = new string[]
-    {
-        "WELCOME TO SUSTAINABILITY CHALLENGE!\n\nLearn about UN Sustainability Goals while exploring cities and solving challenges.",
-        "GAMEPLAY:\n• Navigate through mazes\n• Find treasure boxes\n• Answer sustainability questions\n• Collect artifacts\n• Unlock more sustainable cities",
-        "CITIES:\nStart from the least sustainable city and work your way up to the most sustainable one. Each city teaches different sustainability concepts.",
-        "SCORING:\n• +100 points per correct answer\n• +1 artifact per correct answer\n• Complete cities to unlock the next level\n• Earn achievements for milestones",
-        "SUSTAINABILITY GOALS:\nLearn about clean energy, recycling, public transport, green buildings, and carbon neutrality!"
-    };
-
-    private int currentTutorialPage = 0;
+    private int currentTutorialPage = 0; // Kept for compatibility but not used
 
     void Start()
     {
@@ -133,14 +123,32 @@ public class CitySelectionMenu : MonoBehaviour
         if (messagePanel != null) messagePanel.SetActive(false);
     }
 
+    // ============== SIMPLE TUTORIAL (Option 1) ==============
     public void ShowTutorial()
     {
         PlayButtonSound();
         mainMenuPanel.SetActive(false);
         tutorialPanel.SetActive(true);
-        currentTutorialPage = 0;
-        UpdateTutorialPage();
+
+        // Set the tutorial text
+        if (tutorialContentText != null)
+        {
+            tutorialContentText.text = "WELCOME TO SUSTAINABILITY CHALLENGE!\n\n" +
+                "• Find the treasure box in the maze\n" +
+                "• Answer sustainability questions correctly\n" +
+                "• Collect artifacts to unlock more sustainable cities\n" +
+                "• Progress through all 5 cities to win!\n\n" +
+                "GOAL: Learn about UN Sustainability Goals while having fun!";
+        }
     }
+
+    public void CloseTutorial()
+    {
+        PlayButtonSound();
+        tutorialPanel.SetActive(false);
+        mainMenuPanel.SetActive(true);
+    }
+    // =========================================================
 
     public void ShowScores()
     {
@@ -164,44 +172,11 @@ public class CitySelectionMenu : MonoBehaviour
         creditsPanel.SetActive(true);
     }
 
-    public void NextTutorialPage()
-    {
-        if (currentTutorialPage < tutorialPages.Length - 1)
-        {
-            currentTutorialPage++;
-            UpdateTutorialPage();
-        }
-    }
-
-    public void PreviousTutorialPage()
-    {
-        if (currentTutorialPage > 0)
-        {
-            currentTutorialPage--;
-            UpdateTutorialPage();
-        }
-    }
-
-    void UpdateTutorialPage()
-    {
-        if (tutorialContentText != null)
-            tutorialContentText.text = tutorialPages[currentTutorialPage];
-
-        if (pageNumberText != null)
-            pageNumberText.text = $"{currentTutorialPage + 1}/{tutorialPages.Length}";
-
-        if (tutorialPageButtons != null && tutorialPageButtons.Length >= 2)
-        {
-            tutorialPageButtons[0].interactable = currentTutorialPage > 0;
-            tutorialPageButtons[1].interactable = currentTutorialPage < tutorialPages.Length - 1;
-        }
-    }
-
     // ============== PLAY BUTTON ==============
     public void StartGame()
     {
         PlayButtonSound();
-        SceneManager.LoadScene("City1_LeastSustainable"); // Same maze for all cities
+        SceneManager.LoadScene("0");
     }
 
     public void QuitGame()

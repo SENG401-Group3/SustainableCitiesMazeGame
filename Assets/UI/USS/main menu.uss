@@ -11,13 +11,14 @@
     align-self: auto;
     flex-grow: 0;
     flex-direction: column;
+    height: auto;
 }
 
 .menu {
     width: auto;
     height: auto;
     align-items: stretch;
-    max-height: none;
+    max-height: 60%;
     background-color: rgba(255, 0, 89, 0);
     border-left-color: rgb(0, 0, 0);
     border-right-color: rgb(0, 0, 0);
@@ -35,7 +36,9 @@
     justify-content: center;
     align-content: stretch;
     align-self: center;
-    min-width: 400px;
+    min-width: 90%;
+    max-width: none;
+    min-height: auto;
 }
 
 .unity-button {
@@ -55,13 +58,14 @@
     -unity-font-style: bold;
     -unity-text-align: middle-center;
     background-color: rgb(255, 228, 181);
-    font-size: 12px;
+    font-size: 250%;
     white-space: normal;
     max-width: none;
     justify-content: flex-start;
     align-self: center;
-    max-height: 70px;
-    min-width: 100px;
+    max-height: none;
+    min-width: 20%;
+    min-height: 60%;
 }
 
 .unity-button:hover {
@@ -76,8 +80,8 @@
 
 .text {
     -unity-font-style: bold;
-    font-size: 20px;
-    color: rgb(0, 0, 0);
+    font-size: 450%;
+    color: rgb(48, 45, 41);
     -unity-text-align: upper-center;
     -unity-text-outline-width: 0;
     letter-spacing: 2px;
@@ -91,9 +95,9 @@
 .field {
     flex-direction: row;
     align-content: stretch;
-    margin-top: 5px;
+    margin-top: 7px;
     margin-right: 2px;
-    margin-bottom: 5px;
+    margin-bottom: 7px;
     margin-left: 2px;
     background-color: rgba(0, 0, 0, 0);
     border-left-color: rgb(143, 0, 89);
@@ -107,7 +111,9 @@
     -unity-text-align: middle-left;
     color: rgb(26, 26, 26);
     -unity-font-style: bold;
-    font-size: 12px;
+    font-size: 200%;
+    align-self: auto;
+    min-height: 5%;
 }
 
 .group {
@@ -126,4 +132,13 @@
     border-right-color: rgb(139, 0, 139);
     border-top-color: rgb(139, 0, 139);
     border-bottom-color: rgb(139, 0, 139);
+}
+
+.button-bar {
+    flex-grow: 1;
+    flex-direction: row;
+    justify-content: center;
+    align-content: stretch;
+    min-height: 20%;
+    max-height: 20%;
 }

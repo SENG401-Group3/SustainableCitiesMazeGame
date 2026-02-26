@@ -1,8 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
+//using System.Collections.Generic;
 using UnityEngine;
-//using UnityEngine.UI;
 using UnityEngine.UIElements;
+using UnityEngine.Networking;
 
 public class LoginController : MonoBehaviour
 {
@@ -72,33 +72,47 @@ public class LoginController : MonoBehaviour
         form.AddField("username", usernameInput.value.Trim());
         form.AddField("password", passwordInput.value.Trim());
 
-        WWW www = new WWW("http://localhost/SQLConnect/login.php", form);
-        yield return www;
-
-        string response = www.text.Trim();
-        Debug.Log("Server response: " + response);
-
-        if (response == "0")
+        using (UnityWebRequest request = UnityWebRequest.Post("http://localhost/SQLConnect/login.php", form))
         {
-            DBManager.username = usernameInput.value;
+            yield return request.SendWebRequest();
 
-            usernameInput.value = "";
-            passwordInput.value = "";
-            successLabel.style.visibility = Visibility.Visible;
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                string response = request.downloadHandler.text.Trim();
+                Debug.Log("Server response: " + response);
 
-            yield return new WaitForSeconds(3f);
-            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
-        }
-        else
-        {
-            successLabel.text = "Login failed!";
-            successLabel.style.visibility = Visibility.Visible;
-            Debug.Log("User login failed. Error #" + response);
+                if (response == "0")
+                {
+                    DBManager.username = usernameInput.value;
+
+                    usernameInput.value = "";
+                    passwordInput.value = "";
+
+                    successLabel.text = "Login successful!";
+                    successLabel.style.visibility = Visibility.Visible;
+
+                    yield return new WaitForSeconds(3f);
+                    UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+                }
+                else
+                {
+                    successLabel.text = "Login failed!";
+                    successLabel.style.visibility = Visibility.Visible;
+                    Debug.Log("User login failed. Error #" + response);
+                }
+            }
+            else
+            {
+                Debug.Log("Network Error: " + request.error);
+                successLabel.text = "Connection error!";
+                successLabel.style.visibility = Visibility.Visible;
+            }
         }
     }
 
-    public void VerifyInputs()
+
+    /*public void VerifyInputs()
     {
         // place constraints on username and password here, such as length, special characters, etc.
-    }
+    }*/
 }
