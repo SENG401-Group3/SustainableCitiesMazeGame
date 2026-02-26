@@ -28,6 +28,7 @@ public class Artifact : Interactable
             Debug.Log("Artifact collected! Show question screen next.");
             // load question scene
             // TODO: find proper scene for the questions. Currently boots back to tutorial
+            // not sure how to find the correct number
             UnityEngine.SceneManagement.SceneManager.LoadScene(0);
         }
     }
