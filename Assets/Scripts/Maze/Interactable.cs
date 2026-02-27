@@ -24,17 +24,9 @@ public abstract class Interactable : MonoBehaviour
       tile = spawnableTile;
     }
 
-    public abstract void handleCollision();
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
+    void OnTriggerEnter2D(Collider2D other){
+      handleCollision(other);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public abstract void handleCollision(Collider2D other);
 }

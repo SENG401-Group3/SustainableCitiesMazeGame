@@ -48,7 +48,7 @@ public class MazeController : MonoBehaviour
     float minValue = Mathf.Max(camTilesZoom * (dims.x - 1), camTilesZoom * (dims.y - 1));
     cam.SetCameraSize(minValue * 0.75f);
   }
-  
+
   private void renderMaze(int[,] mazeGrid){
     Vector2 dims = GetRoomSize();
     for(int i = 0; i < mazeDimsX; i++){
@@ -105,7 +105,7 @@ public class MazeController : MonoBehaviour
         new Vector3(-100, -100, -100),
         Quaternion.identity);
     Interactable interactable = artifact.GetComponent<Artifact>();
-    
+
     // get the maximum distance found in the maze
     int maxDist = maze.getMaxDistance();
 
@@ -114,26 +114,26 @@ public class MazeController : MonoBehaviour
 
   }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-      setCamera();
+  // Start is called once before the first execution of Update after the MonoBehaviour is created
+  void Start()
+  {
+    setCamera();
 
-      // create the maze object
-        // I am just using a preexisting maze object
-      mazeWalls = new Wall[mazeDimsX, mazeDimsY];
+    // create the maze object
+    // I am just using a preexisting maze object
+    mazeWalls = new Wall[mazeDimsX, mazeDimsY];
 
-      // set the dimensions of the maze
-      maze.mazeDimsX = mazeDimsX;
-      maze.mazeDimsY = mazeDimsY;
+    // set the dimensions of the maze
+    maze.mazeDimsX = mazeDimsX;
+    maze.mazeDimsY = mazeDimsY;
 
-      // generate the maze
-      // render the maze
-      renderMaze(maze.generateMaze());
-        
-      // add the artifact to the maze
-      spawnArtifact();
-      
-      // populate the maze with other items
-    }
+    // generate the maze
+    // render the maze
+    renderMaze(maze.generateMaze());
+
+    // add the artifact to the maze
+    spawnArtifact();
+
+    // populate the maze with other items
+  }
 }
