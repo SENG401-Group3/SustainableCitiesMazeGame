@@ -12,6 +12,8 @@ public class MazeController : MonoBehaviour
   [SerializeField]
   CameraController cam;
 
+  [SerializeField]
+  GameObject art;
 
   // variables and containers
   [SerializeField]
@@ -19,6 +21,9 @@ public class MazeController : MonoBehaviour
 
   [SerializeField]
   int mazeDimsY;
+
+  [SerializeField]
+  float camTilesZoom;
 
   Wall[,] mazeWalls = null;
   Wall[,] boundaries = new Wall[2,2];
@@ -40,10 +45,10 @@ public class MazeController : MonoBehaviour
   private void setCamera(){
     Vector2 dims = GetRoomSize();
 
-    float minValue = Mathf.Max(5.5f * (dims.x - 1), 5.5f * (dims.y - 1));
+    float minValue = Mathf.Max(camTilesZoom * (dims.x - 1), camTilesZoom * (dims.y - 1));
     cam.SetCameraSize(minValue * 0.75f);
   }
-  
+
   private void renderMaze(int[,] mazeGrid){
     Vector2 dims = GetRoomSize();
     for(int i = 0; i < mazeDimsX; i++){
@@ -94,26 +99,41 @@ public class MazeController : MonoBehaviour
 
   }
 
+  private void spawnArtifact(){
+    // create the artifact and get the interactable component
+    GameObject artifact = Instantiate(art,
+        new Vector3(-100, -100, -100),
+        Quaternion.identity);
+    Interactable interactable = artifact.GetComponent<Artifact>();
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-      setCamera();
+    // get the maximum distance found in the maze
+    int maxDist = maze.getMaxDistance();
 
-      // create the maze object
-        // I am just using a preexisting maze object
-      mazeWalls = new Wall[mazeDimsX, mazeDimsY];
+    // spawn the artifact at a given depth
+    interactable.spawn(new Vector2Int((int)(maxDist * 0.8), maxDist), maze, GetRoomSize());
 
-      // set the dimensions of the maze
-      maze.mazeDimsX = mazeDimsX;
-      maze.mazeDimsY = mazeDimsY;
+  }
 
-      // generate the maze
-      // render the maze
-      renderMaze(maze.generateMaze());
-        
-      // add the artifact to the maze
-      
-      // populate the maze with other items
-    }
+  // Start is called once before the first execution of Update after the MonoBehaviour is created
+  void Start()
+  {
+    setCamera();
+
+    // create the maze object
+    // I am just using a preexisting maze object
+    mazeWalls = new Wall[mazeDimsX, mazeDimsY];
+
+    // set the dimensions of the maze
+    maze.mazeDimsX = mazeDimsX;
+    maze.mazeDimsY = mazeDimsY;
+
+    // generate the maze
+    // render the maze
+    renderMaze(maze.generateMaze());
+
+    // add the artifact to the maze
+    spawnArtifact();
+
+    // populate the maze with other items
+  }
 }

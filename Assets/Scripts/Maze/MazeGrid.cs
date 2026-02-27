@@ -41,7 +41,8 @@ public class MazeGrid : MonoBehaviour
   // visit a tile, change its visit count and update the visit count of its neightbours
   private void visitTile(int x, int y, int dist){
     // update the minimum distance to this tile
-    gridDistances[x,y] = dist;
+    if(gridDistances[x,y] == 0 || gridDistances[x,y] > dist)
+      gridDistances[x,y] = dist;
 
     // visit a tile, giving it a visit count of -1 for open path
     if(mazeGrid[x, y] >= 0)
@@ -108,6 +109,19 @@ public class MazeGrid : MonoBehaviour
     }
 
     return spawnableTiles;
+  }
+
+  public int getMaxDistance(){
+    int maxDist = 0;
+
+    for(int x = 0; x < mazeDimsX; x++){
+      for(int y = 0; y < mazeDimsY; y++){
+        if(gridDistances[x,y] > maxDist)
+          maxDist = gridDistances[x,y];
+      }
+    }
+
+    return maxDist;
   }
 
   // Start is called once before the first execution of Update after the MonoBehaviour is created
