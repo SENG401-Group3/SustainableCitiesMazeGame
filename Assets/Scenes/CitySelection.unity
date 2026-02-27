@@ -650,7 +650,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 374299071}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: CitySelectionMenu, Assembly-CSharp
         m_MethodName: ShowTutorial
         m_Mode: 1
@@ -900,7 +900,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 374299072}
-  - component: {fileID: 374299071}
+  - component: {fileID: 374299073}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -908,54 +908,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &374299071
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 374299070}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f802e66955086134c8ca17d073ccd3b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CitySelectionMenu
-  mainMenuPanel: {fileID: 735067477}
-  tutorialPanel: {fileID: 1726959062}
-  scoresPanel: {fileID: 167868289}
-  settingsPanel: {fileID: 1685024789}
-  creditsPanel: {fileID: 232515783}
-  messagePanel: {fileID: 191190201}
-  backgroundImage: {fileID: 1677691483}
-  cityBackgrounds:
-  - {fileID: 1414139173100871430, guid: 6d8a15880cdbbaa4dbf5e8301fb2166f, type: 3}
-  - {fileID: 4037621421494769097, guid: ab0476d5bda95ec469d37e5be2ab9fa8, type: 3}
-  - {fileID: -1426929989288815221, guid: 417f372f202069c4b9b50094ec21b4e9, type: 3}
-  - {fileID: -8747121057869537726, guid: db094e2fa904863479175ab9f734e169, type: 3}
-  - {fileID: 2232170439010504846, guid: 082d6b13eeaa58b4287261d57d1bedc4, type: 3}
-  messageText: {fileID: 1004628172}
-  sustainabilityMessages:
-  - The city has become a little more sustainable!
-  - Recycling programs have started! The city is cleaner.
-  - Solar panels are appearing! The city is greener.
-  - The city is much more sustainable now!
-  - Congratulations! You've reached the most sustainable city!
-  cityScoreTexts: []
-  cityStatusTexts: []
-  totalScoreText: {fileID: 0}
-  totalArtifactsText: {fileID: 0}
-  highestCityText: {fileID: 0}
-  resetProgressButton: {fileID: 0}
-  tutorialContentText: {fileID: 815365986}
-  backButton: {fileID: 0}
-  musicVolumeSlider: {fileID: 0}
-  sfxVolumeSlider: {fileID: 0}
-  fullscreenToggle: {fileID: 0}
-  resolutionDropdown: {fileID: 0}
-  qualityDropdown: {fileID: 0}
-  buttonHoverSound: {fileID: 0}
-  buttonClickSound: {fileID: 0}
-  gameStartSound: {fileID: 0}
 --- !u!4 &374299072
 Transform:
   m_ObjectHideFlags: 0
@@ -971,6 +923,32 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &374299073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 374299070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f802e66955086134c8ca17d073ccd3b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CitySelectionMenu
+  document: {fileID: 1094860892}
+  cityBackgrounds:
+  - {fileID: 1414139173100871430, guid: 6d8a15880cdbbaa4dbf5e8301fb2166f, type: 3}
+  - {fileID: 4037621421494769097, guid: ab0476d5bda95ec469d37e5be2ab9fa8, type: 3}
+  - {fileID: -1426929989288815221, guid: 417f372f202069c4b9b50094ec21b4e9, type: 3}
+  - {fileID: -8747121057869537726, guid: db094e2fa904863479175ab9f734e169, type: 3}
+  - {fileID: 2232170439010504846, guid: 082d6b13eeaa58b4287261d57d1bedc4, type: 3}
+  sustainabilityMessages:
+  - The city has become a little more sustainable!
+  - Recycling programs have started! The city is cleaner.
+  - Solar panels are appearing! The city is greener.
+  - The city is much more sustainable now!
+  - Congratulations! You've reached the most sustainable city!
+  buttonClickSound: {fileID: 0}
 --- !u!1 &424119716
 GameObject:
   m_ObjectHideFlags: 0
@@ -1255,6 +1233,7 @@ Transform:
   - {fileID: 1647433132}
   - {fileID: 1785733612}
   - {fileID: 1319321781}
+  - {fileID: 1677226098}
   m_Father: {fileID: 921801640}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &735067479
@@ -1553,60 +1532,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 815365984}
   m_CullTransparentMesh: 1
---- !u!1 &874519580
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 874519581}
-  - component: {fileID: 874519582}
-  m_Layer: 5
-  m_Name: PlayMenuPanel
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &874519581
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 874519580}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 921801640}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &874519582
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 874519580}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 19106, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.PanelInputConfiguration
-  m_Settings:
-    m_ProcessWorldSpaceInput: 1
-    m_InteractionLayers:
-      serializedVersion: 2
-      m_Bits: 51
-    m_MaxInteractionDistance: Infinity
-    m_DefaultEventCameraIsMainCamera: 1
-    m_EventCameras: []
-    m_PanelInputRedirection: 0
-    m_AutoCreatePanelComponents: 1
 --- !u!1 &921801639
 GameObject:
   m_ObjectHideFlags: 0
@@ -1619,13 +1544,14 @@ GameObject:
   - component: {fileID: 921801643}
   - component: {fileID: 921801642}
   - component: {fileID: 921801641}
+  - component: {fileID: 921801644}
   m_Layer: 5
   m_Name: MenuCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &921801640
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1639,7 +1565,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 735067478}
-  - {fileID: 874519581}
   - {fileID: 167868290}
   - {fileID: 1685024790}
   - {fileID: 232515785}
@@ -1715,6 +1640,31 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &921801644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 921801639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6adb21ea0067a774ab82b21520b123ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIScaler
+  referenceWidth: 1920
+  referenceHeight: 1080
+  buttons:
+  - {fileID: 1205119101}
+  - {fileID: 211688839}
+  - {fileID: 1252970211}
+  - {fileID: 1647433132}
+  - {fileID: 1785733612}
+  - {fileID: 1319321781}
+  titleText: {fileID: 1677226098}
+  minButtonWidth: 200
+  maxButtonWidth: 400
+  buttonHeightRatio: 0.05
 --- !u!1 &1004628171
 GameObject:
   m_ObjectHideFlags: 0
@@ -1852,6 +1802,61 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 500, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1094860891
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1094860893}
+  - component: {fileID: 1094860892}
+  m_Layer: 0
+  m_Name: UIDocument_Menu
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1094860892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1094860891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
+  m_PanelSettings: {fileID: 11400000, guid: 9ce55b0765a913548b2f712517e471e6, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: d7f2c34048f53da4b98b8f2511b52a48, type: 3}
+  m_SortingOrder: 0
+  m_Position: 0
+  m_WorldSpaceSizeMode: 1
+  m_WorldSpaceWidth: 1920
+  m_WorldSpaceHeight: 1080
+  m_PivotReferenceSize: 0
+  m_Pivot: 0
+  m_WorldSpaceCollider: {fileID: 0}
+--- !u!4 &1094860893
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1094860891}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 104.9697, y: 101.25051, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1205119100
 GameObject:
   m_ObjectHideFlags: 0
@@ -1935,7 +1940,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 374299071}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: CitySelectionMenu, Assembly-CSharp
         m_MethodName: StartGame
         m_Mode: 1
@@ -2068,7 +2073,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 374299071}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: CitySelectionMenu, Assembly-CSharp
         m_MethodName: ShowScores
         m_Mode: 1
@@ -2201,7 +2206,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 374299071}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: CitySelectionMenu, Assembly-CSharp
         m_MethodName: QuitGame
         m_Mode: 1
@@ -2471,7 +2476,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 374299071}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: CitySelectionMenu, Assembly-CSharp
         m_MethodName: CloseTutorial
         m_Mode: 1
@@ -2741,7 +2746,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 374299071}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: CitySelectionMenu, Assembly-CSharp
         m_MethodName: ShowSettings
         m_Mode: 1
@@ -2927,6 +2932,143 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1667688043}
+  m_CullTransparentMesh: 1
+--- !u!1 &1677226097
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1677226098}
+  - component: {fileID: 1677226100}
+  - component: {fileID: 1677226099}
+  m_Layer: 5
+  m_Name: TitleText
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1677226098
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1677226097}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 735067478}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 200, y: 50}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1677226099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1677226097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: 
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 48
+  m_fontSizeBase: 48
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_characterHorizontalScale: 1
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &1677226100
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1677226097}
   m_CullTransparentMesh: 1
 --- !u!1 &1677691481
 GameObject:
@@ -3196,7 +3338,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 374299071}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: CitySelectionMenu, Assembly-CSharp
         m_MethodName: ShowCredits
         m_Mode: 1
@@ -3256,3 +3398,4 @@ SceneRoots:
   - {fileID: 720169684}
   - {fileID: 374299072}
   - {fileID: 654695104}
+  - {fileID: 1094860893}
