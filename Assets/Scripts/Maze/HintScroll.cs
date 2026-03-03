@@ -2,13 +2,18 @@ using UnityEngine;
 
 public class HintScroll : Interactable
 {
+  [SerializeField]
+  MessageHandler messageHandler;
+
     public override void handleCollision(Collider2D other)
     {
       // update player prefs so we can display a hint in the question page
       PlayerPrefs.SetInt("HintScrollCollected", 1);
 
       // create a text popup that says "hint scroll collected!"
+      messageHandler.addMessage("Hint Scroll Collected!");
 
+      Destroy(gameObject, 0f);
       return;
     }
 
