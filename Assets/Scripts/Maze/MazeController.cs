@@ -14,6 +14,8 @@ public class MazeController : MonoBehaviour
 
   [SerializeField]
   GameObject art;
+  [SerializeField]
+  GameObject hintScroll;
 
   // variables and containers
   [SerializeField]
@@ -110,8 +112,24 @@ public class MazeController : MonoBehaviour
     int maxDist = maze.getMaxDistance();
 
     // spawn the artifact at a given depth
+    interactable.spawn(new Vector2Int((int)(maxDist * 0.5), (int)(maxDist * 0.8)), maze, GetRoomSize());
+  }
+
+  private void spawnHelperItems(){
+    // spawn the HintScroll
+    GameObject scroll = Instantiate(hintScroll,
+        new Vector3(-100, -100, -100),
+        Quaternion.identity);
+    Interactable interactable = scroll.GetComponent<HintScroll>();
+
+    // get the maximum distance found in the maze
+    int maxDist = maze.getMaxDistance();
+
+    // spawn the artifact at a given depth
     interactable.spawn(new Vector2Int((int)(maxDist * 0.8), maxDist), maze, GetRoomSize());
 
+
+    // spawn other items
   }
 
   // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -135,5 +153,6 @@ public class MazeController : MonoBehaviour
     spawnArtifact();
 
     // populate the maze with other items
+    spawnHelperItems();
   }
 }
