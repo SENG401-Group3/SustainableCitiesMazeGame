@@ -2,9 +2,6 @@ using UnityEngine;
 
 public class HintScroll : Interactable
 {
-  [SerializeField]
-  MessageHandler messageHandler;
-
     public override void handleCollision(Collider2D other)
     {
       // update player prefs so we can display a hint in the question page

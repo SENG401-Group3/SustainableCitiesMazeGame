@@ -5,12 +5,10 @@ public class HelperItem : Interactable
 {
   private static List<string> itemNames = new List<string>{ "Speed Boost" };
 
+  // c# does weird things with accessors so these attributes have to be public
   private int id;
 
-  [SerializeField]
-  private MessageHandler messageHandler;
-  [SerializeField]
-  private PlayerItemController itemController;
+  public PlayerItemController itemController {get; set;} = null;
 
   public void setId(int id){
     // set the id and sprite based on the item

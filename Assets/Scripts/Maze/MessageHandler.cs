@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 
-public class MessageHandler : MonoBehaviour
+public class MessageHandlerScript : MonoBehaviour
 {
   [SerializeField]
   private float messageLifetimeSeconds;
@@ -26,7 +26,7 @@ public class MessageHandler : MonoBehaviour
     baseAnchorPosition = new Vector2(-250, -225);
 
     // create a text object
-    CreateTextObject("");
+    CreateTextObject("test");
 
     // create a message queue
     messageQ = new Queue<string>();
