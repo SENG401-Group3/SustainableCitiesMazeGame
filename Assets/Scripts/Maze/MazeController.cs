@@ -19,11 +19,13 @@ public class MazeController : MonoBehaviour
   private GameObject hintScroll;
   [SerializeField]
   private GameObject helperItem;
+  [SerializeField]
+  private GameObject pitfall;
 
   // these just have to be passed from the scene into the objects since the objects
   // are generated at runtime
   [SerializeField]
-  private MessageHandlerScript messageHandler;
+  private MessageHandler messageHandler;
   [SerializeField]
   private PlayerItemController itemController;
 
@@ -164,6 +166,23 @@ public class MazeController : MonoBehaviour
 
     }
 
+    // spawn pitfalls
+    int numPitfalls = 50;
+    for(int i = 0; i < numPitfalls; i++){
+
+      // spawn the HintScroll
+      GameObject pfall = Instantiate(pitfall,
+          new Vector3(-100, -100, -100),
+          Quaternion.identity);
+      Pitfall pf = pfall.GetComponent<Pitfall>();
+      
+      // set the required attributes in the object
+      pf.setMessageHandler(messageHandler);
+
+      // spawn the artifact at a given depth
+      pf.spawn(new Vector2Int(0, maxDist), maze, GetRoomSize());
+
+    }
   }
 
   // Start is called once before the first execution of Update after the MonoBehaviour is created

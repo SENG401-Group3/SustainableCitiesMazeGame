@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 
-public class MessageHandlerScript : MonoBehaviour
+public class MessageHandler : MonoBehaviour
 {
   [SerializeField]
   private float messageLifetimeSeconds;
@@ -44,6 +44,7 @@ public class MessageHandlerScript : MonoBehaviour
     textComponent.text = textString;
     textComponent.fontSize = fontSize;
     textComponent.color = Color.white;
+    textComponent.textWrappingMode = TextWrappingModes.NoWrap;
 
     // Optional: Adjust RectTransform properties
     // TODO: keep text in bottom corner irrespective of screen size or message length

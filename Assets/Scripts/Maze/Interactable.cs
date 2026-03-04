@@ -9,8 +9,8 @@ public abstract class Interactable : MonoBehaviour
   private Vector2Int tile;
   private Vector2 offset;
   
-  protected MessageHandlerScript messageHandler = null;
-  public void setMessageHandler(MessageHandlerScript mh){
+  protected MessageHandler messageHandler = null;
+  public void setMessageHandler(MessageHandler mh){
     messageHandler = mh;
   }
 
