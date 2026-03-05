@@ -482,9 +482,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   timeslice: 0.1
-  maxVel: 50
+  maxVel: 5
   minVel: 1
-  acceleration: 5
+  acceleration: 0.5
   velDecay: 1.1
 --- !u!212 &1576454046
 SpriteRenderer:
