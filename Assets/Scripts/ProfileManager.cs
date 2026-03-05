@@ -39,7 +39,7 @@ public class ProfileManager : MonoBehaviour
 
     public void OnPlayClicked()
     {
-        SceneManager.LoadScene("0");
+        SceneManager.LoadScene("MazeScene"); //load the game scene on play button
     }
 
     public void OnEditClicked()
@@ -62,6 +62,7 @@ public class ProfileManager : MonoBehaviour
     {
         Debug.Log("Loading profile for: " + DBManager.username);
 
+        // ensures that the user is not null so it can fetch their data from the db
         if (!string.IsNullOrEmpty(DBManager.username))
         {
             StartCoroutine(GetUserData());
