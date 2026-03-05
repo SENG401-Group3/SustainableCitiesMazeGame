@@ -7,11 +7,14 @@ public class UIManager : MonoBehaviour
     [SerializeField] private UIDocument signupDoc;
     [SerializeField] private UIDocument loginDoc;
     [SerializeField] private UIDocument aboutDoc;
+    [SerializeField] private UIDocument profileDoc;
+    [SerializeField] private ProfileManager profileManager;
 
     private VisualElement welcome;
     private VisualElement signup;
     private VisualElement login;
     private VisualElement about;
+    private VisualElement profile;
 
     void Awake()
     {
@@ -19,6 +22,7 @@ public class UIManager : MonoBehaviour
         signup = signupDoc.rootVisualElement;
         login = loginDoc.rootVisualElement;
         about = aboutDoc.rootVisualElement;
+        profile = profileDoc.rootVisualElement;
     }
 
     void Start()
@@ -32,6 +36,7 @@ public class UIManager : MonoBehaviour
         signup.style.display = DisplayStyle.None;
         login.style.display = DisplayStyle.None;
         about.style.display = DisplayStyle.None;
+        profile.style.display = DisplayStyle.None;
     }
 
     public void ShowSignup()
@@ -40,6 +45,7 @@ public class UIManager : MonoBehaviour
         signup.style.display = DisplayStyle.Flex;
         login.style.display = DisplayStyle.None;
         about.style.display = DisplayStyle.None;
+        profile.style.display = DisplayStyle.None;
     }
 
     public void ShowLogin()
@@ -48,6 +54,7 @@ public class UIManager : MonoBehaviour
         signup.style.display = DisplayStyle.None;
         login.style.display = DisplayStyle.Flex;
         about.style.display = DisplayStyle.None;
+        profile.style.display = DisplayStyle.None;
     }
 
     public void ShowAbout()
@@ -56,5 +63,17 @@ public class UIManager : MonoBehaviour
         signup.style.display = DisplayStyle.None;
         login.style.display = DisplayStyle.None;
         about.style.display = DisplayStyle.Flex;
+        profile.style.display = DisplayStyle.None;
+    }
+
+    public void ShowProfile()
+    {
+        welcome.style.display = DisplayStyle.None;
+        signup.style.display = DisplayStyle.None;
+        login.style.display = DisplayStyle.None;
+        about.style.display = DisplayStyle.None;
+
+        profile.style.display = DisplayStyle.Flex;
+        profileManager.LoadProfile();
     }
 }
