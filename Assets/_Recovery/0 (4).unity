@@ -1652,19 +1652,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6adb21ea0067a774ab82b21520b123ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIScaler
-  referenceWidth: 1920
-  referenceHeight: 1080
-  buttons:
-  - {fileID: 1205119101}
-  - {fileID: 211688839}
-  - {fileID: 1252970211}
-  - {fileID: 1647433132}
-  - {fileID: 1785733612}
-  - {fileID: 1319321781}
-  titleText: {fileID: 1677226098}
-  minButtonWidth: 200
-  maxButtonWidth: 400
-  buttonHeightRatio: 0.05
 --- !u!1 &1004628171
 GameObject:
   m_ObjectHideFlags: 0

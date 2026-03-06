@@ -96,8 +96,9 @@ public class Registration : MonoBehaviour
                     usernameInput.value = "";
                     passwordInput.value = "";
 
-                    yield return new WaitForSeconds(2f);
-                    UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+                    yield return new WaitForSeconds(1f);
+                    UnityEngine.SceneManagement.SceneManager.LoadScene(0); //load city selection menu
+                    successLabel.text = "";
                 }
                 else
                 {

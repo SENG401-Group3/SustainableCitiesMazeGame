@@ -29,7 +29,7 @@ public class Artifact : Interactable
             // load question scene
             // TODO: find proper scene for the questions. Currently boots back to tutorial
             // not sure how to find the correct number
-            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+            UnityEngine.SceneManagement.SceneManager.LoadScene("QuestionScene");
         }
     }
 

@@ -1,68 +1,107 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
 using System.Collections.Generic;
+using System.Collections;
 
 public class CitySelectionMenu : MonoBehaviour
 {
-    [Header("Menu Panels")]
-    public GameObject mainMenuPanel;
-    public GameObject tutorialPanel;
-    public GameObject scoresPanel;
-    public GameObject settingsPanel;
-    public GameObject creditsPanel;
-    public GameObject messagePanel;
+    [Header("UI Toolkit")]
+    public UIDocument document; // Drag your UIDocument here
 
     [Header("Background")]
-    public Image backgroundImage; // The background image of the main menu
-    public Sprite[] cityBackgrounds; // 5 sprites, one per city
-    private int currentCityIndex = 1; // 1 = least sustainable
+    public Sprite[] cityBackgrounds; // 5 city images
+    private int currentCityIndex = 1;
 
     [Header("Message")]
-    public TMPro.TextMeshProUGUI messageText;
     public string[] sustainabilityMessages = new string[]
     {
         "The city has become a little more sustainable!",
         "Recycling programs have started! The city is cleaner.",
         "Solar panels are appearing! The city is greener.",
         "The city is much more sustainable now!",
-        "Congratulations! You've reached the most sustainable city!"
+        "You've reached the end of the game! Congratulations!"
     };
 
-    [Header("Scores Panel")]
-    public Text[] cityScoreTexts;
-    public Text[] cityStatusTexts;
-    public Text totalScoreText;
-    public Text totalArtifactsText;
-    public Text highestCityText;
-    public Button resetProgressButton;
-
-    [Header("Tutorial Panel")]
-    public TMPro.TextMeshProUGUI tutorialContentText; // The main text area for the tutorial
-    public Button backButton; // Button to return to main menu
-
-    [Header("Settings Panel")]
-    public Slider musicVolumeSlider;
-    public Slider sfxVolumeSlider;
-    public Toggle fullscreenToggle;
-    public Dropdown resolutionDropdown;
-    public Dropdown qualityDropdown;
-
     [Header("Audio")]
-    public AudioClip buttonHoverSound;
     public AudioClip buttonClickSound;
-    public AudioClip gameStartSound;
     private AudioSource audioSource;
 
-    private int currentTutorialPage = 0; // Kept for compatibility but not used
+    private VisualElement root;
+    private VisualElement messagePanel;
+    private Label messageText;
+    private VisualElement tutorialPanel;
+    private Button tutorialBackButton;
+    private VisualElement backgroundContainer;
+    private bool isMessageVisible = false;
+
+    // Static variables for seamless transition
+    public static int pendingCityIndex = -1;
+    public static string pendingMessage = null;
+
+    // Tutorial text stored directly in script
+    private string tutorialText =
+        "WELCOME TO SUSTAINABILITY CHALLENGE!\n\n" +
+        "‚Ä¢ Find the treasure box in the maze\n" +
+        "‚Ä¢ Answer sustainability questions correctly\n" +
+        "‚Ä¢ Collect artifacts to unlock more sustainable cities\n" +
+        "‚Ä¢ Progress through all 5 cities to win!\n\n" +
+        "GOAL: Learn about UN Sustainability Goals while having fun!";
 
     void Start()
     {
         InitializeAudio();
-        LoadProgress();
-        UpdateBackground();
-        ShowMainMenu();
+
+        // Use pending city if available (from QuestionManager)
+        if (pendingCityIndex != -1)
+        {
+            currentCityIndex = pendingCityIndex;
+            pendingCityIndex = -1;
+            Debug.Log($"üèôÔ∏è Using pending city index: {currentCityIndex}");
+        }
+        else
+        {
+            LoadProgress();
+        }
+
+        // Setup UI (will be hidden initially)
+        StartCoroutine(DelayedSetup());
+
+        // Show pending message if there is one
+        if (!string.IsNullOrEmpty(pendingMessage))
+        {
+            StartCoroutine(ShowDelayedMessage(pendingMessage));
+            pendingMessage = null;
+        }
+
         CheckForMessage();
+    }
+
+    IEnumerator DelayedSetup()
+    {
+        yield return new WaitForSeconds(0.1f);
+        SetupUI();
+    }
+
+    IEnumerator ShowDelayedMessage(string message)
+    {
+        // Wait for UI to fully load
+        yield return new WaitForSeconds(0.3f);
+
+        // Show the message
+        if (messagePanel != null && messageText != null)
+        {
+            messageText.text = message;
+            messagePanel.style.display = DisplayStyle.Flex;
+            isMessageVisible = true;
+
+            // Hide after 3 seconds
+            yield return new WaitForSeconds(3f);
+
+            if (messagePanel != null)
+                messagePanel.style.display = DisplayStyle.None;
+            isMessageVisible = false;
+        }
     }
 
     void InitializeAudio()
@@ -77,11 +116,132 @@ public class CitySelectionMenu : MonoBehaviour
         currentCityIndex = PlayerPrefs.GetInt("CurrentCity", 1);
     }
 
+    void SetupUI()
+    {
+        if (document == null)
+        {
+            Debug.LogError("UIDocument not assigned!");
+            return;
+        }
+
+        root = document.rootVisualElement;
+
+        if (root == null)
+        {
+            Debug.LogError("Root visual element is null!");
+            return;
+        }
+
+        // Hide everything initially to prevent flash
+        root.style.display = DisplayStyle.None;
+
+        // Find existing UI elements
+        backgroundContainer = root.Q<VisualElement>("Background");
+        var playButton = root.Q<Button>("PlayButton");
+        var tutorialButton = root.Q<Button>("TutorialButton");
+        var scoresButton = root.Q<Button>("ScoresButton");
+        var settingsButton = root.Q<Button>("SettingsButton");
+        var creditsButton = root.Q<Button>("CreditsButton");
+        var quitButton = root.Q<Button>("QuitButton");
+
+        messagePanel = root.Q<VisualElement>("MessagePanel");
+        messageText = root.Q<Label>("MessageText");
+
+        // Create tutorial panel programmatically
+        CreateTutorialPanel();
+
+        // Debug which buttons were found
+        Debug.Log($"PlayButton found: {playButton != null}");
+        Debug.Log($"TutorialButton found: {tutorialButton != null}");
+        Debug.Log($"ScoresButton found: {scoresButton != null}");
+        Debug.Log($"SettingsButton found: {settingsButton != null}");
+        Debug.Log($"CreditsButton found: {creditsButton != null}");
+        Debug.Log($"QuitButton found: {quitButton != null}");
+
+        // Update background (this happens while hidden)
+        UpdateBackground();
+
+        // Connect button events
+        if (playButton != null) playButton.clicked += StartGame;
+        if (tutorialButton != null) tutorialButton.clicked += ShowTutorial;
+        if (scoresButton != null) scoresButton.clicked += ShowScores;
+        if (settingsButton != null) settingsButton.clicked += ShowSettings;
+        if (creditsButton != null) creditsButton.clicked += ShowCredits;
+        if (quitButton != null) quitButton.clicked += QuitGame;
+
+        // Hide message panel at start
+        if (messagePanel != null)
+            messagePanel.style.display = DisplayStyle.None;
+
+        // Now show everything (after background is correct)
+        root.style.display = DisplayStyle.Flex;
+    }
+
+    void CreateTutorialPanel()
+    {
+        // Create main tutorial container
+        tutorialPanel = new VisualElement();
+        tutorialPanel.name = "TutorialPanel";
+        tutorialPanel.style.position = Position.Absolute;
+        tutorialPanel.style.width = Length.Percent(100);
+        tutorialPanel.style.height = Length.Percent(100);
+        tutorialPanel.style.backgroundColor = new Color(0.1f, 0.1f, 0.1f, 0.95f);
+        tutorialPanel.style.display = DisplayStyle.None; // Hidden by default
+        tutorialPanel.style.alignItems = Align.Center;
+        tutorialPanel.style.justifyContent = Justify.Center;
+
+        // Create tutorial text label
+        var tutorialLabel = new Label();
+        tutorialLabel.name = "TutorialLabel";
+        tutorialLabel.text = tutorialText;
+        tutorialLabel.style.color = Color.white;
+        tutorialLabel.style.fontSize = 24;
+        tutorialLabel.style.whiteSpace = WhiteSpace.Normal;
+        tutorialLabel.style.width = Length.Percent(80);
+        tutorialLabel.style.height = StyleKeyword.Auto;
+        tutorialLabel.style.marginBottom = 30;
+        tutorialLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
+
+        // Create back button
+        tutorialBackButton = new Button();
+        tutorialBackButton.name = "TutorialBackButton";
+        tutorialBackButton.text = "BACK";
+        tutorialBackButton.style.width = 200;
+        tutorialBackButton.style.height = 50;
+        tutorialBackButton.style.backgroundColor = new Color(0.2f, 0.2f, 0.2f);
+        tutorialBackButton.style.color = Color.white;
+        tutorialBackButton.style.fontSize = 20;
+        tutorialBackButton.style.marginTop = 20;
+
+        // Add click handler
+        tutorialBackButton.clicked += HideTutorial;
+
+        // Add elements to panel
+        tutorialPanel.Add(tutorialLabel);
+        tutorialPanel.Add(tutorialBackButton);
+
+        // Add panel to root
+        root.Add(tutorialPanel);
+    }
+
     void UpdateBackground()
     {
-        if (backgroundImage != null && cityBackgrounds.Length >= currentCityIndex)
+        if (backgroundContainer == null)
         {
-            backgroundImage.sprite = cityBackgrounds[currentCityIndex - 1];
+            Debug.LogError("Background element not found! Check UXML name.");
+            return;
+        }
+
+        if (cityBackgrounds == null || cityBackgrounds.Length == 0)
+        {
+            Debug.LogError("City backgrounds not assigned!");
+            return;
+        }
+
+        Sprite currentCitySprite = cityBackgrounds[currentCityIndex - 1];
+        if (currentCitySprite != null)
+        {
+            backgroundContainer.style.backgroundImage = new StyleBackground(currentCitySprite);
         }
     }
 
@@ -101,85 +261,73 @@ public class CitySelectionMenu : MonoBehaviour
         if (messagePanel != null && messageText != null)
         {
             messageText.text = msg;
-            messagePanel.SetActive(true);
-            Invoke("HideMessage", 3f);
+            messagePanel.style.display = DisplayStyle.Flex;
+            isMessageVisible = true;
+            Invoke(nameof(HideMessage), 3f);
         }
     }
 
     void HideMessage()
     {
         if (messagePanel != null)
-            messagePanel.SetActive(false);
-    }
-
-    public void ShowMainMenu()
-    {
-        PlayButtonSound();
-        mainMenuPanel.SetActive(true);
-        if (tutorialPanel != null) tutorialPanel.SetActive(false);
-        if (scoresPanel != null) scoresPanel.SetActive(false);
-        if (settingsPanel != null) settingsPanel.SetActive(false);
-        if (creditsPanel != null) creditsPanel.SetActive(false);
-        if (messagePanel != null) messagePanel.SetActive(false);
-    }
-
-    // ============== SIMPLE TUTORIAL (Option 1) ==============
-    public void ShowTutorial()
-    {
-        PlayButtonSound();
-        mainMenuPanel.SetActive(false);
-        tutorialPanel.SetActive(true);
-
-        // Set the tutorial text
-        if (tutorialContentText != null)
         {
-            tutorialContentText.text = "WELCOME TO SUSTAINABILITY CHALLENGE!\n\n" +
-                "ï Find the treasure box in the maze\n" +
-                "ï Answer sustainability questions correctly\n" +
-                "ï Collect artifacts to unlock more sustainable cities\n" +
-                "ï Progress through all 5 cities to win!\n\n" +
-                "GOAL: Learn about UN Sustainability Goals while having fun!";
+            messagePanel.style.display = DisplayStyle.None;
+            isMessageVisible = false;
         }
     }
 
-    public void CloseTutorial()
+    void ShowTutorial()
     {
         PlayButtonSound();
-        tutorialPanel.SetActive(false);
-        mainMenuPanel.SetActive(true);
-    }
-    // =========================================================
 
-    public void ShowScores()
+        // Hide main menu background
+        if (backgroundContainer != null)
+            backgroundContainer.style.display = DisplayStyle.None;
+
+        // Show tutorial panel
+        if (tutorialPanel != null)
+            tutorialPanel.style.display = DisplayStyle.Flex;
+    }
+
+    void HideTutorial()
     {
         PlayButtonSound();
-        mainMenuPanel.SetActive(false);
-        scoresPanel.SetActive(true);
-        // Load and display scores here
+
+        // Show main menu background
+        if (backgroundContainer != null)
+            backgroundContainer.style.display = DisplayStyle.Flex;
+
+        // Hide tutorial panel
+        if (tutorialPanel != null)
+            tutorialPanel.style.display = DisplayStyle.None;
     }
 
-    public void ShowSettings()
+    void StartGame()
     {
         PlayButtonSound();
-        mainMenuPanel.SetActive(false);
-        settingsPanel.SetActive(true);
+        Debug.Log("Loading scene: MazeScene");
+        SceneManager.LoadScene("MazeScene");
     }
 
-    public void ShowCredits()
+    void ShowScores()
     {
         PlayButtonSound();
-        mainMenuPanel.SetActive(false);
-        creditsPanel.SetActive(true);
+        Debug.Log("Scores clicked - to be implemented");
     }
 
-    // ============== PLAY BUTTON ==============
-    public void StartGame()
+    void ShowSettings()
     {
         PlayButtonSound();
-        SceneManager.LoadScene("0");
+        Debug.Log("Settings clicked - to be implemented");
     }
 
-    public void QuitGame()
+    void ShowCredits()
+    {
+        PlayButtonSound();
+        Debug.Log("Credits clicked - to be implemented");
+    }
+
+    void QuitGame()
     {
         PlayButtonSound();
 #if UNITY_EDITOR
@@ -194,14 +342,6 @@ public class CitySelectionMenu : MonoBehaviour
         if (buttonClickSound != null && audioSource != null)
         {
             audioSource.PlayOneShot(buttonClickSound);
-        }
-    }
-
-    public void OnButtonHover()
-    {
-        if (buttonHoverSound != null && audioSource != null)
-        {
-            audioSource.PlayOneShot(buttonHoverSound);
         }
     }
 
