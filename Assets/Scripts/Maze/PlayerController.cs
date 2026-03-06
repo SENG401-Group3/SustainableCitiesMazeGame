@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour
   private float targetDistance;
 
   Rigidbody2D rb;
+  Animator animator;
 
     public enum Directions{
       UP,
@@ -151,6 +152,12 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
       handleInputs();
+    }
+
+    // ADD THIS METHOD - allows other scripts to read the player's current velocity
+    public Vector2 GetCurrentVelocity()
+    {
+        return rb.linearVelocity; // Returns the current movement speed and direction
     }
 
 }

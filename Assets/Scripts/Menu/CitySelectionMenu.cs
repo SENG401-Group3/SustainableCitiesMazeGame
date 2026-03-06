@@ -7,10 +7,10 @@ using System.Collections;
 public class CitySelectionMenu : MonoBehaviour
 {
     [Header("UI Toolkit")]
-    public UIDocument document; // Drag your UIDocument here
+    public UIDocument document;
 
     [Header("Background")]
-    public Sprite[] cityBackgrounds; // 5 city images
+    public Sprite[] cityBackgrounds;
     private int currentCityIndex = 1;
 
     [Header("Message")]
@@ -35,11 +35,12 @@ public class CitySelectionMenu : MonoBehaviour
     private VisualElement backgroundContainer;
     private bool isMessageVisible = false;
 
-    // Static variables for seamless transition
+    private VisualElement leaderboardPanel;
+    private Button closeLeaderboardButton;
+
     public static int pendingCityIndex = -1;
     public static string pendingMessage = null;
 
-    // Tutorial text stored directly in script
     private string tutorialText =
         "WELCOME TO SUSTAINABILITY CHALLENGE!\n\n" +
         "• Find the treasure box in the maze\n" +
@@ -52,22 +53,18 @@ public class CitySelectionMenu : MonoBehaviour
     {
         InitializeAudio();
 
-        // Use pending city if available (from QuestionManager)
         if (pendingCityIndex != -1)
         {
             currentCityIndex = pendingCityIndex;
             pendingCityIndex = -1;
-            Debug.Log($"🏙️ Using pending city index: {currentCityIndex}");
         }
         else
         {
             LoadProgress();
         }
 
-        // Setup UI (will be hidden initially)
         StartCoroutine(DelayedSetup());
 
-        // Show pending message if there is one
         if (!string.IsNullOrEmpty(pendingMessage))
         {
             StartCoroutine(ShowDelayedMessage(pendingMessage));
@@ -85,19 +82,13 @@ public class CitySelectionMenu : MonoBehaviour
 
     IEnumerator ShowDelayedMessage(string message)
     {
-        // Wait for UI to fully load
         yield return new WaitForSeconds(0.3f);
-
-        // Show the message
         if (messagePanel != null && messageText != null)
         {
             messageText.text = message;
             messagePanel.style.display = DisplayStyle.Flex;
             isMessageVisible = true;
-
-            // Hide after 3 seconds
             yield return new WaitForSeconds(3f);
-
             if (messagePanel != null)
                 messagePanel.style.display = DisplayStyle.None;
             isMessageVisible = false;
@@ -118,24 +109,13 @@ public class CitySelectionMenu : MonoBehaviour
 
     void SetupUI()
     {
-        if (document == null)
-        {
-            Debug.LogError("UIDocument not assigned!");
-            return;
-        }
+        if (document == null) return;
 
         root = document.rootVisualElement;
+        if (root == null) return;
 
-        if (root == null)
-        {
-            Debug.LogError("Root visual element is null!");
-            return;
-        }
-
-        // Hide everything initially to prevent flash
         root.style.display = DisplayStyle.None;
 
-        // Find existing UI elements
         backgroundContainer = root.Q<VisualElement>("Background");
         var playButton = root.Q<Button>("PlayButton");
         var tutorialButton = root.Q<Button>("TutorialButton");
@@ -147,102 +127,69 @@ public class CitySelectionMenu : MonoBehaviour
         messagePanel = root.Q<VisualElement>("MessagePanel");
         messageText = root.Q<Label>("MessageText");
 
-        // Create tutorial panel programmatically
+        leaderboardPanel = root.Q<VisualElement>("LeaderboardPanel");
+        closeLeaderboardButton = root.Q<Button>("CloseLeaderboardButton");
+
         CreateTutorialPanel();
-
-        // Debug which buttons were found
-        Debug.Log($"PlayButton found: {playButton != null}");
-        Debug.Log($"TutorialButton found: {tutorialButton != null}");
-        Debug.Log($"ScoresButton found: {scoresButton != null}");
-        Debug.Log($"SettingsButton found: {settingsButton != null}");
-        Debug.Log($"CreditsButton found: {creditsButton != null}");
-        Debug.Log($"QuitButton found: {quitButton != null}");
-
-        // Update background (this happens while hidden)
         UpdateBackground();
 
-        // Connect button events
         if (playButton != null) playButton.clicked += StartGame;
         if (tutorialButton != null) tutorialButton.clicked += ShowTutorial;
         if (scoresButton != null) scoresButton.clicked += ShowScores;
         if (settingsButton != null) settingsButton.clicked += ShowSettings;
         if (creditsButton != null) creditsButton.clicked += ShowCredits;
         if (quitButton != null) quitButton.clicked += QuitGame;
+        if (closeLeaderboardButton != null) closeLeaderboardButton.clicked += HideLeaderboard;
 
-        // Hide message panel at start
-        if (messagePanel != null)
-            messagePanel.style.display = DisplayStyle.None;
+        if (messagePanel != null) messagePanel.style.display = DisplayStyle.None;
+        if (leaderboardPanel != null) leaderboardPanel.style.display = DisplayStyle.None;
 
-        // Now show everything (after background is correct)
         root.style.display = DisplayStyle.Flex;
     }
 
     void CreateTutorialPanel()
     {
-        // Create main tutorial container
         tutorialPanel = new VisualElement();
         tutorialPanel.name = "TutorialPanel";
         tutorialPanel.style.position = Position.Absolute;
         tutorialPanel.style.width = Length.Percent(100);
         tutorialPanel.style.height = Length.Percent(100);
-        tutorialPanel.style.backgroundColor = new Color(0.1f, 0.1f, 0.1f, 0.95f);
-        tutorialPanel.style.display = DisplayStyle.None; // Hidden by default
+
+        // FIXED: Changed alpha to 1.0f to make it fully opaque
+        tutorialPanel.style.backgroundColor = new Color(0.05f, 0.05f, 0.05f, 1.0f);
+
+        tutorialPanel.style.display = DisplayStyle.None;
         tutorialPanel.style.alignItems = Align.Center;
         tutorialPanel.style.justifyContent = Justify.Center;
 
-        // Create tutorial text label
         var tutorialLabel = new Label();
-        tutorialLabel.name = "TutorialLabel";
         tutorialLabel.text = tutorialText;
         tutorialLabel.style.color = Color.white;
         tutorialLabel.style.fontSize = 24;
         tutorialLabel.style.whiteSpace = WhiteSpace.Normal;
         tutorialLabel.style.width = Length.Percent(80);
-        tutorialLabel.style.height = StyleKeyword.Auto;
         tutorialLabel.style.marginBottom = 30;
         tutorialLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
 
-        // Create back button
         tutorialBackButton = new Button();
-        tutorialBackButton.name = "TutorialBackButton";
         tutorialBackButton.text = "BACK";
         tutorialBackButton.style.width = 200;
         tutorialBackButton.style.height = 50;
-        tutorialBackButton.style.backgroundColor = new Color(0.2f, 0.2f, 0.2f);
+        tutorialBackButton.style.backgroundColor = new Color(0.95f, 0.6f, 0f); // Match the orange "BACK" button in your screenshot
         tutorialBackButton.style.color = Color.white;
-        tutorialBackButton.style.fontSize = 20;
-        tutorialBackButton.style.marginTop = 20;
-
-        // Add click handler
         tutorialBackButton.clicked += HideTutorial;
 
-        // Add elements to panel
         tutorialPanel.Add(tutorialLabel);
         tutorialPanel.Add(tutorialBackButton);
-
-        // Add panel to root
         root.Add(tutorialPanel);
     }
 
     void UpdateBackground()
     {
-        if (backgroundContainer == null)
-        {
-            Debug.LogError("Background element not found! Check UXML name.");
-            return;
-        }
-
-        if (cityBackgrounds == null || cityBackgrounds.Length == 0)
-        {
-            Debug.LogError("City backgrounds not assigned!");
-            return;
-        }
-
+        if (backgroundContainer == null || cityBackgrounds == null || cityBackgrounds.Length == 0) return;
         Sprite currentCitySprite = cityBackgrounds[currentCityIndex - 1];
         if (currentCitySprite != null)
-        {
             backgroundContainer.style.backgroundImage = new StyleBackground(currentCitySprite);
-        }
     }
 
     void CheckForMessage()
@@ -279,53 +226,46 @@ public class CitySelectionMenu : MonoBehaviour
     void ShowTutorial()
     {
         PlayButtonSound();
-
-        // Hide main menu background
-        if (backgroundContainer != null)
-            backgroundContainer.style.display = DisplayStyle.None;
-
-        // Show tutorial panel
         if (tutorialPanel != null)
+        {
             tutorialPanel.style.display = DisplayStyle.Flex;
+            tutorialPanel.BringToFront(); // Ensure it sits above the background
+        }
     }
 
     void HideTutorial()
     {
         PlayButtonSound();
-
-        // Show main menu background
-        if (backgroundContainer != null)
-            backgroundContainer.style.display = DisplayStyle.Flex;
-
-        // Hide tutorial panel
-        if (tutorialPanel != null)
-            tutorialPanel.style.display = DisplayStyle.None;
+        if (tutorialPanel != null) tutorialPanel.style.display = DisplayStyle.None;
     }
 
     void StartGame()
     {
         PlayButtonSound();
-        Debug.Log("Loading scene: MazeScene");
         SceneManager.LoadScene("MazeScene");
     }
 
     void ShowScores()
     {
         PlayButtonSound();
-        Debug.Log("Scores clicked - to be implemented");
+        if (leaderboardPanel != null)
+        {
+            leaderboardPanel.style.display = DisplayStyle.Flex;
+            leaderboardPanel.BringToFront();
+        }
     }
 
-    void ShowSettings()
+    void HideLeaderboard()
     {
         PlayButtonSound();
-        Debug.Log("Settings clicked - to be implemented");
+        if (leaderboardPanel != null)
+        {
+            leaderboardPanel.style.display = DisplayStyle.None;
+        }
     }
 
-    void ShowCredits()
-    {
-        PlayButtonSound();
-        Debug.Log("Credits clicked - to be implemented");
-    }
+    void ShowSettings() { PlayButtonSound(); }
+    void ShowCredits() { PlayButtonSound(); }
 
     void QuitGame()
     {
@@ -340,9 +280,7 @@ public class CitySelectionMenu : MonoBehaviour
     void PlayButtonSound()
     {
         if (buttonClickSound != null && audioSource != null)
-        {
             audioSource.PlayOneShot(buttonClickSound);
-        }
     }
 
     public void ResetProgress()
