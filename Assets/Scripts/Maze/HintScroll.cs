@@ -4,7 +4,13 @@ public class HintScroll : Interactable
 {
     public override void handleCollision(Collider2D other)
     {
-      // make a text popup that creates a fact that is the answer to the next question
+      // update player prefs so we can display a hint in the question page
+      PlayerPrefs.SetInt("HintScrollCollected", 1);
+
+      // create a text popup that says "hint scroll collected!"
+      messageHandler.addMessage("Hint Scroll Collected!");
+
+      Destroy(gameObject, 0f);
       return;
     }
 

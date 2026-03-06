@@ -4,9 +4,15 @@ public class Pitfall : Interactable
 {
     public override void handleCollision(Collider2D other)
     {
-      // play an animation and take us to a scene tha describes a sustainability pitfall
-      // then take use to the update player without incrementing the maze ar changing the sus score
-      return;
+      // play an animation that describes a sustainability pitfall
+      // then return to the menu without updating anything
+      messageHandler.addMessage("The path to sustainability has many pitfalls! Try Again!");
+
+      Invoke("returnToMenu", 3f);
+    }
+
+    private void returnToMenu(){
+      UnityEngine.SceneManagement.SceneManager.LoadScene(0);
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

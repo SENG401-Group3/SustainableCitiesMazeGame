@@ -103,7 +103,7 @@ public class MazeGrid : MonoBehaviour
     // chec every distance, add to the spawnable tiles if in the range
     for(int x = 0; x < mazeDimsX; x++){
       for(int y = 0; y < mazeDimsY; y++){
-        if(gridDistances[x,y] >= distanceRange.x && gridDistances[x,y] < distanceRange.y)
+        if(gridDistances[x,y] > distanceRange.x && gridDistances[x,y] <= distanceRange.y)
           spawnableTiles.Add(new Vector2Int(x, y));
       }
     }

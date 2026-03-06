@@ -4,29 +4,43 @@ public class MazeController : MonoBehaviour
 {
   // objects to connect and add
   [SerializeField]
-  GameObject wallPrefab;
+  private GameObject wallPrefab;
 
   [SerializeField]
-  MazeGrid maze;
+  private MazeGrid maze;
 
   [SerializeField]
-  CameraController cam;
+  private CameraController cam;
 
+  // items we will be 'spawning'
   [SerializeField]
-  GameObject art;
+  private GameObject art;
+  [SerializeField]
+  private GameObject hintScroll;
+  [SerializeField]
+  private GameObject helperItem;
+  [SerializeField]
+  private GameObject pitfall;
+
+  // these just have to be passed from the scene into the objects since the objects
+  // are generated at runtime
+  [SerializeField]
+  private MessageHandler messageHandler;
+  [SerializeField]
+  private PlayerItemController itemController;
 
   // variables and containers
   [SerializeField]
-  int mazeDimsX;
+  private int mazeDimsX;
 
   [SerializeField]
-  int mazeDimsY;
+  private int mazeDimsY;
 
   [SerializeField]
-  float camTilesZoom;
+  private float camTilesZoom;
 
-  Wall[,] mazeWalls = null;
-  Wall[,] boundaries = new Wall[2,2];
+  private Wall[,] mazeWalls = null;
+  private Wall[,] boundaries = new Wall[2,2];
 
   public Vector2 GetRoomSize(){
     SpriteRenderer[] spriteRenderers = wallPrefab.GetComponentsInChildren<SpriteRenderer>();
@@ -110,8 +124,65 @@ public class MazeController : MonoBehaviour
     int maxDist = maze.getMaxDistance();
 
     // spawn the artifact at a given depth
-    interactable.spawn(new Vector2Int((int)(maxDist * 0.8), maxDist), maze, GetRoomSize());
+    interactable.spawn(new Vector2Int((int)(maxDist * 0.5), (int)(maxDist * 0.8)), maze, GetRoomSize());
+  }
 
+  private void spawnHelperItems(){
+    // get the maximum distance found in the maze
+    int maxDist = maze.getMaxDistance();
+
+
+
+    // spawn the HintScroll
+    GameObject scroll = Instantiate(hintScroll,
+        new Vector3(-100, -100, -100),
+        Quaternion.identity);
+    HintScroll interactable = scroll.GetComponent<HintScroll>();
+    interactable.setMessageHandler(messageHandler);
+
+    // spawn the artifact at a given depth
+    // interactable.spawn(new Vector2Int((int)(maxDist * 0.8), maxDist), maze, GetRoomSize());
+    interactable.spawn(new Vector2Int(0, 1), maze, GetRoomSize());
+
+
+    // spawn other items
+    int numHelperItems = 5;
+    for(int i = 0; i < numHelperItems; i++){
+
+      // spawn the HintScroll
+      GameObject hItem = Instantiate(helperItem,
+          new Vector3(-100, -100, -100),
+          Quaternion.identity);
+      HelperItem item = hItem.GetComponent<HelperItem>();
+      
+      // set the required attributes in the object
+      item.setId(0);
+      item.setMessageHandler(messageHandler);
+      item.itemController = itemController;
+
+      // spawn the artifact at a given depth
+      // interactable.spawn(new Vector2Int((int)(maxDist * 0.8), maxDist), maze, GetRoomSize());
+      item.spawn(new Vector2Int(0, 10), maze, GetRoomSize());
+
+    }
+
+    // spawn pitfalls
+    int numPitfalls = 50;
+    for(int i = 0; i < numPitfalls; i++){
+
+      // spawn the HintScroll
+      GameObject pfall = Instantiate(pitfall,
+          new Vector3(-100, -100, -100),
+          Quaternion.identity);
+      Pitfall pf = pfall.GetComponent<Pitfall>();
+      
+      // set the required attributes in the object
+      pf.setMessageHandler(messageHandler);
+
+      // spawn the artifact at a given depth
+      pf.spawn(new Vector2Int(0, maxDist), maze, GetRoomSize());
+
+    }
   }
 
   // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -135,5 +206,6 @@ public class MazeController : MonoBehaviour
     spawnArtifact();
 
     // populate the maze with other items
+    spawnHelperItems();
   }
 }

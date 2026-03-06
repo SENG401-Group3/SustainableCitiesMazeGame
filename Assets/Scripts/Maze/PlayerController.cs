@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.EnhancedTouch;
+using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
 public class PlayerController : MonoBehaviour
 {
@@ -79,8 +81,17 @@ public class PlayerController : MonoBehaviour
     private void handleInputs(){
       pressedDirections.Clear();
 
+      if(Touch.activeTouches.Count > 0){
+        Debug.Log(Touch.activeTouches.Count);
+        // Get the first touch
+        Vector3 touchPos = Touch.activeTouches[0].screenPosition;
+        touchPos = Camera.main.ScreenToWorldPoint(touchPos);
+
+        targetPosition.x = touchPos.x;
+        targetPosition.y = touchPos.y;
+        targetDistance = Vector2.Distance(targetPosition, (Vector2)player.transform.position);
       // prioritize mouse movement
-      if(Mouse.current.leftButton.wasPressedThisFrame){
+      }else if(Mouse.current.leftButton.wasPressedThisFrame){
         // read the mouse click point
         Vector3 mousePos = Mouse.current.position.ReadValue();
 
@@ -131,6 +142,9 @@ public class PlayerController : MonoBehaviour
       velocity = new Vector2(0,0);
       targetPosition = new Vector2((float)invalidPos, (float)invalidPos);
       pressedDirections = new List<Directions>();
+
+      Input.simulateMouseWithTouches = true;
+      UnityEngine.InputSystem.EnhancedTouch.EnhancedTouchSupport.Enable();
     }
 
     // Update is called once per frame
