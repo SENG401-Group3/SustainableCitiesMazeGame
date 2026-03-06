@@ -124,7 +124,8 @@ public class MazeController : MonoBehaviour
     int maxDist = maze.getMaxDistance();
 
     // spawn the artifact at a given depth
-    interactable.spawn(new Vector2Int((int)(maxDist * 0.5), (int)(maxDist * 0.8)), maze, GetRoomSize());
+    // interactable.spawn(new Vector2Int((int)(maxDist * 0.5), (int)(maxDist * 0.8)), maze, GetRoomSize());
+    interactable.spawn(new Vector2Int(0, 3), maze, GetRoomSize());
   }
 
   private void spawnHelperItems(){

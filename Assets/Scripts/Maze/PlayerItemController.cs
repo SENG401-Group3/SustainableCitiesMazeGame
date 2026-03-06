@@ -1,37 +1,56 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Patterns;
 
-public class PlayerItemController : MonoBehaviour
+public class PlayerItemController : MonoBehaviour, Subject
 {
-    // unless we want item persistence, these lists do not matter
-    private List<int> collectedItems;  
-    private List<int> usedItems;  
+  List<Observer> observers = new List<Observer>();
 
-    // this one does
-    private List<int> heldItems;  
+  // unless we want item persistence, these lists do not matter
+  // private List<int> collectedItems;  
+  // private List<int> usedItems;  
 
-    public bool hasItem(int id){
-      return heldItems.Contains(id);
-    }
+  // this one does
+  private List<HelperItem.itemName> heldItems;  
 
-    public void collectItem(int id){
-      heldItems.Add(id);
-    }
+  public bool hasItem(HelperItem.itemName id){
+    return heldItems.Contains(id);
+  }
 
-    public void useItem(int id){
-      heldItems.Remove(id);
-    }
+  public void collectItem(HelperItem.itemName id){
+    heldItems.Add(id);
+    notifyObservers();
+  }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+  public void useItem(HelperItem.itemName id){
+    heldItems.Remove(id);
+  }
+
+  public void addObserver(Observer o){
+    if(!observers.Contains(o))
+      observers.Add(o);
+  }
+
+  public void removeObserver(Observer o){
+    observers.Remove(o);
+  }
+
+  public void notifyObservers(){
+    foreach(Observer o in observers)
     {
-      heldItems = new List<int>();
-        
+      o.notify();
     }
+  }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+  // Start is called once before the first execution of Update after the MonoBehaviour is created
+  void Start()
+  {
+    heldItems = new List<HelperItem.itemName>();
+  }
+
+  // Update is called once per frame
+  void Update()
+  {
+
+  }
 }

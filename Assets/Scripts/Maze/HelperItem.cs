@@ -1,19 +1,24 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 public class HelperItem : Interactable
 {
-  private static List<string> itemNames = new List<string>{ "Speed Boost" };
+  public enum itemName {
+    SpeedBoost = 0,
+
+  };
+  // private static List<string> itemNames = new List<string>{ "Speed Boost" };
 
   // c# does weird things with accessors so these attributes have to be public
-  private int id;
+  private itemName id;
 
   public PlayerItemController itemController {get; set;} = null;
 
   public void setId(int id){
     // set the id and sprite based on the item
-    if(id < itemNames.Count)
-      this.id = id;
+    if(Enum.IsDefined(typeof(itemName), id))
+      this.id = (itemName)id;
     else
       this.id = 0;
 
@@ -25,7 +30,7 @@ public class HelperItem : Interactable
       itemController.collectItem(id);
     
       // create a text popup that says "item collected!"
-      messageHandler.addMessage(itemNames[id] + " collected!");
+      messageHandler.addMessage(id.ToString() + " collected!");
 
       Destroy(gameObject, 0f);
       return;
