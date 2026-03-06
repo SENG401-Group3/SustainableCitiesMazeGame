@@ -83,7 +83,7 @@ public class LoginController : MonoBehaviour
 
                 if (response == "0")
                 {
-                    DBManager.username = usernameInput.value;
+                    DBManager.username = usernameInput.value.Trim();
 
                     usernameInput.value = "";
                     passwordInput.value = "";
@@ -91,8 +91,11 @@ public class LoginController : MonoBehaviour
                     successLabel.text = "Login successful!";
                     successLabel.style.visibility = Visibility.Visible;
 
-                    yield return new WaitForSeconds(3f);
-                    UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+                    yield return new WaitForSeconds(1f);
+                    //Debug.Log("Saved username: " + DBManager.username);
+                    uiManager.ShowProfile();
+                    successLabel.text = "";
+                    //UnityEngine.SceneManagement.SceneManager.LoadScene(0);
                 }
                 else
                 {

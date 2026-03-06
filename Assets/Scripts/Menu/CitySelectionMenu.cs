@@ -20,7 +20,7 @@ public class CitySelectionMenu : MonoBehaviour
         "Recycling programs have started! The city is cleaner.",
         "Solar panels are appearing! The city is greener.",
         "The city is much more sustainable now!",
-        "Congratulations! You've reached the most sustainable city!"
+        "You've reached the end of the game! Congratulations!"
     };
 
     [Header("Audio")]
@@ -35,20 +35,45 @@ public class CitySelectionMenu : MonoBehaviour
     private VisualElement backgroundContainer;
     private bool isMessageVisible = false;
 
+    // Static variables for seamless transition
+    public static int pendingCityIndex = -1;
+    public static string pendingMessage = null;
+
     // Tutorial text stored directly in script
     private string tutorialText =
         "WELCOME TO SUSTAINABILITY CHALLENGE!\n\n" +
-        "ï Find the treasure box in the maze\n" +
-        "ï Answer sustainability questions correctly\n" +
-        "ï Collect artifacts to unlock more sustainable cities\n" +
-        "ï Progress through all 5 cities to win!\n\n" +
+        "‚Ä¢ Find the treasure box in the maze\n" +
+        "‚Ä¢ Answer sustainability questions correctly\n" +
+        "‚Ä¢ Collect artifacts to unlock more sustainable cities\n" +
+        "‚Ä¢ Progress through all 5 cities to win!\n\n" +
         "GOAL: Learn about UN Sustainability Goals while having fun!";
 
     void Start()
     {
         InitializeAudio();
-        LoadProgress();
+
+        // Use pending city if available (from QuestionManager)
+        if (pendingCityIndex != -1)
+        {
+            currentCityIndex = pendingCityIndex;
+            pendingCityIndex = -1;
+            Debug.Log($"üèôÔ∏è Using pending city index: {currentCityIndex}");
+        }
+        else
+        {
+            LoadProgress();
+        }
+
+        // Setup UI (will be hidden initially)
         StartCoroutine(DelayedSetup());
+
+        // Show pending message if there is one
+        if (!string.IsNullOrEmpty(pendingMessage))
+        {
+            StartCoroutine(ShowDelayedMessage(pendingMessage));
+            pendingMessage = null;
+        }
+
         CheckForMessage();
     }
 
@@ -56,6 +81,27 @@ public class CitySelectionMenu : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
         SetupUI();
+    }
+
+    IEnumerator ShowDelayedMessage(string message)
+    {
+        // Wait for UI to fully load
+        yield return new WaitForSeconds(0.3f);
+
+        // Show the message
+        if (messagePanel != null && messageText != null)
+        {
+            messageText.text = message;
+            messagePanel.style.display = DisplayStyle.Flex;
+            isMessageVisible = true;
+
+            // Hide after 3 seconds
+            yield return new WaitForSeconds(3f);
+
+            if (messagePanel != null)
+                messagePanel.style.display = DisplayStyle.None;
+            isMessageVisible = false;
+        }
     }
 
     void InitializeAudio()
@@ -86,6 +132,9 @@ public class CitySelectionMenu : MonoBehaviour
             return;
         }
 
+        // Hide everything initially to prevent flash
+        root.style.display = DisplayStyle.None;
+
         // Find existing UI elements
         backgroundContainer = root.Q<VisualElement>("Background");
         var playButton = root.Q<Button>("PlayButton");
@@ -109,7 +158,7 @@ public class CitySelectionMenu : MonoBehaviour
         Debug.Log($"CreditsButton found: {creditsButton != null}");
         Debug.Log($"QuitButton found: {quitButton != null}");
 
-        // Update background
+        // Update background (this happens while hidden)
         UpdateBackground();
 
         // Connect button events
@@ -123,6 +172,9 @@ public class CitySelectionMenu : MonoBehaviour
         // Hide message panel at start
         if (messagePanel != null)
             messagePanel.style.display = DisplayStyle.None;
+
+        // Now show everything (after background is correct)
+        root.style.display = DisplayStyle.Flex;
     }
 
     void CreateTutorialPanel()
@@ -146,7 +198,7 @@ public class CitySelectionMenu : MonoBehaviour
         tutorialLabel.style.fontSize = 24;
         tutorialLabel.style.whiteSpace = WhiteSpace.Normal;
         tutorialLabel.style.width = Length.Percent(80);
-        tutorialLabel.style.height = StyleKeyword.Auto; // Fixed: was Length.Auto
+        tutorialLabel.style.height = StyleKeyword.Auto;
         tutorialLabel.style.marginBottom = 30;
         tutorialLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
 
@@ -253,8 +305,8 @@ public class CitySelectionMenu : MonoBehaviour
     void StartGame()
     {
         PlayButtonSound();
-        Debug.Log("Loading scene: 0");
-        SceneManager.LoadScene("0");
+        Debug.Log("Loading scene: MazeScene");
+        SceneManager.LoadScene("MazeScene");
     }
 
     void ShowScores()

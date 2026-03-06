@@ -1,0 +1,105 @@
+:root {
+    /* Define color variables for easy updating */
+    --correct-color: #4CAF50;
+    --incorrect-color: #F44336;
+    --button-default: #333333;
+    --text-color: #FFFFFF;
+    --feedback-duration: 0.3s;
+}
+
+/* Base button styles */
+Button {
+    -unity-font-definition: var(--button-font);
+    background-color: var(--button-default);
+    color: var(--text-color);
+    font-size: 20px;
+    -unity-text-align: middle-center;
+    border-radius: 8px;
+    margin: 5px;
+    
+    /* Transition properties for smooth animations */
+    transition-property: background-color, scale, opacity;
+    transition-duration: var(--feedback-duration);
+    transition-timing-function: ease-out;
+}
+
+/* Hover effect */
+Button:hover {
+    background-color: #444444;
+    scale: 1.02;
+}
+
+/* Correct answer animation class */
+Button.correct {
+    background-color: var(--correct-color);
+    scale: 1.1;
+}
+
+/* Incorrect answer animation class */
+Button.incorrect {
+    background-color: var(--incorrect-color);
+    animation-name: shake;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-in-out;
+}
+
+/* Shake animation keyframes */
+@keyframes shake {
+    0% { translate: 0; }
+    25% { translate: 5px; }
+    50% { translate: -5px; }
+    75% { translate: 3px; }
+    100% { translate: 0; }
+}
+
+/* Question text styling */
+Label {
+    color: var(--text-color);
+    font-size: 24px;
+    -unity-text-align: middle-center;
+    white-space: normal;
+}
+
+/* Feedback text */
+#FeedbackText {
+    font-size: 20px;
+    margin-top: 20px;
+    transition-property: opacity;
+    transition-duration: 0.2s;
+}
+
+/* Correct feedback */
+#FeedbackText.correct {
+    color: var(--correct-color);
+}
+
+/* Incorrect feedback */
+#FeedbackText.incorrect {
+    color: var(--incorrect-color);
+}
+
+/* Continue button */
+#ContinueButton {
+    background-color: #2196F3;
+    width: 200px;
+    height: 50px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#ContinueButton:hover {
+    background-color: #1976D2;
+    scale: 1.05;
+}
+
+/* Main question panel */
+#QuestionPanel {
+    background-color: rgba(0, 0, 0, 0.85);
+    padding: 20px;
+}
+
+/* Answer container */
+#AnswerContainer {
+    width: 100%;
+    align-items: center;
+}
