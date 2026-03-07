@@ -1,0 +1,31 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+  <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.9); align-items: center; justify-content: center;">
+    
+    <!-- Main Leaderboard Container -->
+    <ui:VisualElement name="LeaderboardContainer" style="width: 600px; background-color: rgba(30, 30, 30, 0.95); border-radius: 20px; padding: 30px; align-items: center;">
+      
+      <!-- Title -->
+      <ui:Label text="🏆 GAME COMPLETE! 🏆" style="font-size: 36px; color: gold; margin-bottom: 20px; -unity-text-align: middle-center;" />
+      
+      <!-- Score List Container -->
+      <ui:VisualElement name="ScoreList" style="width: 100%; margin-bottom: 20px;" />
+      
+      <!-- Loading Spinner (hidden by default) -->
+      <ui:VisualElement name="LoadingSpinner" style="width: 50px; height: 50px; background-color: white; border-radius: 25px; margin: 20px; display: none;" />
+      
+      <!-- Status Message (hidden by default) -->
+      <ui:Label name="StatusMessage" text="" style="font-size: 18px; color: white; margin: 10px; display: none;" />
+      
+      <!-- Submit Button -->
+      <ui:Button name="SubmitButton" text="SUBMIT MY SCORE" style="width: 200px; height: 50px; background-color: green; color: white; font-size: 16px; margin: 5px;" />
+      
+      <!-- Retry Button (hidden by default) -->
+      <ui:Button name="RetryButton" text="RETRY" style="width: 200px; height: 50px; background-color: orange; color: white; font-size: 16px; margin: 5px; display: none;" />
+      
+      <!-- Back to Menu Button -->
+      <ui:Button name="BackToMenuButton" text="BACK TO MENU" style="width: 200px; height: 50px; background-color: gray; color: white; font-size: 16px; margin: 5px;" />
+      
+    </ui:VisualElement>
+    
+  </ui:VisualElement>
+</ui:UXML>

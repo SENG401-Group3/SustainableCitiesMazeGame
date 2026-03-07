@@ -6,12 +6,10 @@ using System.Collections;
 public class CitySelectionMenu : MonoBehaviour
 {
     public UIDocument document;
-    public LeaderboardManager leaderboardManager; // The slot you are dragging GameManager into
     public Sprite[] cityBackgrounds;
 
     private VisualElement root;
     private VisualElement backgroundContainer;
-    private VisualElement leaderboardPanel;
     private VisualElement tutorialPanel;
 
     void Start()
@@ -25,13 +23,6 @@ public class CitySelectionMenu : MonoBehaviour
         root = document.rootVisualElement;
         root.style.opacity = 0;
 
-        // AUTO-FIND: If the slot is blank, find the LeaderboardManager in the scene
-        if (leaderboardManager == null)
-        {
-            leaderboardManager = FindFirstObjectByType<LeaderboardManager>();
-            Debug.Log($"LeaderboardManager auto-found: {leaderboardManager != null}");
-        }
-
         StartCoroutine(SetupSequence());
     }
 
@@ -40,13 +31,14 @@ public class CitySelectionMenu : MonoBehaviour
         yield return null;
 
         backgroundContainer = root.Q<VisualElement>("Background");
-        leaderboardPanel = root.Q<VisualElement>("LeaderboardPanel");
 
-        // Set Background
+        // Set Background based on CurrentCity
         int cityIdx = PlayerPrefs.GetInt("CurrentCity", 1) - 1;
         cityIdx = Mathf.Clamp(cityIdx, 0, cityBackgrounds.Length - 1);
         if (backgroundContainer != null && cityBackgrounds.Length > 0)
             backgroundContainer.style.backgroundImage = new StyleBackground(cityBackgrounds[cityIdx]);
+
+        Debug.Log($"CitySelectionMenu loaded - CurrentCity: {cityIdx + 1}");
 
         // Bind Buttons
         var playButton = root.Q<Button>("PlayButton");
@@ -61,26 +53,10 @@ public class CitySelectionMenu : MonoBehaviour
         Button tutBtn = root.Q<Button>("TutorialButton");
         if (tutBtn != null) tutBtn.clicked += ShowTutorial;
 
-        // Setup Close Button for Leaderboard
-        Button closeBtn = root.Q<Button>("CloseLeaderboardButton");
-        if (closeBtn != null) closeBtn.clicked += () =>
-        {
-            if (leaderboardPanel != null) leaderboardPanel.style.display = DisplayStyle.None;
-        };
-
         CreateTutorialPanel();
 
         yield return new WaitForSeconds(0.2f);
         root.style.opacity = 1;
-
-        // Check for City 5 Completion Win
-        if (PlayerPrefs.GetInt("GameComplete", 0) == 1)
-        {
-            yield return new WaitForSeconds(0.5f);
-            ShowScores();
-            PlayerPrefs.SetInt("GameComplete", 0);
-            PlayerPrefs.Save();
-        }
     }
 
     void CreateTutorialPanel()
@@ -122,28 +98,13 @@ public class CitySelectionMenu : MonoBehaviour
 
     void ShowScores()
     {
-        Debug.Log("ShowScores called");
+        Debug.Log("ShowScores called - Scores button clicked");
 
-        if (leaderboardPanel != null)
-        {
-            leaderboardPanel.style.display = DisplayStyle.Flex;
-            leaderboardPanel.BringToFront();
+        // You can add future functionality here
+        // For example, load a persistent leaderboard scene or show high scores
+        Debug.Log("🏆 Scores button clicked - feature coming soon!");
 
-            int total = PlayerPrefs.GetInt("TotalScore", 0);
-            Debug.Log($"Total score from PlayerPrefs: {total}");
-
-            if (leaderboardManager != null)
-            {
-                leaderboardManager.StartManualSubmission("Makuo", total);
-            }
-            else
-            {
-                Debug.LogError("❌ LeaderboardManager is null! Make sure it's attached to a GameObject.");
-            }
-        }
-        else
-        {
-            Debug.LogError("LeaderboardPanel not found in UXML!");
-        }
+        // Optional: Show a message that leaderboard is coming soon
+        // You could add a simple popup here
     }
 }

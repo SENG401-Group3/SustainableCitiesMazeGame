@@ -72,11 +72,16 @@ public class QuestionManager : MonoBehaviour
         attemptCount++;
 
         string choice = (index == 0) ? "A" : (index == 1 ? "B" : "C");
+        Debug.Log($"📝 Answer selected: {choice}, Attempt: {attemptCount}");
+        Debug.Log($"Current Question - Correct Answer: {currentQuestion.CorrectAnswer}");
+
         if (choice == currentQuestion.CorrectAnswer)
         {
             questionCompleted = true;
             // The 10, 5, 3 Point System
             int points = (attemptCount == 1) ? 10 : (attemptCount == 2 ? 5 : 3);
+
+            Debug.Log($"✅ CORRECT! Awarding {points} points on attempt {attemptCount}");
 
             if (feedbackText != null)
             {
@@ -86,12 +91,22 @@ public class QuestionManager : MonoBehaviour
             }
 
             CityGameManager gm = FindFirstObjectByType<CityGameManager>();
-            if (gm != null) gm.AddScoreAndArtifacts(points);
+            if (gm != null)
+            {
+                gm.AddScoreAndArtifacts(points);
+                Debug.Log($"✅ Added {points} points to CityGameManager. Total now: {gm.GetPlayerScore()}");
+            }
+            else
+            {
+                Debug.LogError("❌ CityGameManager not found!");
+            }
 
             ShowEndUI();
         }
         else if (attemptCount >= 3)
         {
+            Debug.Log($"❌ Out of tries! Correct answer was {currentQuestion.CorrectAnswer}");
+
             if (feedbackText != null)
             {
                 feedbackText.text = $"Out of tries! Answer was {currentQuestion.CorrectAnswer}";
@@ -102,6 +117,8 @@ public class QuestionManager : MonoBehaviour
         }
         else
         {
+            Debug.Log($"❌ Incorrect, try again! Attempt {attemptCount}/3");
+
             if (feedbackText != null)
             {
                 feedbackText.text = "Incorrect, try again!";
@@ -121,8 +138,22 @@ public class QuestionManager : MonoBehaviour
     {
         // Save and trigger CityUpdater logic
         PlayerPrefs.Save();
-        CityUpdater updater = FindFirstObjectByType<CityUpdater>();
-        if (updater != null) updater.CompleteCity();
-        else SceneManager.LoadScene("CitySelection");
+
+        int currentCity = PlayerPrefs.GetInt("CurrentCity", 1);
+        Debug.Log($"🔄 FinishAndRedirect called for City {currentCity}");
+
+        // Use the singleton instance instead of Find
+        if (CityUpdater.Instance != null)
+        {
+            // Let CityUpdater handle all city completions
+            CityUpdater.Instance.CompleteCity();
+        }
+        else
+        {
+            Debug.LogError("❌ CityUpdater instance not found! Make sure it persists between scenes.");
+
+            // Fallback - go to city selection
+            SceneManager.LoadScene("CitySelection");
+        }
     }
 }
