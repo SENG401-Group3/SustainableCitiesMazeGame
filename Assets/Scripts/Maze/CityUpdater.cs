@@ -12,7 +12,6 @@ public class CityUpdater : MonoBehaviour
 
     public void CompleteCity()
     {
-        // Use FindFirstObjectByType instead of FindObjectOfType
         CityGameManager gameManager = FindFirstObjectByType<CityGameManager>();
 
         int playerScore = gameManager != null ? gameManager.GetPlayerScore() : 0;
@@ -39,12 +38,12 @@ public class CityUpdater : MonoBehaviour
         }
         else
         {
+            // CRITICAL: Set this to 1 so the leaderboard shows up
+            PlayerPrefs.SetInt("GameComplete", 1);
             PlayerPrefs.SetInt("CurrentCity", 5);
         }
 
         PlayerPrefs.Save();
-
-        // Return to main menu
         SceneManager.LoadScene("CitySelection");
     }
 }

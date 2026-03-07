@@ -17,16 +17,27 @@ public class LeaderboardManager : MonoBehaviour
     private VisualElement loadingSpinner;
     private Label statusMessage;
 
+    // Store pending data for retries
+    private string pendingName;
+    private int pendingScore;
+
     void Start()
     {
         if (document == null)
         {
-            Debug.LogError("❌ UIDocument not assigned!");
+            Debug.LogError("❌ LeaderboardManager: UIDocument not assigned!");
             return;
         }
 
         root = document.rootVisualElement;
 
+        if (root == null)
+        {
+            Debug.LogError("❌ LeaderboardManager: Root visual element is null!");
+            return;
+        }
+
+        // Find all UI elements
         leaderboardPanel = root.Q<VisualElement>("LeaderboardPanel");
         scoreList = root.Q<VisualElement>("ScoreList");
         submitButton = root.Q<Button>("SubmitButton");
@@ -35,10 +46,23 @@ public class LeaderboardManager : MonoBehaviour
         loadingSpinner = root.Q<VisualElement>("LoadingSpinner");
         statusMessage = root.Q<Label>("StatusMessage");
 
+        // Debug: See what was found
+        Debug.Log("=== LeaderboardManager Element Check ===");
+        Debug.Log($"LeaderboardPanel found: {leaderboardPanel != null}");
+        Debug.Log($"ScoreList found: {scoreList != null}");
+        Debug.Log($"SubmitButton found: {submitButton != null}");
+        Debug.Log($"RetryButton found: {retryButton != null}");
+        Debug.Log($"CloseButton found: {closeButton != null}");
+        Debug.Log($"LoadingSpinner found: {loadingSpinner != null}");
+        Debug.Log($"StatusMessage found: {statusMessage != null}");
+        Debug.Log("========================================");
+
+        // Hide elements initially
         if (retryButton != null) retryButton.style.display = DisplayStyle.None;
         if (loadingSpinner != null) loadingSpinner.style.display = DisplayStyle.None;
         if (statusMessage != null) statusMessage.style.display = DisplayStyle.None;
 
+        // Add button listeners
         if (submitButton != null) submitButton.clicked += OnSubmitClicked;
         if (retryButton != null) retryButton.clicked += OnRetryClicked;
         if (closeButton != null) closeButton.clicked += HideLeaderboard;
@@ -48,98 +72,117 @@ public class LeaderboardManager : MonoBehaviour
 
     public void ShowLeaderboard()
     {
+        Debug.Log("ShowLeaderboard called");
         if (leaderboardPanel != null)
+        {
             leaderboardPanel.style.display = DisplayStyle.Flex;
+            leaderboardPanel.BringToFront();
+            Debug.Log("Leaderboard panel shown");
+        }
+        else
+        {
+            Debug.LogError("LeaderboardPanel is null!");
+        }
     }
 
-    void HideLeaderboard()
+    public void HideLeaderboard()
     {
         if (leaderboardPanel != null)
             leaderboardPanel.style.display = DisplayStyle.None;
     }
 
+    // Call this from other scripts to use REAL player scores
+    public void StartManualSubmission(string playerName, int score)
+    {
+        Debug.Log($"StartManualSubmission called with {playerName}: {score}");
+        pendingName = playerName;
+        pendingScore = score;
+        ShowLeaderboard();
+        StartCoroutine(SubmitScoreRoutine(playerName, score));
+    }
+
     void OnSubmitClicked()
     {
-        StartCoroutine(SubmitScore());
+        Debug.Log("Submit clicked");
+        // For testing/manual submit
+        StartCoroutine(SubmitScoreRoutine("YOU", Random.Range(500, 2000)));
     }
 
     void OnRetryClicked()
     {
-        if (retryButton != null)
-            retryButton.style.display = DisplayStyle.None;
-
-        StartCoroutine(SubmitScore());
+        Debug.Log("Retry clicked");
+        if (retryButton != null) retryButton.style.display = DisplayStyle.None;
+        StartCoroutine(SubmitScoreRoutine(pendingName, pendingScore));
     }
 
-    IEnumerator SubmitScore()
+    IEnumerator SubmitScoreRoutine(string name, int score)
     {
-        if (submitButton != null)
-            submitButton.SetEnabled(false);
+        Debug.Log("SubmitScoreRoutine started");
 
-        if (loadingSpinner != null)
-            loadingSpinner.style.display = DisplayStyle.Flex;
+        // AC: Short "submitting" state
+        if (submitButton != null) submitButton.SetEnabled(false);
+        if (loadingSpinner != null) loadingSpinner.style.display = DisplayStyle.Flex;
 
         if (statusMessage != null)
         {
             statusMessage.text = "Submitting score...";
             statusMessage.style.color = Color.white;
-            statusMessage.style.opacity = 1f;
             statusMessage.style.display = DisplayStyle.Flex;
+            statusMessage.style.opacity = 1f;
         }
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1.5f); // Short delay for "satisfying" feel
 
-        bool success = Random.Range(0, 2) == 0;
+        // Simulate success/fail
+        bool success = Random.Range(0, 10) > 2; // 80% success rate
+        Debug.Log($"Submission result: {(success ? "SUCCESS" : "FAILURE")}");
 
-        if (loadingSpinner != null)
-            loadingSpinner.style.display = DisplayStyle.None;
+        if (loadingSpinner != null) loadingSpinner.style.display = DisplayStyle.None;
 
         if (success)
         {
+            // AC: Confirmation animation
             if (statusMessage != null)
             {
                 statusMessage.text = "✓ Score submitted!";
                 statusMessage.style.color = Color.green;
-
-                // FIXED: Removed parentheses from .animation
-                statusMessage.experimental.animation.Scale(1.1f, 200);
             }
 
-            AddPlayerScore("YOU", Random.Range(500, 2000));
-
-            yield return new WaitForSeconds(2f);
-
-            if (statusMessage != null)
-                statusMessage.style.opacity = 0f;
+            AddPlayerScore(name, score);
+            yield return new WaitForSeconds(1.5f);
+            if (statusMessage != null) statusMessage.style.display = DisplayStyle.None;
         }
         else
         {
+            // AC: Failure animation & Retry option
             if (statusMessage != null)
             {
                 statusMessage.text = "✗ Submission failed";
                 statusMessage.style.color = Color.red;
             }
 
-            if (retryButton != null)
-                retryButton.style.display = DisplayStyle.Flex;
+            if (retryButton != null) retryButton.style.display = DisplayStyle.Flex;
         }
 
-        if (submitButton != null)
-            submitButton.SetEnabled(true);
+        if (submitButton != null) submitButton.SetEnabled(true);
     }
 
     void LoadDummyScores()
     {
-        if (scoreList == null) return;
+        if (scoreList == null)
+        {
+            Debug.LogError("ScoreList is null, cannot load scores");
+            return;
+        }
+
         scoreList.Clear();
-        AddScoreEntry("Player1", 1500, 1);
-        AddScoreEntry("Player2", 1200, 2);
-        AddScoreEntry("Player3", 900, 3);
-        AddScoreEntry("Player4", 600, 4);
-        AddScoreEntry("Player5", 300, 5);
+        AddScoreEntry("EcoWarrior", 1500, 1);
+        AddScoreEntry("GreenMachine", 1200, 2);
+        AddScoreEntry("SolarSam", 900, 3);
+        Debug.Log($"Loaded {scoreList.childCount} dummy scores");
     }
 
-    void AddScoreEntry(string name, int score, int rank)
+    void AddScoreEntry(string name, int score, int rank, bool highlight = false)
     {
         var entry = new VisualElement();
         entry.AddToClassList("score-entry");
@@ -158,19 +201,17 @@ public class LeaderboardManager : MonoBehaviour
         entry.Add(scoreLabel);
 
         scoreList.Add(entry);
+
+        if (highlight)
+        {
+            // AC: Rank highlight animation
+            entry.schedule.Execute(() => entry.AddToClassList("score-entry--highlight")).StartingIn(100);
+        }
     }
 
-    void AddPlayerScore(string name, int score)
+    public void AddPlayerScore(string name, int score)
     {
         int newRank = scoreList.childCount + 1;
-        AddScoreEntry(name, score, newRank);
-
-        if (scoreList.childCount > 0)
-        {
-            var lastEntry = scoreList[scoreList.childCount - 1];
-            lastEntry.schedule.Execute(() => {
-                lastEntry.AddToClassList("score-entry--highlight");
-            }).StartingIn(50);
-        }
+        AddScoreEntry(name, score, newRank, true);
     }
 }
