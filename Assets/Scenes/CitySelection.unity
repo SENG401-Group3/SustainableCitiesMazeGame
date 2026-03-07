@@ -901,6 +901,7 @@ GameObject:
   m_Component:
   - component: {fileID: 374299072}
   - component: {fileID: 374299073}
+  - component: {fileID: 374299074}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -949,6 +950,19 @@ MonoBehaviour:
   - The city is much more sustainable now!
   - Congratulations! You've reached the most sustainable city!
   buttonClickSound: {fileID: 0}
+--- !u!114 &374299074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 374299070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcc44fe9042ac4c4196e704062ae4e6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LeaderboardManager
+  document: {fileID: 1094860892}
 --- !u!1 &424119716
 GameObject:
   m_ObjectHideFlags: 0
@@ -1652,19 +1666,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6adb21ea0067a774ab82b21520b123ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIScaler
-  referenceWidth: 1920
-  referenceHeight: 1080
-  buttons:
-  - {fileID: 1205119101}
-  - {fileID: 211688839}
-  - {fileID: 1252970211}
-  - {fileID: 1647433132}
-  - {fileID: 1785733612}
-  - {fileID: 1319321781}
-  titleText: {fileID: 1677226098}
-  minButtonWidth: 200
-  maxButtonWidth: 400
-  buttonHeightRatio: 0.05
 --- !u!1 &1004628171
 GameObject:
   m_ObjectHideFlags: 0
