@@ -1,11 +1,11 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI/USS/GameMenu.uss?fileID=7433441132597879392&amp;guid=a136b945e1747504c90c48062a99ed56&amp;type=3"/>
+    <Style src="project://database/Assets/UI/USS/GameMenu.uss?fileID=7433441132597879392&amp;guid=a136b945e1747504c90c48062a99ed56&amp;type=3#GameMenu"/>
     <ui:GroupBox name="Background" style="align-items: center; max-height: 100%; height: 100%; width: 100%; align-self: center; justify-content: center; align-content: center; -unity-text-align: middle-center; -unity-background-scale-mode: stretch-to-fill; position: relative; min-height: 100%; flex-grow: 1;">
         <ui:Button text="PLAY" name="PlayButton" style="width: 100%; min-height: 0%;"/>
         <ui:Button text="TUTORIAL" name="TutorialButton" style="width: 100%;"/>
         <ui:Button text="SCORES" name="ScoresButton" style="width: 100%;"/>
         <ui:Button text="SETTINGS" name="SettingsButton" style="width: 100%;"/>
-        <ui:Button text="CREDITS" name="CreditsButton" style="width: 100%;"/>
+        <ui:Button text="PROFILE" name="ProfileButton" style="width: 100%;"/>
         <ui:Button text="QUIT" name="QuitButton" style="width: 100%;"/>
         <ui:VisualElement name="TutorialPanel" style="flex-grow: 1; display: none; width: 100%; height: 100%;">
             <ui:Label text="Label" name="TutorialText" style="font-size: 24px; color: rgb(0, 0, 0);"/>
