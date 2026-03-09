@@ -6,12 +6,12 @@ using UnityEngine.SceneManagement;
 
 public class ProfileManager : MonoBehaviour
 {
-    [SerializeField] private UIManager uiManager;
+    [SerializeField] private GameUIManager gameUIManager;
     private VisualElement root;
     private Label greetingLabel;
     private Label namesLabel;
     private Label scoreLabel;
-    private Button playButton;
+    private Button menuButton;
     private Button editButton;
     private Button logoutButton;
     private void Awake()
@@ -27,8 +27,8 @@ public class ProfileManager : MonoBehaviour
         greetingLabel = root.Q<Label>("GreetingLabel");
 
         // fetching the buttons for input and adding events
-        playButton = root.Q<Button>("PlayButton");
-        playButton.clicked += OnPlayClicked;
+        menuButton = root.Q<Button>("MenuButton");
+        menuButton.clicked += OnMenuClicked;
 
         editButton = root.Q<Button>("EditButton");
         editButton.clicked += OnEditClicked;
@@ -37,9 +37,9 @@ public class ProfileManager : MonoBehaviour
         logoutButton.clicked += OnLogoutClicked;
     }
 
-    public void OnPlayClicked()
+    public void OnMenuClicked()
     {
-        SceneManager.LoadScene("MazeScene"); //load the game scene on play button
+        gameUIManager.ShowSelection(); //load the game scene on play button
     }
 
     public void OnEditClicked()
@@ -54,7 +54,7 @@ public class ProfileManager : MonoBehaviour
         DBManager.lastname = null;
         DBManager.username = null;
         DBManager.score = 0;
-        uiManager.ShowWelcome();
+        SceneManager.LoadScene("UI");
     }
 
     // public method being called on login. I made it this way because of issues with username being fetched before the panel is rendered

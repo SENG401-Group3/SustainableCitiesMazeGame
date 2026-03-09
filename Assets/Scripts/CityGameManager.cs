@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 public class CityGameManager : MonoBehaviour
@@ -40,9 +42,37 @@ public class CityGameManager : MonoBehaviour
     // Called by QuestionManager.cs after all questions are answered correctly
     public void AddScoreAndArtifacts()
     {
+        Debug.Log("AddScoreAndArtifacts called");
         playerScore += scorePerQuestion;
         artifactsCollected += artifactReward;
         UpdateUI();
+
+        StartCoroutine(UpdateScore(scorePerQuestion));
+    }
+
+    private IEnumerator UpdateScore(int score)
+    {
+        Debug.Log("Sending score update...");
+
+        WWWForm form = new WWWForm();
+        form.AddField("username", DBManager.username);
+        form.AddField("score", score);
+
+        using (UnityWebRequest www = UnityWebRequest.Post("https://yourserver.com/updatescore.php", form))
+        {
+            yield return www.SendWebRequest();
+
+            Debug.Log("Server returned: " + www.downloadHandler.text);
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError($"❌ Failed to update score: {www.error}");
+            }
+            else
+            {
+                Debug.Log($"✅ Score updated successfully on server: {score}");
+            }
+        }
     }
 
     void LoadPlayerProgress()
