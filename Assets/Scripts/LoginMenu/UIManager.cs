@@ -8,6 +8,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private UIDocument loginDoc;
     [SerializeField] private UIDocument aboutDoc;
     [SerializeField] private UIDocument profileDoc;
+    [SerializeField] private UIDocument resetPasswordDoc;
     [SerializeField] private ProfileManager profileManager;
 
     private VisualElement welcome;
@@ -15,6 +16,7 @@ public class UIManager : MonoBehaviour
     private VisualElement login;
     private VisualElement about;
     private VisualElement profile;
+    private VisualElement resetPassword;
 
     void Awake()
     {
@@ -23,6 +25,7 @@ public class UIManager : MonoBehaviour
         login = loginDoc.rootVisualElement;
         about = aboutDoc.rootVisualElement;
         profile = profileDoc.rootVisualElement;
+        resetPassword = resetPasswordDoc.rootVisualElement;
     }
 
     void Start()
@@ -37,6 +40,7 @@ public class UIManager : MonoBehaviour
         login.style.display = DisplayStyle.None;
         about.style.display = DisplayStyle.None;
         profile.style.display = DisplayStyle.None;
+        resetPassword.style.display = DisplayStyle.None;
     }
 
     public void ShowSignup()
@@ -46,6 +50,7 @@ public class UIManager : MonoBehaviour
         login.style.display = DisplayStyle.None;
         about.style.display = DisplayStyle.None;
         profile.style.display = DisplayStyle.None;
+        resetPassword.style.display = DisplayStyle.None;
     }
 
     public void ShowLogin()
@@ -55,6 +60,7 @@ public class UIManager : MonoBehaviour
         login.style.display = DisplayStyle.Flex;
         about.style.display = DisplayStyle.None;
         profile.style.display = DisplayStyle.None;
+        resetPassword.style.display = DisplayStyle.None;
     }
 
     public void ShowAbout()
@@ -64,6 +70,7 @@ public class UIManager : MonoBehaviour
         login.style.display = DisplayStyle.None;
         about.style.display = DisplayStyle.Flex;
         profile.style.display = DisplayStyle.None;
+        resetPassword.style.display = DisplayStyle.None;
     }
 
     public void ShowProfile()
@@ -72,8 +79,20 @@ public class UIManager : MonoBehaviour
         signup.style.display = DisplayStyle.None;
         login.style.display = DisplayStyle.None;
         about.style.display = DisplayStyle.None;
+        resetPassword.style.display = DisplayStyle.None;
 
         profile.style.display = DisplayStyle.Flex;
         profileManager.LoadProfile();
+    }
+
+    public void ShowResetPassword()
+    {
+        welcome.style.display = DisplayStyle.None;
+        signup.style.display = DisplayStyle.None;
+        login.style.display = DisplayStyle.None;
+        about.style.display = DisplayStyle.None;
+        profile.style.display = DisplayStyle.None;
+
+        resetPassword.style.display = DisplayStyle.Flex;
     }
 }
