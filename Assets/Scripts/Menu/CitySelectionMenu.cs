@@ -1,354 +1,263 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
-using System.Collections.Generic;
 using System.Collections;
 
 public class CitySelectionMenu : MonoBehaviour
 {
-    [Header("UI Toolkit")]
-    public UIDocument document; // Drag your UIDocument here
-
-    [Header("Background")]
-    public Sprite[] cityBackgrounds; // 5 city images
-    private int currentCityIndex = 1;
-
-    [Header("Message")]
-    public string[] sustainabilityMessages = new string[]
-    {
-        "The city has become a little more sustainable!",
-        "Recycling programs have started! The city is cleaner.",
-        "Solar panels are appearing! The city is greener.",
-        "The city is much more sustainable now!",
-        "You've reached the end of the game! Congratulations!"
-    };
-
-    [Header("Audio")]
-    public AudioClip buttonClickSound;
-    private AudioSource audioSource;
-
+    [SerializeField] private GameUIManager gameUIManager;
     private VisualElement root;
-    private VisualElement messagePanel;
-    private Label messageText;
-    private VisualElement tutorialPanel;
-    private Button tutorialBackButton;
     private VisualElement backgroundContainer;
-    private bool isMessageVisible = false;
+    private Button playButton;
+    private Button tutorialButton;
+    private Button settingsButton;
+    private Button profileButton;
+    private Button quitButton;
 
-    // Static variables for seamless transition
+    // YOUR city progression variables
     public static int pendingCityIndex = -1;
     public static string pendingMessage = null;
+    private int currentCityIndex = 1;
+    public Sprite[] cityBackgrounds; // YOUR backgrounds
 
-    // Tutorial text stored directly in script
-    private string tutorialText =
-        "WELCOME TO SUSTAINABILITY CHALLENGE!\n\n" +
-        "• Find the treasure box in the maze\n" +
-        "• Answer sustainability questions correctly\n" +
-        "• Collect artifacts to unlock more sustainable cities\n" +
-        "• Progress through all 5 cities to win!\n\n" +
-        "GOAL: Learn about UN Sustainability Goals while having fun!";
+    private void Awake()
+    {
+        Debug.Log("🔵 Awake() called");
+
+        // Check for UIDocument component
+        var uiDoc = GetComponent<UIDocument>();
+        if (uiDoc == null)
+        {
+            Debug.LogError("❌ CitySelectionMenu: No UIDocument component found on this GameObject!");
+            return;
+        }
+
+        root = uiDoc.rootVisualElement;
+
+        if (root == null)
+            Debug.LogError("❌ CitySelectionMenu: rootVisualElement is null!");
+        else
+            Debug.Log("✅ rootVisualElement found");
+    }
+
+    private void OnEnable()
+    {
+        Debug.Log("🟢 OnEnable() called");
+
+        if (root == null)
+        {
+            Debug.LogError("❌ root is null in OnEnable!");
+            return;
+        }
+
+        // Find background
+        backgroundContainer = root.Q<VisualElement>("Background");
+        if (backgroundContainer == null)
+            Debug.LogError("❌ Could not find 'Background' in UXML!");
+        else
+            Debug.Log("✅ Found 'Background' element");
+
+        // Find all buttons with null checks
+        playButton = root.Q<Button>("PlayButton");
+        if (playButton != null)
+        {
+            playButton.clicked += StartGame;
+            Debug.Log("✅ Found 'PlayButton'");
+        }
+        else
+            Debug.LogError("❌ Could not find 'PlayButton' in UXML!");
+
+        tutorialButton = root.Q<Button>("TutorialButton");
+        if (tutorialButton != null)
+        {
+            tutorialButton.clicked += ShowTutorial;
+            Debug.Log("✅ Found 'TutorialButton'");
+        }
+        else
+            Debug.LogError("❌ Could not find 'TutorialButton' in UXML!");
+
+        settingsButton = root.Q<Button>("SettingsButton");
+        if (settingsButton != null)
+        {
+            settingsButton.clicked += ShowSettings;
+            Debug.Log("✅ Found 'SettingsButton'");
+        }
+        else
+            Debug.LogError("❌ Could not find 'SettingsButton' in UXML!");
+
+        profileButton = root.Q<Button>("ProfileButton");
+        if (profileButton != null)
+        {
+            profileButton.clicked += ShowProfile;
+            Debug.Log("✅ Found 'ProfileButton'");
+        }
+        else
+            Debug.LogError("❌ Could not find 'ProfileButton' in UXML!");
+
+        quitButton = root.Q<Button>("QuitButton");
+        if (quitButton != null)
+        {
+            quitButton.clicked += QuitGame;
+            Debug.Log("✅ Found 'QuitButton'");
+        }
+        else
+            Debug.LogError("❌ Could not find 'QuitButton' in UXML!");
+    }
+
+    private void OnDisable()
+    {
+        Debug.Log("🔴 OnDisable() called");
+
+        // Safely unsubscribe from events
+        if (playButton != null) playButton.clicked -= StartGame;
+        if (tutorialButton != null) tutorialButton.clicked -= ShowTutorial;
+        if (settingsButton != null) settingsButton.clicked -= ShowSettings;
+        if (profileButton != null) profileButton.clicked -= ShowProfile;
+        if (quitButton != null) quitButton.clicked -= QuitGame;
+    }
 
     void Start()
     {
-        InitializeAudio();
+        Debug.Log("🟢 Start() called");
 
-        // Use pending city if available (from QuestionManager)
+        // Find GameUIManager if not assigned
+        if (gameUIManager == null)
+        {
+            gameUIManager = FindFirstObjectByType<GameUIManager>();
+            if (gameUIManager == null)
+                Debug.LogError("❌ GameUIManager not found in scene! Make sure it exists.");
+            else
+                Debug.Log("✅ GameUIManager found");
+        }
+
+        // YOUR city progression logic
         if (pendingCityIndex != -1)
         {
             currentCityIndex = pendingCityIndex;
             pendingCityIndex = -1;
-            Debug.Log($"🏙️ Using pending city index: {currentCityIndex}");
         }
         else
         {
-            LoadProgress();
+            currentCityIndex = PlayerPrefs.GetInt("CurrentCity", 1);
         }
 
-        // Setup UI (will be hidden initially)
-        StartCoroutine(DelayedSetup());
+        UpdateBackground();
 
-        // Show pending message if there is one
-        if (!string.IsNullOrEmpty(pendingMessage))
+        // DEBUG: Check root properties
+        if (root != null)
         {
-            StartCoroutine(ShowDelayedMessage(pendingMessage));
-            pendingMessage = null;
+            Debug.Log($"📊 Root opacity: {root.style.opacity.value}");
+            Debug.Log($"📊 Root display: {root.style.display.value}");
+            Debug.Log($"📊 Root visible: {root.visible}");
+            Debug.Log($"📊 Root worldBound: {root.worldBound}");
         }
 
-        CheckForMessage();
+        StartCoroutine(FadeIn());
     }
 
-    IEnumerator DelayedSetup()
+    IEnumerator FadeIn()
     {
-        yield return new WaitForSeconds(0.1f);
-        SetupUI();
-    }
-
-    IEnumerator ShowDelayedMessage(string message)
-    {
-        // Wait for UI to fully load
-        yield return new WaitForSeconds(0.3f);
-
-        // Show the message
-        if (messagePanel != null && messageText != null)
-        {
-            messageText.text = message;
-            messagePanel.style.display = DisplayStyle.Flex;
-            isMessageVisible = true;
-
-            // Hide after 3 seconds
-            yield return new WaitForSeconds(3f);
-
-            if (messagePanel != null)
-                messagePanel.style.display = DisplayStyle.None;
-            isMessageVisible = false;
-        }
-    }
-
-    void InitializeAudio()
-    {
-        audioSource = GetComponent<AudioSource>();
-        if (audioSource == null)
-            audioSource = gameObject.AddComponent<AudioSource>();
-    }
-
-    void LoadProgress()
-    {
-        currentCityIndex = PlayerPrefs.GetInt("CurrentCity", 1);
-    }
-
-    void SetupUI()
-    {
-        if (document == null)
-        {
-            Debug.LogError("UIDocument not assigned!");
-            return;
-        }
-
-        root = document.rootVisualElement;
+        Debug.Log("🎬 FadeIn coroutine started");
 
         if (root == null)
         {
-            Debug.LogError("Root visual element is null!");
-            return;
+            Debug.LogError("❌ root is null in FadeIn!");
+            yield break;
         }
 
-        // Hide everything initially to prevent flash
-        root.style.display = DisplayStyle.None;
+        root.style.opacity = 0;
+        Debug.Log("📊 Opacity set to 0");
 
-        // Find existing UI elements
-        backgroundContainer = root.Q<VisualElement>("Background");
-        var playButton = root.Q<Button>("PlayButton");
-        var tutorialButton = root.Q<Button>("TutorialButton");
-        var scoresButton = root.Q<Button>("ScoresButton");
-        var settingsButton = root.Q<Button>("SettingsButton");
-        var creditsButton = root.Q<Button>("CreditsButton");
-        var quitButton = root.Q<Button>("QuitButton");
+        yield return new WaitForSeconds(0.2f);
 
-        messagePanel = root.Q<VisualElement>("MessagePanel");
-        messageText = root.Q<Label>("MessageText");
+        root.style.opacity = 1;
+        Debug.Log("📊 Opacity set to 1");
 
-        // Create tutorial panel programmatically
-        CreateTutorialPanel();
-
-        // Debug which buttons were found
-        Debug.Log($"PlayButton found: {playButton != null}");
-        Debug.Log($"TutorialButton found: {tutorialButton != null}");
-        Debug.Log($"ScoresButton found: {scoresButton != null}");
-        Debug.Log($"SettingsButton found: {settingsButton != null}");
-        Debug.Log($"CreditsButton found: {creditsButton != null}");
-        Debug.Log($"QuitButton found: {quitButton != null}");
-
-        // Update background (this happens while hidden)
-        UpdateBackground();
-
-        // Connect button events
-        if (playButton != null) playButton.clicked += StartGame;
-        if (tutorialButton != null) tutorialButton.clicked += ShowTutorial;
-        if (scoresButton != null) scoresButton.clicked += ShowScores;
-        if (settingsButton != null) settingsButton.clicked += ShowSettings;
-        if (creditsButton != null) creditsButton.clicked += ShowCredits;
-        if (quitButton != null) quitButton.clicked += QuitGame;
-
-        // Hide message panel at start
-        if (messagePanel != null)
-            messagePanel.style.display = DisplayStyle.None;
-
-        // Now show everything (after background is correct)
-        root.style.display = DisplayStyle.Flex;
-    }
-
-    void CreateTutorialPanel()
-    {
-        // Create main tutorial container
-        tutorialPanel = new VisualElement();
-        tutorialPanel.name = "TutorialPanel";
-        tutorialPanel.style.position = Position.Absolute;
-        tutorialPanel.style.width = Length.Percent(100);
-        tutorialPanel.style.height = Length.Percent(100);
-        tutorialPanel.style.backgroundColor = new Color(0.1f, 0.1f, 0.1f, 0.95f);
-        tutorialPanel.style.display = DisplayStyle.None; // Hidden by default
-        tutorialPanel.style.alignItems = Align.Center;
-        tutorialPanel.style.justifyContent = Justify.Center;
-
-        // Create tutorial text label
-        var tutorialLabel = new Label();
-        tutorialLabel.name = "TutorialLabel";
-        tutorialLabel.text = tutorialText;
-        tutorialLabel.style.color = Color.white;
-        tutorialLabel.style.fontSize = 24;
-        tutorialLabel.style.whiteSpace = WhiteSpace.Normal;
-        tutorialLabel.style.width = Length.Percent(80);
-        tutorialLabel.style.height = StyleKeyword.Auto;
-        tutorialLabel.style.marginBottom = 30;
-        tutorialLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
-
-        // Create back button
-        tutorialBackButton = new Button();
-        tutorialBackButton.name = "TutorialBackButton";
-        tutorialBackButton.text = "BACK";
-        tutorialBackButton.style.width = 200;
-        tutorialBackButton.style.height = 50;
-        tutorialBackButton.style.backgroundColor = new Color(0.2f, 0.2f, 0.2f);
-        tutorialBackButton.style.color = Color.white;
-        tutorialBackButton.style.fontSize = 20;
-        tutorialBackButton.style.marginTop = 20;
-
-        // Add click handler
-        tutorialBackButton.clicked += HideTutorial;
-
-        // Add elements to panel
-        tutorialPanel.Add(tutorialLabel);
-        tutorialPanel.Add(tutorialBackButton);
-
-        // Add panel to root
-        root.Add(tutorialPanel);
+        // Check again after fade
+        Debug.Log($"📊 Final opacity: {root.style.opacity.value}");
+        Debug.Log($"📊 Final display: {root.style.display.value}");
     }
 
     void UpdateBackground()
     {
         if (backgroundContainer == null)
         {
-            Debug.LogError("Background element not found! Check UXML name.");
+            Debug.LogError("❌ backgroundContainer is null in UpdateBackground!");
             return;
         }
 
         if (cityBackgrounds == null || cityBackgrounds.Length == 0)
         {
-            Debug.LogError("City backgrounds not assigned!");
+            Debug.LogError("❌ cityBackgrounds is null or empty!");
             return;
         }
 
-        Sprite currentCitySprite = cityBackgrounds[currentCityIndex - 1];
-        if (currentCitySprite != null)
+        int index = currentCityIndex - 1;
+        if (index < 0 || index >= cityBackgrounds.Length)
         {
-            backgroundContainer.style.backgroundImage = new StyleBackground(currentCitySprite);
+            Debug.LogError($"❌ Invalid city index: {index}");
+            return;
+        }
+
+        Sprite sprite = cityBackgrounds[index];
+        if (sprite != null)
+        {
+            backgroundContainer.style.backgroundImage = new StyleBackground(sprite);
+            Debug.Log($"✅ Background updated to city {currentCityIndex}");
+        }
+        else
+        {
+            Debug.LogError($"❌ Sprite is null for city {currentCityIndex}");
         }
     }
 
-    void CheckForMessage()
+    private void StartGame()
     {
-        int cityJustUnlocked = PlayerPrefs.GetInt("ShowSustainabilityMessage", 0);
-        if (cityJustUnlocked > 0 && cityJustUnlocked <= sustainabilityMessages.Length)
-        {
-            ShowMessage(sustainabilityMessages[cityJustUnlocked - 1]);
-            PlayerPrefs.SetInt("ShowSustainabilityMessage", 0);
-            PlayerPrefs.Save();
-        }
-    }
-
-    void ShowMessage(string msg)
-    {
-        if (messagePanel != null && messageText != null)
-        {
-            messageText.text = msg;
-            messagePanel.style.display = DisplayStyle.Flex;
-            isMessageVisible = true;
-            Invoke(nameof(HideMessage), 3f);
-        }
-    }
-
-    void HideMessage()
-    {
-        if (messagePanel != null)
-        {
-            messagePanel.style.display = DisplayStyle.None;
-            isMessageVisible = false;
-        }
-    }
-
-    void ShowTutorial()
-    {
-        PlayButtonSound();
-
-        // Hide main menu background
-        if (backgroundContainer != null)
-            backgroundContainer.style.display = DisplayStyle.None;
-
-        // Show tutorial panel
-        if (tutorialPanel != null)
-            tutorialPanel.style.display = DisplayStyle.Flex;
-    }
-
-    void HideTutorial()
-    {
-        PlayButtonSound();
-
-        // Show main menu background
-        if (backgroundContainer != null)
-            backgroundContainer.style.display = DisplayStyle.Flex;
-
-        // Hide tutorial panel
-        if (tutorialPanel != null)
-            tutorialPanel.style.display = DisplayStyle.None;
-    }
-
-    void StartGame()
-    {
-        PlayButtonSound();
-        Debug.Log("Loading scene: MazeScene");
+        Debug.Log("🎮 StartGame() called");
         SceneManager.LoadScene("MazeScene");
     }
 
-    void ShowScores()
+    private void ShowTutorial()
     {
-        PlayButtonSound();
-        Debug.Log("Scores clicked - to be implemented");
+        Debug.Log("📖 ShowTutorial() called");
+
+        // Make sure GameUIManager is enabled
+        if (gameUIManager == null)
+        {
+            gameUIManager = FindFirstObjectByType<GameUIManager>();
+        }
+
+        if (gameUIManager != null)
+        {
+            // Make sure the GameObject is active
+            gameUIManager.gameObject.SetActive(true);
+            gameUIManager.ShowTutorial();
+        }
+        else
+            Debug.LogError("❌ Cannot show tutorial: gameUIManager is null!");
     }
 
-    void ShowSettings()
+    private void ShowSettings()
     {
-        PlayButtonSound();
-        Debug.Log("Settings clicked - to be implemented");
+        Debug.Log("⚙️ ShowSettings() called");
     }
 
-    void ShowCredits()
+    private void ShowProfile()
     {
-        PlayButtonSound();
-        Debug.Log("Credits clicked - to be implemented");
+        Debug.Log("👤 ShowProfile() called");
+        if (gameUIManager != null)
+            gameUIManager.ShowProfile();
+        else
+            Debug.LogError("❌ Cannot show profile: gameUIManager is null!");
     }
 
-    void QuitGame()
+    private void QuitGame()
     {
-        PlayButtonSound();
+        Debug.Log("👋 QuitGame() called");
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
         Application.Quit();
 #endif
-    }
-
-    void PlayButtonSound()
-    {
-        if (buttonClickSound != null && audioSource != null)
-        {
-            audioSource.PlayOneShot(buttonClickSound);
-        }
-    }
-
-    public void ResetProgress()
-    {
-        PlayerPrefs.DeleteAll();
-        LoadProgress();
-        UpdateBackground();
     }
 }

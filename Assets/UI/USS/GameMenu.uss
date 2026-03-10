@@ -18,3 +18,143 @@
     align-self: center;
     align-content: center;
 }
+
+/* Leaderboard Panel */
+#LeaderboardPanel {
+    background-color: rgba(0, 0, 0, 0.9);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+#LeaderboardTitle {
+    font-size: 48px;
+    color: gold;
+    margin-bottom: 30px;
+    -unity-font-style: bold;
+}
+
+#ScoreList {
+    background-color: rgba(30, 30, 30, 0.95);
+    width: 600px;
+    height: 400px;
+    overflow-y: scroll;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 2px solid #444;
+}
+
+/* Updated Score Entry with Transitions for AC */
+.score-entry {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 8px 15px;
+    margin-bottom: 2px;
+    color: white;
+    font-size: 18px;
+    background-color: rgba(50, 50, 50, 0.5);
+    border-radius: 5px;
+    /* Added transitions for satisfying feel */
+    transition-property: background-color, scale, border-color;
+    transition-duration: 0.4s;
+    transition-timing-function: ease-out-back;
+}
+
+/* AC: Rank highlight animation class */
+.score-entry--highlight {
+    background-color: rgba(76, 175, 80, 0.6);
+    scale: 1.05;
+    border-width: 2px;
+    border-color: gold;
+}
+
+.score-entry:hover {
+    background-color: rgba(80, 80, 80, 0.8);
+}
+
+.rank-label { width: 50px; color: gold; }
+.name-label { width: 200px; }
+.score-label { width: 80px; color: rgb(76, 175, 80); }
+
+#SubmitButton {
+    background-color: #4CAF50;
+    color: white;
+    font-size: 20px;
+    width: 200px;
+    height: 50px;
+    margin: 5px;
+    border-radius: 8px;
+    border: none;
+}
+
+#SubmitButton:hover { background-color: #45a049; }
+#SubmitButton:disabled { background-color: #666; opacity: 0.5; }
+
+#RetryButton {
+    background-color: #f44336;
+    color: white;
+    font-size: 20px;
+    width: 200px;
+    height: 50px;
+    margin: 5px;
+    border-radius: 8px;
+    border: none;
+}
+
+#RetryButton:hover { background-color: #da190b; }
+
+#CloseLeaderboardButton {
+    background-color: #ff9800;
+    color: white;
+    font-size: 20px;
+    width: 200px;
+    height: 50px;
+    margin: 5px;
+    border-radius: 8px;
+    border: none;
+}
+
+/* Loading Spinner with existing rotation logic */
+#LoadingSpinner {
+    width: 40px;
+    height: 40px;
+    margin: 10px;
+    border-width: 4px;
+    border-color: white;
+    border-style: solid;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { rotate: 0deg; }
+    to { rotate: 360deg; }
+}
+
+#StatusMessage {
+    font-size: 18px;
+    margin: 10px;
+    padding: 10px;
+    color: white;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    min-width: 200px;
+    /* Transition for fading */
+    transition-property: opacity;
+    transition-duration: 0.5s;
+}
+
+.button-container {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+}

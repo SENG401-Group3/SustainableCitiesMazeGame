@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/USS/GameMenu.uss?fileID=7433441132597879392&amp;guid=a136b945e1747504c90c48062a99ed56&amp;type=3#GameMenu"/>
+    <ui:VisualElement name="TutorialPanel" class="panel" style="flex-grow: 1; justify-content: flex-start; align-self: stretch; align-content: center;">
+        <ui:VisualElement name="Container" class="container" style="flex-grow: 1; flex-wrap: wrap; align-self: center; align-content: center; max-height: none; margin-top: 10%;">
+            <ui:Label text="WELCOME TO SUSTAINABILITY CHALLENGE!" name="WelcomeLabel" style="color: rgb(255, 255, 255); font-size: 25%; margin-top: 4px; -unity-font-style: bold;"/>
+            <ui:Label text="• Find the treasure box in the maze&#10;• Answer sustainability questions correctly&#10;• Collect artifacts to unlock more sustainable cities&#10;• Progress through all 5 cities to win!&#10;&#10;GOAL: Learn about UN Sustainability Goals while having fun!" name="TutorialLabel" style="color: rgb(255, 255, 255);"/>
+            <ui:Button text="BACK" name="BackButton" style="background-color: rgb(255, 165, 0); border-top-width: 1px; padding-top: 10px; margin-top: 5%;"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
