@@ -139,8 +139,6 @@ public class PlayerController : MonoBehaviour, Observer
     public void notify(){
       // if notified, check if we have to update properties based on the items picked up
       // this works for the item pickup system
-      Debug.Log("notified!");
-
       if(itemController.hasItem(HelperItem.itemName.SpeedBoost)){
         maxVel *= (float)1.2;
         itemController.useItem(HelperItem.itemName.SpeedBoost);
