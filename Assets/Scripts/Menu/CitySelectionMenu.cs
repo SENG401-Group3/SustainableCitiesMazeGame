@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
-//using System.Collections.Generic;
 using System.Collections;
 
 public class CitySelectionMenu : MonoBehaviour
