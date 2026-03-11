@@ -92,10 +92,9 @@ public class LoginController : MonoBehaviour
                     successLabel.style.visibility = Visibility.Visible;
 
                     yield return new WaitForSeconds(1f);
-                    //Debug.Log("Saved username: " + DBManager.username);
-                    uiManager.ShowProfile();
+                    Debug.Log("Saved username: " + DBManager.username);
+                    UnityEngine.SceneManagement.SceneManager.LoadScene(0);
                     successLabel.text = "";
-                    //UnityEngine.SceneManagement.SceneManager.LoadScene(0);
                 }
                 else
                 {
