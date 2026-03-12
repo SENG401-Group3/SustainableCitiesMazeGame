@@ -10,66 +10,57 @@ public class CitySelectionMenu : MonoBehaviour
     private VisualElement backgroundContainer;
     private Button playButton;
     private Button tutorialButton;
-    private Button scoresButton;
     private Button settingsButton;
     private Button profileButton;
     private Button quitButton;
+
     public static int pendingCityIndex = -1;
     public static string pendingMessage = null;
     private int currentCityIndex = 1;
     public Sprite[] cityBackgrounds;
+
     private void Awake()
     {
         // fetch the panel as soon as it is initialized
         root = GetComponent<UIDocument>().rootVisualElement;
-        //welcomePanel = welcomeDoc.rootVisualElement;
     }
 
     private void OnEnable()
     {
+        if (root == null) return;
+
         backgroundContainer = root.Q<VisualElement>("Background");
 
         playButton = root.Q<Button>("PlayButton");
-        playButton.clicked += StartGame;
+        if (playButton != null)
+            playButton.clicked += StartGame;
 
         tutorialButton = root.Q<Button>("TutorialButton");
-        tutorialButton.clicked += ShowTutorial;
-        
-        scoresButton = root.Q<Button>("ScoresButton");
-        scoresButton.clicked += ShowScores;
+        if (tutorialButton != null)
+            tutorialButton.clicked += ShowTutorial;
+
+        // Scores button removed
 
         settingsButton = root.Q<Button>("SettingsButton");
-        settingsButton.clicked += ShowSettings;
+        if (settingsButton != null)
+            settingsButton.clicked += ShowSettings;
 
         profileButton = root.Q<Button>("ProfileButton");
-        profileButton.clicked += ShowProfile;
+        if (profileButton != null)
+            profileButton.clicked += ShowProfile;
 
         quitButton = root.Q<Button>("QuitButton");
-        quitButton.clicked += QuitGame;
-
-        //UpdateBackground();
-
-        /*messagePanel = root.Q<VisualElement>("MessagePanel");
-        messageText = root.Q<Label>("MessageText");
-
-        leaderboardPanel = root.Q<VisualElement>("LeaderboardPanel");
-        closeLeaderboardButton = root.Q<Button>("CloseLeaderboardButton");
-
-        
-        if (closeLeaderboardButton != null) closeLeaderboardButton.clicked += HideLeaderboard;
-
-        if (messagePanel != null) messagePanel.style.display = DisplayStyle.None;
-        if (leaderboardPanel != null) leaderboardPanel.style.display = DisplayStyle.None;*/
+        if (quitButton != null)
+            quitButton.clicked += QuitGame;
     }
 
     private void OnDisable()
     {
-        playButton.clicked -= StartGame;
-        tutorialButton.clicked -= ShowTutorial;
-        scoresButton.clicked -= ShowScores;
-        settingsButton.clicked -= ShowSettings;
-        profileButton.clicked -= ShowProfile;
-        quitButton.clicked -= QuitGame;
+        if (playButton != null) playButton.clicked -= StartGame;
+        if (tutorialButton != null) tutorialButton.clicked -= ShowTutorial;
+        if (settingsButton != null) settingsButton.clicked -= ShowSettings;
+        if (profileButton != null) profileButton.clicked -= ShowProfile;
+        if (quitButton != null) quitButton.clicked -= QuitGame;
     }
 
     void UpdateBackground()
@@ -90,41 +81,62 @@ public class CitySelectionMenu : MonoBehaviour
 
     private void StartGame()
     {
-        //PlayButtonSound();
         SceneManager.LoadScene("MazeScene");
     }
 
     private void ShowTutorial()
     {
-        gameUIManager.ShowTutorial();
-    }
+        Debug.Log("🔵 STEP 1: CitySelectionMenu.ShowTutorial() CALLED");
 
-    private void ShowScores()
-    {
-        gameUIManager.ShowScores();
+        if (gameUIManager == null)
+        {
+            gameUIManager = FindFirstObjectByType<GameUIManager>();
+            Debug.Log($"🔵 STEP 2: GameUIManager found: {gameUIManager != null}");
+        }
+
+        if (gameUIManager != null)
+        {
+            Debug.Log("🔵 STEP 3: Calling gameUIManager.ShowTutorial()");
+            gameUIManager.ShowTutorial();
+        }
+        else
+        {
+            Debug.LogError("❌ GameUIManager is NULL!");
+        }
     }
 
     private void ShowSettings()
     {
-        
+        Debug.Log("Settings button clicked");
     }
 
     private void ShowProfile()
     {
-        gameUIManager.ShowProfile();
+        if (gameUIManager != null)
+            gameUIManager.ShowProfile();
+        else
+            Debug.LogError("❌ Cannot show profile: gameUIManager is null!");
     }
 
     private void QuitGame()
     {
-        #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-        #else
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
             Application.Quit();
-        #endif
+#endif
     }
 
     void Start()
     {
+        // Find GameUIManager if not assigned
+        if (gameUIManager == null)
+        {
+            gameUIManager = FindFirstObjectByType<GameUIManager>();
+            if (gameUIManager == null)
+                Debug.LogError("❌ GameUIManager not found in scene! Make sure it exists.");
+        }
+
         if (pendingCityIndex != -1)
         {
             currentCityIndex = pendingCityIndex;
