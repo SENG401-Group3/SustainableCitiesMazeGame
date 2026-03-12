@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/CitySelection.unity
     guid: becc0f1a3e04d014f9be05107883217c
   - enabled: 1
+    path: Assets/Scenes/LoginMenu/UI.unity
+    guid: 3f8490a6a7f980d42bdbf9a622ee65da
+  - enabled: 1
     path: Assets/Scenes/Maze/MazeScene.unity
     guid: 99589be6ea3b2451d960a1516a51a1bb
   - enabled: 1
