@@ -85,33 +85,37 @@ public class CityGameManager : MonoBehaviour
         SaveCityProgress();
 
         UpdateUI();
-        StartCoroutine(UpdateScore(points));
+
+        // DATABASE CODE COMMENTED OUT - causing null reference errors
+        // StartCoroutine(UpdateScore(points));
     }
 
+    /*
     private IEnumerator UpdateScore(int score)
-{
-    Debug.Log("Sending score update...");
-
-    WWWForm form = new WWWForm();
-    form.AddField("username", DBManager.username);
-    form.AddField("points", score);
-
-    using (UnityWebRequest www = UnityWebRequest.Post("http://localhost/SQLConnect/updatescore.php", form))
     {
-        yield return www.SendWebRequest();
+        Debug.Log("Sending score update...");
 
-        Debug.Log("Server returned: " + www.downloadHandler.text);
+        WWWForm form = new WWWForm();
+        form.AddField("username", DBManager.username);
+        form.AddField("points", score);
 
-        if (www.result != UnityWebRequest.Result.Success)
+        using (UnityWebRequest www = UnityWebRequest.Post("http://localhost/SQLConnect/updatescore.php", form))
         {
-            Debug.LogError($"❌ Failed to update score: {www.error}");
-        }
-        else
-        {
-            Debug.Log($"✅ Score updated successfully on server: {score}");
+            yield return www.SendWebRequest();
+
+            Debug.Log("Server returned: " + www.downloadHandler.text);
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError($"❌ Failed to update score: {www.error}");
+            }
+            else
+            {
+                Debug.Log($"✅ Score updated successfully on server: {score}");
+            }
         }
     }
-}
+    */
 
     void SaveCityProgress()
     {
