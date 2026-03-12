@@ -90,7 +90,7 @@ public class CityGameManager : MonoBehaviour
         // StartCoroutine(UpdateScore(points));
     }
 
-    /*
+    
     private IEnumerator UpdateScore(int score)
     {
         Debug.Log("Sending score update...");
@@ -115,7 +115,7 @@ public class CityGameManager : MonoBehaviour
             }
         }
     }
-    */
+    
 
     void SaveCityProgress()
     {
