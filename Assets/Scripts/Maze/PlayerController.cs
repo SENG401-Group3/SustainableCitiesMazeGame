@@ -5,8 +5,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
+using Patterns;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, Observer
 {
   private const double invalidPos = -1E3;
 
@@ -26,6 +27,9 @@ public class PlayerController : MonoBehaviour
 
   [SerializeField]
   private float velDecay;
+
+  [SerializeField]
+  private PlayerItemController itemController;
 
   private Vector2 targetPosition;
   private float targetDistance;
@@ -133,6 +137,15 @@ public class PlayerController : MonoBehaviour
         updateVelocity(pressedDirections);
     }
 
+    public void notify(){
+      // if notified, check if we have to update properties based on the items picked up
+      // this works for the item pickup system
+      if(itemController.hasItem(HelperItem.itemName.SpeedBoost)){
+        maxVel *= (float)1.2;
+        itemController.useItem(HelperItem.itemName.SpeedBoost);
+      }
+
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -143,6 +156,8 @@ public class PlayerController : MonoBehaviour
       velocity = new Vector2(0,0);
       targetPosition = new Vector2((float)invalidPos, (float)invalidPos);
       pressedDirections = new List<Directions>();
+
+      itemController.addObserver(this);
 
       Input.simulateMouseWithTouches = true;
       UnityEngine.InputSystem.EnhancedTouch.EnhancedTouchSupport.Enable();

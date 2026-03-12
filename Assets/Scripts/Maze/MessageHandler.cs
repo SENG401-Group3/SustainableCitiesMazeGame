@@ -23,10 +23,10 @@ public class MessageHandler : MonoBehaviour
     parentCanvas = gameObject.GetComponent<Transform>();
 
     // specify where the text will sit
-    baseAnchorPosition = new Vector2(-250, -225);
+    baseAnchorPosition = new Vector2(-250, -150);
 
     // create a text object
-    CreateTextObject("test");
+    CreateTextObject("");
 
     // create a message queue
     messageQ = new Queue<string>();
