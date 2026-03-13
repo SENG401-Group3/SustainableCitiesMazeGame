@@ -3,7 +3,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.InputSystem;
 
 public class QuestionManager : MonoBehaviour
 {
@@ -21,32 +20,18 @@ public class QuestionManager : MonoBehaviour
     {
         root = document.rootVisualElement;
 
-        // Link UI
+        // Link UI - ENSURE THESE NAMES MATCH UI BUILDER EXACTLY
         questionText = root.Q<Label>("QuestionText");
         feedbackText = root.Q<Label>("FeedbackText");
         continueButton = root.Q<Button>("ContinueButton");
 
-        Debug.Log($"🔍 Continue button found: {continueButton != null}");
-
+        // Initialization
         if (feedbackText != null) feedbackText.text = "";
+        if (continueButton != null) continueButton.style.display = DisplayStyle.None;
 
-        if (continueButton != null)
-        {
-            continueButton.style.display = DisplayStyle.None;
-
-            // SIMPLE DIRECT ASSIGNMENT - no lambda, no extra events
-            continueButton.clicked += OnContinueClicked;
-
-            Debug.Log("✅ Continue button event assigned directly");
-        }
-        else
-        {
-            Debug.LogError("❌ Continue button is NULL in Start!");
-        }
-
-        // Answer buttons
         for (int i = 0; i < 3; i++)
         {
+            // Looking for AnswerButton0, AnswerButton1, AnswerButton2
             answerButtons[i] = root.Q<Button>($"AnswerButton{i}");
             if (answerButtons[i] != null)
             {
@@ -55,47 +40,30 @@ public class QuestionManager : MonoBehaviour
             }
         }
 
+        if (continueButton != null)
+            continueButton.clicked += FinishAndRedirect;
+
         LoadQuestionForCity(PlayerPrefs.GetInt("CurrentCity", 1));
-    }
-
-    // DIRECT METHOD for continue button
-    void OnContinueClicked()
-    {
-        Debug.Log("🎯🎯🎯 ON CONTINUE CLICKED EXECUTED! 🎯🎯🎯");
-        Debug.Log("🔴 FINISH AND REDIRECT WAS CALLED!");
-
-        PlayerPrefs.Save();
-        int currentCity = PlayerPrefs.GetInt("CurrentCity", 1);
-        Debug.Log($"🔄 Current city: {currentCity}");
-
-        if (CityUpdater.Instance != null)
-        {
-            Debug.Log("✅ CityUpdater.Instance found");
-            CityUpdater.Instance.CompleteCity();
-        }
-        else
-        {
-            Debug.LogError("❌ CityUpdater instance not found!");
-            SceneManager.LoadScene("CitySelection");
-        }
     }
 
     void LoadQuestionForCity(int city)
     {
         string diff = city <= 2 ? "easy" : (city <= 4 ? "medium" : "hard");
 
+        // Ensure the bank exists and contains the difficulty
         if (QuestionsBank.Questionss != null && QuestionsBank.Questionss.ContainsKey(diff))
         {
             var available = QuestionsBank.Questionss[diff];
             currentQuestion = available[Random.Range(0, available.Count)];
 
+            // Apply text to UI
             if (questionText != null) questionText.text = currentQuestion.Prompt;
             for (int i = 0; i < 3; i++)
             {
                 if (answerButtons[i] != null) answerButtons[i].text = currentQuestion.Choices[i];
             }
         }
-        else { Debug.LogError("QuestionsBank missing!"); }
+        else { Debug.LogError("QuestionsBank is missing or difficulty not found!"); }
     }
 
     void OnAnswerSelected(int index)
@@ -104,12 +72,16 @@ public class QuestionManager : MonoBehaviour
         attemptCount++;
 
         string choice = (index == 0) ? "A" : (index == 1 ? "B" : "C");
-        Debug.Log($"📝 Answer: {choice}, Attempt: {attemptCount}");
+        Debug.Log($"📝 Answer selected: {choice}, Attempt: {attemptCount}");
+        Debug.Log($"Current Question - Correct Answer: {currentQuestion.CorrectAnswer}");
 
         if (choice == currentQuestion.CorrectAnswer)
         {
             questionCompleted = true;
+            // The 10, 5, 3 Point System
             int points = (attemptCount == 1) ? 10 : (attemptCount == 2 ? 5 : 3);
+
+            Debug.Log($"✅ CORRECT! Awarding {points} points on attempt {attemptCount}");
 
             if (feedbackText != null)
             {
@@ -119,12 +91,22 @@ public class QuestionManager : MonoBehaviour
             }
 
             CityGameManager gm = FindFirstObjectByType<CityGameManager>();
-            if (gm != null) gm.AddScoreAndArtifacts(points);
+            if (gm != null)
+            {
+                gm.AddScoreAndArtifacts(points);
+                Debug.Log($"✅ Added {points} points to CityGameManager. Total now: {gm.GetPlayerScore()}");
+            }
+            else
+            {
+                Debug.LogError("❌ CityGameManager not found!");
+            }
 
             ShowEndUI();
         }
         else if (attemptCount >= 3)
         {
+            Debug.Log($"❌ Out of tries! Correct answer was {currentQuestion.CorrectAnswer}");
+
             if (feedbackText != null)
             {
                 feedbackText.text = $"Out of tries! Answer was {currentQuestion.CorrectAnswer}";
@@ -135,6 +117,8 @@ public class QuestionManager : MonoBehaviour
         }
         else
         {
+            Debug.Log($"❌ Incorrect, try again! Attempt {attemptCount}/3");
+
             if (feedbackText != null)
             {
                 feedbackText.text = "Incorrect, try again!";
@@ -146,42 +130,30 @@ public class QuestionManager : MonoBehaviour
 
     void ShowEndUI()
     {
-        Debug.Log("📢 ShowEndUI() called");
-
-        foreach (var b in answerButtons)
-        {
-            if (b != null) b.style.display = DisplayStyle.None;
-        }
-
-        if (continueButton != null)
-        {
-            continueButton.style.display = DisplayStyle.Flex;
-            continueButton.SetEnabled(true);
-            continueButton.Focus(); // Try to force focus
-            Debug.Log("✅ Continue button visible and enabled");
-        }
+        foreach (var b in answerButtons) if (b != null) b.style.display = DisplayStyle.None;
+        if (continueButton != null) continueButton.style.display = DisplayStyle.Flex;
     }
 
-    void Update()
+    void FinishAndRedirect()
     {
-        // Press F8 to check button
-        if (Keyboard.current != null && Keyboard.current.f8Key.wasPressedThisFrame)
-        {
-            if (continueButton != null)
-            {
-                Debug.Log($"🔍 Button display: {continueButton.style.display.value}");
-                Debug.Log($"🔍 Button enabled: {continueButton.enabledSelf}");
-            }
-        }
+        // Save and trigger CityUpdater logic
+        PlayerPrefs.Save();
 
-        // Press F9 to simulate click
-        if (Keyboard.current != null && Keyboard.current.f9Key.wasPressedThisFrame)
+        int currentCity = PlayerPrefs.GetInt("CurrentCity", 1);
+        Debug.Log($"🔄 FinishAndRedirect called for City {currentCity}");
+
+        // Use the singleton instance instead of Find
+        if (CityUpdater.Instance != null)
         {
-            if (continueButton != null && continueButton.style.display.value == DisplayStyle.Flex)
-            {
-                Debug.Log("🟢 SIMULATING BUTTON CLICK");
-                OnContinueClicked();
-            }
+            // Let CityUpdater handle all city completions
+            CityUpdater.Instance.CompleteCity();
+        }
+        else
+        {
+            Debug.LogError("❌ CityUpdater instance not found! Make sure it persists between scenes.");
+
+            // Fallback - go to city selection
+            SceneManager.LoadScene("CitySelection");
         }
     }
 }
