@@ -124,15 +124,12 @@ public class MazeController : MonoBehaviour
     int maxDist = maze.getMaxDistance();
 
     // spawn the artifact at a given depth
-    // interactable.spawn(new Vector2Int((int)(maxDist * 0.5), (int)(maxDist * 0.8)), maze, GetRoomSize());
-    interactable.spawn(new Vector2Int(0, 3), maze, GetRoomSize());
+    interactable.spawn(new Vector2Int((int)(maxDist * 0.5), (int)(maxDist * 0.8)), maze, GetRoomSize());
   }
 
   private void spawnHelperItems(){
     // get the maximum distance found in the maze
     int maxDist = maze.getMaxDistance();
-
-
 
     // spawn the HintScroll
     GameObject scroll = Instantiate(hintScroll,
@@ -142,15 +139,14 @@ public class MazeController : MonoBehaviour
     interactable.setMessageHandler(messageHandler);
 
     // spawn the artifact at a given depth
-    // interactable.spawn(new Vector2Int((int)(maxDist * 0.8), maxDist), maze, GetRoomSize());
-    interactable.spawn(new Vector2Int(0, 1), maze, GetRoomSize());
+    interactable.spawn(new Vector2Int((int)(maxDist * 0.8), maxDist), maze, GetRoomSize());
 
 
     // spawn other items
     int numHelperItems = 5;
     for(int i = 0; i < numHelperItems; i++){
 
-      // spawn the HintScroll
+      // spawn the other items
       GameObject hItem = Instantiate(helperItem,
           new Vector3(-100, -100, -100),
           Quaternion.identity);
@@ -161,9 +157,8 @@ public class MazeController : MonoBehaviour
       item.setMessageHandler(messageHandler);
       item.itemController = itemController;
 
-      // spawn the artifact at a given depth
-      // interactable.spawn(new Vector2Int((int)(maxDist * 0.8), maxDist), maze, GetRoomSize());
-      item.spawn(new Vector2Int(0, 10), maze, GetRoomSize());
+      // spawn the item at a given depth
+      item.spawn(new Vector2Int(0, maxDist), maze, GetRoomSize());
 
     }
 
