@@ -271,7 +271,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_MaskInteraction: 0
   m_Sprite: {fileID: -3371894316759702682, guid: 0daacbbadd01647b09e197d1673738a9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -515,7 +515,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_MaskInteraction: 0
   m_Sprite: {fileID: -3371894316759702682, guid: 0daacbbadd01647b09e197d1673738a9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1071,7 +1071,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_MaskInteraction: 0
   m_Sprite: {fileID: -3371894316759702682, guid: 0daacbbadd01647b09e197d1673738a9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1162,7 +1162,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_MaskInteraction: 0
   m_Sprite: {fileID: -3371894316759702682, guid: 0daacbbadd01647b09e197d1673738a9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1227,8 +1227,8 @@ MonoBehaviour:
   pitfall: {fileID: 7286632328712654283, guid: fce1c0380c5af4380a0f6e6510de95c1, type: 3}
   messageHandler: {fileID: 1892598967}
   itemController: {fileID: 1989048485}
-  mazeDimsX: 50
-  mazeDimsY: 50
+  mazeDimsX: 25
+  mazeDimsY: 25
   camTilesZoom: 5.5
 --- !u!4 &1891565986
 Transform:
@@ -1417,7 +1417,6 @@ SceneRoots:
   - {fileID: 619394802}
   - {fileID: 305159225}
   - {fileID: 1576454047}
-  - {fileID: 323270737}
   - {fileID: 116118716}
   - {fileID: 6451592689806786814}
   - {fileID: 864148328}
