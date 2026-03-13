@@ -705,52 +705,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1147730126
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1147730128}
-  - component: {fileID: 1147730127}
-  m_Layer: 0
-  m_Name: CityGameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1147730127
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1147730126}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a8e2ac5077d98243be2d4ffd978cbea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CityGameManager
-  scoreText: {fileID: 0}
-  artifactsText: {fileID: 0}
---- !u!4 &1147730128
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1147730126}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 70.98132, y: 236.23541, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1576454044
 GameObject:
   m_ObjectHideFlags: 0
@@ -843,7 +797,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 2
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -4884595094221595502, guid: 47acc353888fc9943963a1d025355510, type: 3}
+  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -977,9 +931,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1a47250dc971a94e9ba4e537fd475da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SimplePlayerAnimation
-  idleSprite: {fileID: -4884595094221595502, guid: 47acc353888fc9943963a1d025355510, type: 3}
-  walkSprite: {fileID: -7446568635235715570, guid: 47acc353888fc9943963a1d025355510, type: 3}
-  jumpSprite: {fileID: -8572364662651168478, guid: 47acc353888fc9943963a1d025355510, type: 3}
+  idleSprite: {fileID: -7446568635235715570, guid: 47acc353888fc9943963a1d025355510, type: 3}
+  walkSprite: {fileID: -7743937721157804551, guid: 47acc353888fc9943963a1d025355510, type: 3}
+  jumpSprite: {fileID: 4068640662623103159, guid: 47acc353888fc9943963a1d025355510, type: 3}
   idleThreshold: 0.1
 --- !u!58 &1576454053
 CircleCollider2D:
@@ -1463,11 +1417,11 @@ SceneRoots:
   - {fileID: 619394802}
   - {fileID: 305159225}
   - {fileID: 1576454047}
+  - {fileID: 323270737}
   - {fileID: 116118716}
   - {fileID: 6451592689806786814}
   - {fileID: 864148328}
   - {fileID: 1989048486}
-  - {fileID: 1147730128}
   - {fileID: 1891565986}
   - {fileID: 1629865495}
   - {fileID: 315977720}

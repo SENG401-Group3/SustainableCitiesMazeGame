@@ -18,6 +18,7 @@ public class LoginController : MonoBehaviour
     //private Button registerButton;
     private Button backButton;
     private Button loginButton;
+    private Button forgotPasswordButton;
 
     private void Awake()
     {
@@ -33,6 +34,9 @@ public class LoginController : MonoBehaviour
 
         loginButton = root.Q<Button>("LoginButton");
         loginButton.clicked += OnLoginClicked;
+
+        forgotPasswordButton = root.Q<Button>("ForgotPasswordButton");
+        forgotPasswordButton.clicked += OnForgotPasswordClicked;
 
         // Retrieve the input fields
         usernameInput = root.Q<TextField>("UsernameField");
@@ -54,6 +58,11 @@ public class LoginController : MonoBehaviour
     private void OnBackClicked()
     {
         uiManager.ShowWelcome();
+    }
+
+    private void OnForgotPasswordClicked()
+    {
+        uiManager.ShowResetPassword();
     }
 
     private void OnLoginClicked()
@@ -92,10 +101,9 @@ public class LoginController : MonoBehaviour
                     successLabel.style.visibility = Visibility.Visible;
 
                     yield return new WaitForSeconds(1f);
-                    //Debug.Log("Saved username: " + DBManager.username);
-                    uiManager.ShowProfile();
+                    Debug.Log("Saved username: " + DBManager.username);
+                    UnityEngine.SceneManagement.SceneManager.LoadScene(0);
                     successLabel.text = "";
-                    //UnityEngine.SceneManagement.SceneManager.LoadScene(0);
                 }
                 else
                 {
