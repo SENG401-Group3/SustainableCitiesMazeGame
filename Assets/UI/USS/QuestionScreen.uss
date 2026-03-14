@@ -9,7 +9,6 @@
 
 /* Base button styles */
 Button {
-    -unity-font-definition: var(--button-font);
     background-color: var(--button-default);
     color: var(--text-color);
     font-size: 20px;
@@ -52,20 +51,66 @@ Button.incorrect {
     100% { translate: 0; }
 }
 
-/* Question text styling */
+/* Base Label styling */
 Label {
     color: var(--text-color);
-    font-size: 24px;
     -unity-text-align: middle-center;
     white-space: normal;
+}
+
+/* Prompt text styling */
+#PromptText {
+    font-size: 22px;
+    color: var(--text-color);
+    -unity-text-align: middle-center;
+    white-space: normal;
+    margin-bottom: 15px;
+    opacity: 0.9;
+    font-style: italic;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+/* Question text styling */
+#QuestionText {
+    font-size: 28px;
+    color: var(--text-color);
+    -unity-text-align: middle-center;
+    white-space: normal;
+    font-weight: bold;
+    line-height: 1.4;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-bottom: 10px;
+}
+
+/* Question container */
+#QuestionContainer {
+    margin-bottom: 30px;
+    padding: 15px;
+    width: 100%;
+}
+
+/* Separator styling - FIXED: removed background shorthand */
+#Separator {
+    width: 60%;
+    height: 2px;
+    background-color: rgba(255, 255, 255, 0.2);
+    margin-top: 5px;
+    margin-bottom: 25px;
+    opacity: 0.3;
+    align-self: center;
 }
 
 /* Feedback text */
 #FeedbackText {
     font-size: 20px;
-    margin-top: 20px;
+    margin-top: 25px;
+    margin-bottom: 15px;
     transition-property: opacity;
     transition-duration: 0.2s;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 /* Correct feedback */
@@ -85,6 +130,8 @@ Label {
     height: 50px;
     font-size: 24px;
     font-weight: bold;
+    margin-top: 20px;
+    align-self: center;
 }
 
 #ContinueButton:hover {
@@ -95,11 +142,37 @@ Label {
 /* Main question panel */
 #QuestionPanel {
     background-color: rgba(0, 0, 0, 0.85);
-    padding: 20px;
+    padding: 25px;
+    align-items: center;
 }
 
 /* Answer container */
 #AnswerContainer {
     width: 100%;
     align-items: center;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+/* Individual answer button styling */
+#AnswerButton0, #AnswerButton1, #AnswerButton2 {
+    width: 300px;
+    height: 50px;
+    font-size: 20px;
+    margin-bottom: 15px;
+    background-color: var(--button-default);
+}
+
+/* Hint text */
+#HintText {
+    font-size: 18px;
+    margin-top: 15px;
+    color: #4CAF50;
+}
+
+/* Progress message */
+#ProgressMessage {
+    font-size: 18px;
+    margin-top: 15px;
+    color: #4CAF50;
 }

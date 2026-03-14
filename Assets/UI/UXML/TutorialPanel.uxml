@@ -3,7 +3,7 @@
     <ui:VisualElement name="TutorialPanel" class="panel" style="flex-grow: 1; justify-content: flex-start; align-self: stretch; align-content: center;">
         <ui:VisualElement name="Container" class="container" style="flex-grow: 1; flex-wrap: wrap; align-self: center; align-content: center; max-height: none; margin-top: 10%;">
             <ui:Label text="WELCOME TO SUSTAINABILITY CHALLENGE!" name="WelcomeLabel" style="color: rgb(255, 255, 255); font-size: 25%; margin-top: 4px; -unity-font-style: bold;"/>
-            <ui:Label text="• Find the treasure box in the maze&#10;• Answer sustainability questions correctly&#10;• Collect artifacts to unlock more sustainable cities&#10;• Progress through all 5 cities to win!&#10;&#10;GOAL: Learn about UN Sustainability Goals while having fun!" name="TutorialLabel" style="color: rgb(255, 255, 255);"/>
+            <ui:Label text="🎮 CONTROLS: WASD / Arrow Keys | Click to move | SPACE to interact&#10;&#10;📦 GAMEPLAY:&#10;• Find treasure boxes in the maze&#10;• Answer sustainability questions&#10;• Earn points: 10 (1st try) | 5 (2nd try) | 3 (3rd try)&#10;• Unlock 5 increasingly sustainable cities&#10;&#10;🏙️ CITIES: Industrial → Developing → Green → Eco → Sustainable Paradise&#10;&#10;🎯 GOAL: Learn UN Sustainability Goals while having fun!&#10;Complete all cities to see your score on the leaderboard!" name="TutorialLabel" style="color: rgb(255, 255, 255); font-size: 20px;"/>
             <ui:Button text="BACK" name="BackButton" style="background-color: rgb(255, 165, 0); border-top-width: 1px; padding-top: 10px; margin-top: 5%;"/>
         </ui:VisualElement>
     </ui:VisualElement>
