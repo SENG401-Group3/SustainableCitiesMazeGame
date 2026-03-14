@@ -9,10 +9,12 @@ public abstract class Interactable : MonoBehaviour
   private Vector2Int tile;
   private Vector2 offset;
   
-  protected MessageHandler messageHandler = null;
+  public MessageHandler messageHandler = null;
   public void setMessageHandler(MessageHandler mh){
     messageHandler = mh;
   }
+
+  public MessageHandler getMessageHandler() => messageHandler;
 
   public void spawn(Vector2Int depth, MazeGrid tiles, Vector2 roomSize){
     // get a valid spawning tile from the maze grid
