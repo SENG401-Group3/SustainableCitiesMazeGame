@@ -14,6 +14,8 @@ public class QuestionManager : MonoBehaviour
     private Button[] answerButtons = new Button[3];
 
     private Questions currentQuestion;
+    private int correctIndex;
+    private List<string> shuffledChoices;
     private int attemptCount = 0;
     private bool questionCompleted = false;
 
@@ -33,10 +35,7 @@ public class QuestionManager : MonoBehaviour
         if (continueButton != null)
         {
             continueButton.style.display = DisplayStyle.None;
-
-            // SIMPLE DIRECT ASSIGNMENT - no lambda, no extra events
             continueButton.clicked += OnContinueClicked;
-
             Debug.Log("✅ Continue button event assigned directly");
         }
         else
@@ -82,20 +81,24 @@ public class QuestionManager : MonoBehaviour
 
     void LoadQuestionForCity(int city)
     {
-        string diff = city <= 2 ? "easy" : (city <= 4 ? "medium" : "hard");
-
-        if (QuestionsBank.Questionss != null && QuestionsBank.Questionss.ContainsKey(diff))
+        if (QuestionsBank.AllQuestions == null || QuestionsBank.AllQuestions.Count == 0)
         {
-            var available = QuestionsBank.Questionss[diff];
-            currentQuestion = available[Random.Range(0, available.Count)];
-
-            if (questionText != null) questionText.text = currentQuestion.Prompt;
-            for (int i = 0; i < 3; i++)
-            {
-                if (answerButtons[i] != null) answerButtons[i].text = currentQuestion.Choices[i];
-            }
+            Debug.LogError("QuestionsBank is empty!");
+            return;
         }
-        else { Debug.LogError("QuestionsBank missing!"); }
+
+        currentQuestion = QuestionsBank.AllQuestions[Random.Range(0, QuestionsBank.AllQuestions.Count)];
+
+        shuffledChoices = QuestionsBank.GetShuffledChoices(currentQuestion, out correctIndex);
+
+        if (questionText != null)
+            questionText.text = $"{QuestionsBank.PromptPrefix}\n{currentQuestion.Prompt}";
+
+        for (int i = 0; i < 3; i++)
+        {
+            if (answerButtons[i] != null)
+                answerButtons[i].text = shuffledChoices[i];
+        }
     }
 
     void OnAnswerSelected(int index)
@@ -103,10 +106,9 @@ public class QuestionManager : MonoBehaviour
         if (questionCompleted || currentQuestion == null) return;
         attemptCount++;
 
-        string choice = (index == 0) ? "A" : (index == 1 ? "B" : "C");
-        Debug.Log($"📝 Answer: {choice}, Attempt: {attemptCount}");
+        Debug.Log($"📝 Button index: {index}, Attempt: {attemptCount}");
 
-        if (choice == currentQuestion.CorrectAnswer)
+        if (index == correctIndex)
         {
             questionCompleted = true;
             int points = (attemptCount == 1) ? 10 : (attemptCount == 2 ? 5 : 3);
@@ -127,7 +129,7 @@ public class QuestionManager : MonoBehaviour
         {
             if (feedbackText != null)
             {
-                feedbackText.text = $"Out of tries! Answer was {currentQuestion.CorrectAnswer}";
+                feedbackText.text = $"Out of tries! Answer was: {shuffledChoices[correctIndex]}";
                 feedbackText.style.color = Color.yellow;
                 feedbackText.style.display = DisplayStyle.Flex;
             }
@@ -157,7 +159,7 @@ public class QuestionManager : MonoBehaviour
         {
             continueButton.style.display = DisplayStyle.Flex;
             continueButton.SetEnabled(true);
-            continueButton.Focus(); // Try to force focus
+            continueButton.Focus();
             Debug.Log("✅ Continue button visible and enabled");
         }
     }
@@ -173,7 +175,7 @@ public class QuestionManager : MonoBehaviour
                 Debug.Log($"🔍 Button enabled: {continueButton.enabledSelf}");
             }
         }
-
+        
         // Press F9 to simulate click
         if (Keyboard.current != null && Keyboard.current.f9Key.wasPressedThisFrame)
         {
