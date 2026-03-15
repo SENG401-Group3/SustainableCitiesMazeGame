@@ -40,14 +40,14 @@ public class GameUIManager : MonoBehaviour
 
     void Start()
     {
-        ShowSelection(); // Show main menu at start
+        ShowSelection();
         Debug.Log("🟢 GameUIManager.Start() called");
         Debug.Log($"🟢 tutorialDoc assigned: {tutorialDoc != null}");
-        ShowSelection();
     }
 
     public void ShowSelection()
     {
+        Debug.Log("📢 ShowSelection() called");
         HideAll();
         if (selection != null)
             selection.style.display = DisplayStyle.Flex;
@@ -57,23 +57,8 @@ public class GameUIManager : MonoBehaviour
 
     public void ShowTutorial()
     {
-        Debug.Log("🟢 STEP 4: GameUIManager.ShowTutorial() CALLED");
-        Debug.Log($"🟢 tutorialDoc assigned: {tutorialDoc != null}");
-
-        if (tutorialDoc != null)
-        {
-            Debug.Log($"🟢 tutorialDoc name: {tutorialDoc.gameObject.name}");
-            Debug.Log($"🟢 tutorialDoc rootVisualElement exists: {tutorialDoc.rootVisualElement != null}");
-        }
-
-        Debug.Log($"🟢 tutorial VisualElement before assignment: {tutorial != null}");
-
-        // Make sure tutorial is assigned
-        if (tutorial == null && tutorialDoc != null)
-        {
-            tutorial = tutorialDoc.rootVisualElement;
-            Debug.Log($"🟢 Re-assigned tutorial: {tutorial != null}");
-        }
+        Debug.Log("📢 ShowTutorial() called");
+        Debug.Log($"📢 tutorialDoc assigned: {tutorialDoc != null}");
 
         HideAll();
 
@@ -81,7 +66,7 @@ public class GameUIManager : MonoBehaviour
         {
             tutorial.style.display = DisplayStyle.Flex;
             tutorial.BringToFront();
-            Debug.Log($"✅ Tutorial display set to: {tutorial.style.display.value}");
+            Debug.Log("✅ Tutorial panel should now be visible");
         }
         else
         {
@@ -91,6 +76,7 @@ public class GameUIManager : MonoBehaviour
 
     public void ShowProfile()
     {
+        Debug.Log("📢 ShowProfile() called");
         HideAll();
         if (profile != null)
         {
@@ -101,16 +87,35 @@ public class GameUIManager : MonoBehaviour
                 Debug.LogError("❌ Cannot load profile: profileManager is null!");
         }
         else
+        {
             Debug.LogError("❌ Cannot show profile: profile is null!");
+        }
     }
 
     public void ShowEditProfile()
     {
+        Debug.Log("📢 ShowEditProfile() called");
         HideAll();
         if (profileEditor != null)
             profileEditor.style.display = DisplayStyle.Flex;
         else
             Debug.LogError("❌ Cannot show profile editor: profileEditor is null!");
+    }
+
+    public void HideTutorial()
+    {
+        Debug.Log("📖 [HIDE TUTORIAL] Called");
+        if (tutorial != null)
+        {
+            tutorial.style.display = DisplayStyle.None;
+            Debug.Log("✅ Tutorial panel hidden");
+        }
+        else
+        {
+            Debug.LogError("❌ tutorial is null in HideTutorial!");
+        }
+
+        ShowSelection();
     }
 
     private void HideAll()

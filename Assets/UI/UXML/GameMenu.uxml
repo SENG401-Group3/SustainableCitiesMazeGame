@@ -3,7 +3,6 @@
     <ui:GroupBox name="Background" style="align-items: center; max-height: 100%; height: 100%; width: 100%; align-self: center; justify-content: center; align-content: center; -unity-text-align: middle-center; -unity-background-scale-mode: stretch-to-fill; position: relative; min-height: 100%; flex-grow: 1;">
         <ui:Button text="PLAY" name="PlayButton" style="width: 100%; min-height: 0%;"/>
         <ui:Button text="TUTORIAL" name="TutorialButton" style="width: 100%;"/>
-        <ui:Button text="SCORES" name="ScoresButton" style="width: 100%;"/>
         <ui:Button text="SETTINGS" name="SettingsButton" style="width: 100%;"/>
         <ui:Button text="PROFILE" name="ProfileButton" style="width: 100%;"/>
         <ui:Button text="QUIT" name="QuitButton" style="width: 100%;"/>
