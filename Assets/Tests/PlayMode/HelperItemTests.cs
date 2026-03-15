@@ -3,6 +3,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
+/// Verifies item collection, message display, and invalid ID handling
 public class HelperItemTests
 {
     private GameObject obj;
@@ -34,6 +35,7 @@ public class HelperItemTests
         Object.Destroy(obj);
     }
 
+    /// Verifies that collecting a helper item registers it in the PlayerItemController
     [UnityTest]
     public IEnumerator HandleCollision_AddsItemToController()
     {
@@ -44,6 +46,7 @@ public class HelperItemTests
         Assert.IsTrue(itemController.hasItem(HelperItem.itemName.SpeedBoost));
     }
 
+    /// Verifies that collecting a helper item displays a message in the MessageHandler
     [UnityTest]
     public IEnumerator HandleCollision_AddsMessage()
     {
@@ -53,7 +56,8 @@ public class HelperItemTests
 
         Assert.AreEqual(1, messageHandler.getMessageCount());
     }
-
+    
+    /// Verifies that setting an invalid item ID defaults to SpeedBoost (id 0)
     [UnityTest]
     public IEnumerator SetId_InvalidId_DefaultsToSpeedBoost()
     {

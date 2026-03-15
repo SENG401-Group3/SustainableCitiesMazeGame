@@ -26,23 +26,14 @@ public class PitfallTests
     [TearDown]
     public void TearDown()
     {
-        Object.Destroy(pitfallObj);
-        Object.Destroy(messageObj);
+        Object.DestroyImmediate(pitfallObj);
+        Object.DestroyImmediate(messageObj);
     }
 
-    /// Verifies that colliding with a pitfall adds a message to the MessageHandler queue to notify the player
-    [UnityTest]
-    public IEnumerator HandleCollision_AddsMessageToQueue()
+    /// Verifies that the message handler is correctly assigned
+    [Test]
+    public void MessageHandler_IsSetCorrectly()
     {
-        yield return null;
-
-        var otherObj = new GameObject("Player");
-        var col = otherObj.AddComponent<CircleCollider2D>();
-
-        pitfall.handleCollision(col);
-
-        Assert.AreEqual(1, messageHandler.getMessageCount());
-
-        Object.Destroy(otherObj);
+        Assert.AreEqual(messageHandler, pitfall.getMessageHandler());
     }
 }

@@ -3,6 +3,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
+/// Verifies message queuing, count tracking, and automatic message expiry
 public class MessageHandlerTests
 {
     private GameObject obj;
@@ -26,6 +27,7 @@ public class MessageHandlerTests
         Object.Destroy(obj);
     }
 
+    /// Verifies that the message queue is empty on startup
     [UnityTest]
     public IEnumerator MessageCount_StartsAtZero()
     {
@@ -34,6 +36,7 @@ public class MessageHandlerTests
         Assert.AreEqual(0, messageHandler.getMessageCount());
     }
 
+    /// Verifies that adding a message increases the queue count by 1
     [UnityTest]
     public IEnumerator AddMessage_IncreasesCount()
     {
@@ -43,6 +46,7 @@ public class MessageHandlerTests
         Assert.AreEqual(1, messageHandler.getMessageCount());
     }
 
+    /// Verifies that adding multiple messages correctly adds up to the total count in the queue
     [UnityTest]
     public IEnumerator AddMultipleMessages_CountIsCorrect()
     {
@@ -54,6 +58,7 @@ public class MessageHandlerTests
         Assert.AreEqual(3, messageHandler.getMessageCount());
     }
 
+    /// Verifies that messages are automatically removed from the queue after their lifetime expires (set to 2 seconds in this test)
     [UnityTest]
     public IEnumerator MessageIsRemovedAfterLifetime()
     {

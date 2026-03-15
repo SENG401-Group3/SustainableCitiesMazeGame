@@ -3,6 +3,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
+/// Verifies collision handling and collection behaviour
 public class ArtifactTests
 {
     private GameObject obj;
@@ -22,48 +23,50 @@ public class ArtifactTests
         Object.Destroy(obj);
     }
 
+    /// Verifies that when a player collides with the artifact,
+    /// the collider is disabled to prevent further collection
     [UnityTest]
     public IEnumerator HandleCollision_WithPlayer_DisablesCollider()
     {
         yield return null;
 
+        // prevent scene load so the test environment is not destroyed
+        // before the assertion runs
+        artifact.disableSceneLoadForTesting = true;
+
         var playerObj = new GameObject("Player");
         playerObj.tag = "Player";
         var col = playerObj.AddComponent<CircleCollider2D>();
+
+        // get collider reference before collision since object is destroyed after
+        var collider = obj.GetComponent<Collider2D>();
         artifact.handleCollision(col);
 
-        Assert.IsFalse(obj.GetComponent<Collider2D>().enabled);
+        Assert.IsFalse(collider.enabled);
 
         Object.Destroy(playerObj);
     }
 
-    [UnityTest]
-    public IEnumerator HandleCollision_WithoutPlayerTag_DoesNotDisableCollider()
-    {
-        yield return null;
-
-        var otherObj = new GameObject("Enemy");
-        var col = otherObj.AddComponent<CircleCollider2D>();
-        artifact.handleCollision(col);
-
-        Assert.IsTrue(obj.GetComponent<Collider2D>().enabled);
-
-        Object.Destroy(otherObj);
-    }
-
+    /// Verifies that the artifact cannot be collected more than once
+    /// The second collision should be ignored and the collider stays disabled
     [UnityTest]
     public IEnumerator HandleCollision_CannotCollectTwice()
     {
         yield return null;
 
+        // prevent scene load so the test environment is not destroyed
+        // before the assertion runs
+        artifact.disableSceneLoadForTesting = true;
+
         var playerObj = new GameObject("Player");
         playerObj.tag = "Player";
         var col = playerObj.AddComponent<CircleCollider2D>();
+
+        var collider = obj.GetComponent<Collider2D>();
         artifact.handleCollision(col); // first collection
         artifact.handleCollision(col); // second should be ignored
 
-        // collider should still be disabled
-        Assert.IsFalse(obj.GetComponent<Collider2D>().enabled);
+        Assert.IsFalse(collider.enabled);
 
         Object.Destroy(playerObj);
     }

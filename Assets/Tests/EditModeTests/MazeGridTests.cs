@@ -3,6 +3,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
+/// Verifies maze generation, dimensions, distance tracking, and spawnable tile logic
 public class MazeGridTests
 {
     private GameObject obj;
@@ -20,9 +21,10 @@ public class MazeGridTests
     [TearDown]
     public void TearDown()
     {
-        Object.Destroy(obj);
+        Object.DestroyImmediate(obj);
     }
 
+    /// Verifies that generateMaze returns a non-null grid
     [Test]
     public void GenerateMaze_ReturnsGrid()
     {
@@ -31,6 +33,7 @@ public class MazeGridTests
         Assert.IsNotNull(grid);
     }
 
+    /// Verifies that the generated grid matches the set dimensions
     [Test]
     public void GenerateMaze_GridHasCorrectDimensions()
     {
@@ -39,7 +42,8 @@ public class MazeGridTests
         Assert.AreEqual(5, grid.GetLength(0));
         Assert.AreEqual(5, grid.GetLength(1));
     }
-
+    
+    /// Verifies that generateMaze throws an exception if dimensions are zero
     [Test]
     public void GenerateMaze_ThrowsIfDimsAreZero()
     {
@@ -48,7 +52,8 @@ public class MazeGridTests
         
         Assert.Throws<System.Exception>(() => mazeGrid.generateMaze());
     }
-
+    
+    /// Verifies that the maze has a valid max distance greater than zero
     [Test]
     public void GetMaxDistance_IsGreaterThanZero()
     {
@@ -56,7 +61,8 @@ public class MazeGridTests
 
         Assert.Greater(mazeGrid.getMaxDistance(), 0);
     }
-
+    
+    /// Verifies that getSpawnableTiles returns at least one tile for a valid distance range
     [Test]
     public void GetSpawnableTiles_ReturnsNonEmptyList()
     {
@@ -67,6 +73,7 @@ public class MazeGridTests
         Assert.Greater(tiles.Count, 0);
     }
 
+    /// Verifies that getSpawnableTiles returns an empty list when the distance range is invalid
     [Test]
     public void GetSpawnableTiles_ReturnsEmptyForImpossibleRange()
     {

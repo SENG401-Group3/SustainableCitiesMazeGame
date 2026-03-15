@@ -3,6 +3,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
+/// Verifies PlayerPref updates, message display, and destruction on collection
 public class HintScrollTests
 {
     private GameObject obj;
@@ -35,6 +36,8 @@ public class HintScrollTests
         Object.Destroy(obj);
     }
 
+    /// Verifies that collecting the hint scroll sets the HintScrollCollected PlayerPref to 1 
+    /// so the question screen can display the hint
     [UnityTest]
     public IEnumerator HandleCollision_SetsPlayerPref()
     {
@@ -48,6 +51,7 @@ public class HintScrollTests
         Object.Destroy(otherObj);
     }
 
+    /// Verifies that collecting the hint scroll displays a message in the MessageHandler
     [UnityTest]
     public IEnumerator HandleCollision_AddsMessage()
     {
@@ -61,6 +65,7 @@ public class HintScrollTests
         Object.Destroy(otherObj);
     }
 
+    /// Verifies that the hint scroll object is destroyed after collection so it cannot be picked up again
     [UnityTest]
     public IEnumerator HandleCollision_DestroysGameObject()
     {

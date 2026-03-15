@@ -3,6 +3,8 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
+/// Implementation of Interactable used for testing since Interactable is abstract 
+/// it cannot be instantiated directly
 public class TestInteractable : Interactable
 {
     public bool collisionHandled = false;
@@ -13,6 +15,7 @@ public class TestInteractable : Interactable
     }
 }
 
+/// Verifies message handler assignment which all interactables are dependent on
 public class InteractableTests
 {
     private GameObject obj;
@@ -28,15 +31,17 @@ public class InteractableTests
     [TearDown]
     public void TearDown()
     {
-        Object.Destroy(obj);
+        Object.DestroyImmediate(obj);
     }
 
+    /// Verifies that messageHandler is null by default before the setMessageHandler is called
     [Test]
     public void MessageHandler_IsNullByDefault()
     {
         Assert.IsNull(interactable.messageHandler);
     }
 
+    /// Verifies that setMessageHandler correctly assigns the message handler reference
     [Test]
     public void SetMessageHandler_AssignsCorrectly()
     {
