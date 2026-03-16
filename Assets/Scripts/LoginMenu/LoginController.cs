@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 public class LoginController : MonoBehaviour
 {
@@ -87,30 +88,21 @@ public class LoginController : MonoBehaviour
 
             if (request.result == UnityWebRequest.Result.Success)
             {
-                string response = request.downloadHandler.text.Trim();
-                Debug.Log("Server response: " + response);
+                ProgressData data = JsonUtility.FromJson<ProgressData>(request.downloadHandler.text);
+                Debug.Log("Server response: " + request.downloadHandler.text);
 
-                if (response == "0")
-                {
-                    DBManager.username = usernameInput.value.Trim();
+                DBManager.username = usernameInput.value.Trim();
+                usernameInput.value = "";
+                DBManager.citynumber = data.city;
+                DBManager.score = data.score;
 
-                    usernameInput.value = "";
-                    passwordInput.value = "";
+                successLabel.text = "Login successful!";
+                successLabel.style.visibility = Visibility.Visible;
 
-                    successLabel.text = "Login successful!";
-                    successLabel.style.visibility = Visibility.Visible;
-
-                    yield return new WaitForSeconds(1f);
-                    Debug.Log("Saved username: " + DBManager.username);
-                    UnityEngine.SceneManagement.SceneManager.LoadScene(0);
-                    successLabel.text = "";
-                }
-                else
-                {
-                    successLabel.text = "Login failed!";
-                    successLabel.style.visibility = Visibility.Visible;
-                    Debug.Log("User login failed. Error #" + response);
-                }
+                yield return new WaitForSeconds(1f);
+                Debug.Log("Saved username: " + DBManager.username);
+                UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+                successLabel.text = "";
             }
             else
             {
@@ -119,6 +111,13 @@ public class LoginController : MonoBehaviour
                 successLabel.style.visibility = Visibility.Visible;
             }
         }
+    }
+
+    public class ProgressData
+    {
+        public string username;
+        public int city;
+        public int score;
     }
 
 
