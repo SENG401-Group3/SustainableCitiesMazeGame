@@ -8,11 +8,14 @@ public abstract class Interactable : MonoBehaviour
 {
   private Vector2Int tile;
   private Vector2 offset;
+  protected bool collided = false;
   
-  protected MessageHandler messageHandler = null;
+  public MessageHandler messageHandler = null;
   public void setMessageHandler(MessageHandler mh){
     messageHandler = mh;
   }
+
+  public MessageHandler getMessageHandler() => messageHandler;
 
   public void spawn(Vector2Int depth, MazeGrid tiles, Vector2 roomSize){
     // get a valid spawning tile from the maze grid
@@ -30,7 +33,10 @@ public abstract class Interactable : MonoBehaviour
   }
 
   void OnTriggerEnter2D(Collider2D other){
+    if(!collided){
     handleCollision(other);
+    collided = true;
+    }
   }
 
   public abstract void handleCollision(Collider2D other);
