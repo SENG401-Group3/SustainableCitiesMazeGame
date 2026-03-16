@@ -175,4 +175,27 @@ public class UIAnimator : MonoBehaviour
         element.style.opacity = 1;
         element.style.translate = new StyleTranslate(new Translate(0, 0));
     }
+
+    public Coroutine AnimateLoading(Label label, string message, float duration)
+    {
+        return StartCoroutine(AnimateLoadingRoutine(label, message, duration));
+    }
+
+    private IEnumerator AnimateLoadingRoutine(Label label, string message, float duration=2f)
+    {
+        float elapsed = 0;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+
+            if (label != null)
+            {
+                int dots = ((int)(elapsed * 2)) % 4;
+                label.text = message + new string('.', dots);
+            }
+
+            yield return null;
+        }
+    }
 }

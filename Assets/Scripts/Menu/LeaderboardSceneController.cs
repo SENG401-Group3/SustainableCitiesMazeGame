@@ -24,17 +24,6 @@ public class LeaderboardSceneController : MonoBehaviour
 
     void Start()
     {
-        /*if (document == null)
-        {
-            document = GetComponent<UIDocument>();
-
-            if (document == null)
-            {
-                Debug.LogError("❌ LeaderboardSceneController: UIDocument not assigned and not found on GameObject!");
-                return;
-            }
-        }*/
-
         root = GetComponent<UIDocument>().rootVisualElement;
 
         // Get UI elements
@@ -144,39 +133,6 @@ public class LeaderboardSceneController : MonoBehaviour
         Debug.Log("✅ ===== GAME RESET COMPLETE =====");
     }
 
-    /*IEnumerator AnimateLeaderboardEntrance()
-    {
-        if (leaderboardContainer == null) yield break;
-
-        // Start small and transparent
-        leaderboardContainer.style.opacity = 0;
-        leaderboardContainer.style.scale = new StyleScale(new Scale(new Vector2(0.8f, 0.8f)));
-
-        // Animate to full size
-        float elapsed = 0;
-        float duration = 0.5f;
-
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            float t = elapsed / duration;
-
-            // Ease out back for bounce effect
-            float scaleT = Mathf.Sin(t * Mathf.PI * 0.5f);
-
-            leaderboardContainer.style.opacity = t;
-            leaderboardContainer.style.scale = new StyleScale(new Scale(new Vector2(
-                0.8f + 0.2f * scaleT,
-                0.8f + 0.2f * scaleT
-            )));
-
-            yield return null;
-        }
-
-        leaderboardContainer.style.opacity = 1;
-        leaderboardContainer.style.scale = new StyleScale(new Scale(Vector2.one));
-    }*/
-
     void OnSubmitClicked()
     {
         if (isSubmitting || scoreSubmitted) return;
@@ -193,24 +149,6 @@ public class LeaderboardSceneController : MonoBehaviour
         UIAnimator.Instance.FadeOutElement(retryButton, 0.2f);
         StartCoroutine(SubmitScoreRoutine());
     }
-
-    /*IEnumerator AnimateHideRetryButton()
-    {
-        if (retryButton == null) yield break;
-
-        float elapsed = 0;
-        float duration = 0.2f;
-
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            retryButton.style.opacity = 1 - (elapsed / duration);
-            yield return null;
-        }
-
-        retryButton.style.display = DisplayStyle.None;
-        retryButton.style.opacity = 1;
-    }*/
 
     IEnumerator SubmitScoreRoutine()
     {
@@ -237,20 +175,7 @@ public class LeaderboardSceneController : MonoBehaviour
         }
 
         // Simulate network delay (2 seconds)
-        float submitElapsed = 0;
-        while (submitElapsed < 2f)
-        {
-            submitElapsed += Time.deltaTime;
-
-            // Update dots animation
-            if (statusMessage != null)
-            {
-                int dots = ((int)(submitElapsed * 2)) % 4;
-                statusMessage.text = "Submitting score" + new string('.', dots);
-            }
-
-            yield return null;
-        }
+        yield return UIAnimator.Instance.AnimateLoading(statusMessage, "Submitting score", 2f);
 
         // Simulate success/failure (80% success rate)
         bool success = Random.Range(0, 10) > 2;

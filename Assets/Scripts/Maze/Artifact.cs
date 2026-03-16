@@ -5,6 +5,10 @@ public class Artifact : Interactable
     private Animator animator;
     private bool isCollected = false;
 
+    // Disables scene loading during unit tests to prevent the test environment
+    // from being destroyed when handleCollision is called
+    public bool disableSceneLoadForTesting = false;
+
     public override void handleCollision(Collider2D other)
     {
         // Check if player touched the artifact AND it's not already collected
@@ -27,9 +31,11 @@ public class Artifact : Interactable
 
             Debug.Log("Artifact collected! Show question screen next.");
             // load question scene
-            // TODO: find proper scene for the questions. Currently boots back to tutorial
-            // not sure how to find the correct number
-            UnityEngine.SceneManagement.SceneManager.LoadScene("QuestionScene");
+            
+            // skip scene load during testing to prevent the test environment
+            // from being destroyed before assertions can run
+            if (!disableSceneLoadForTesting)
+                UnityEngine.SceneManagement.SceneManager.LoadScene("QuestionScene");
         }
     }
 

@@ -62,6 +62,8 @@ public class MessageHandler : MonoBehaviour
     constructTextDisplay();
   }
 
+  public int getMessageCount() => messageQ.Count;
+
   private void constructTextDisplay(){
     // create a copy of the queue and an empty message
     // no copy needed because foreach wont modify
