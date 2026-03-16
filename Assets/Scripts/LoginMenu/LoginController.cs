@@ -102,7 +102,7 @@ public class LoginController : MonoBehaviour
 
                     yield return new WaitForSeconds(1f);
                     Debug.Log("Saved username: " + DBManager.username);
-                    UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+                    UnityEngine.SceneManagement.SceneManager.LoadScene("CitySelection");
                     successLabel.text = "";
                 }
                 else

@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI/USS/main%20menu.uss?fileID=7433441132597879392&amp;guid=0bc041f9531c6b046b460760c2a027b5&amp;type=3#main menu"/>
-    <ui:VisualElement name="Panel" class="panel" style="flex-grow: 1;">
+    <Style src="project://database/Assets/UI/USS/main%20menu.uss?fileID=7433441132597879392&amp;guid=0bc041f9531c6b046b460760c2a027b5&amp;type=3"/>
+    <ui:VisualElement name="Panel" class="panel welcome-panel" style="flex-grow: 1;">
         <ui:VisualElement name="Container" class="menu" style="flex-grow: 1; flex-wrap: nowrap; align-content: center; justify-content: flex-start; align-items: stretch; flex-direction: column;">
             <ui:Label text="Welcome to Maze City!" name="WelcomeLabel" class="text" style="color: rgb(255, 228, 181);"/>
             <ui:VisualElement name="ButtonBar" style="flex-grow: 1; max-height: 50%; flex-wrap: nowrap; flex-direction: column; justify-content: space-between; align-self: auto; align-content: stretch;">

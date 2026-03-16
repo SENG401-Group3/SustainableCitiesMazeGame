@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public class LeaderboardSceneController : MonoBehaviour
 {
-    public UIDocument document;
+    //public UIDocument document;
 
     private VisualElement root;
     private VisualElement leaderboardContainer;
@@ -24,7 +24,7 @@ public class LeaderboardSceneController : MonoBehaviour
 
     void Start()
     {
-        if (document == null)
+        /*if (document == null)
         {
             document = GetComponent<UIDocument>();
 
@@ -33,9 +33,9 @@ public class LeaderboardSceneController : MonoBehaviour
                 Debug.LogError("❌ LeaderboardSceneController: UIDocument not assigned and not found on GameObject!");
                 return;
             }
-        }
+        }*/
 
-        root = document.rootVisualElement;
+        root = GetComponent<UIDocument>().rootVisualElement;
 
         // Get UI elements
         leaderboardContainer = root.Q<VisualElement>("LeaderboardContainer");
@@ -99,7 +99,7 @@ public class LeaderboardSceneController : MonoBehaviour
         }
 
         // Animate the leaderboard entrance
-        StartCoroutine(AnimateLeaderboardEntrance());
+        UIAnimator.Instance.AnimateEntrance(leaderboardContainer);
     }
 
     // Add this new method to reset all game data
@@ -144,7 +144,7 @@ public class LeaderboardSceneController : MonoBehaviour
         Debug.Log("✅ ===== GAME RESET COMPLETE =====");
     }
 
-    IEnumerator AnimateLeaderboardEntrance()
+    /*IEnumerator AnimateLeaderboardEntrance()
     {
         if (leaderboardContainer == null) yield break;
 
@@ -175,7 +175,7 @@ public class LeaderboardSceneController : MonoBehaviour
 
         leaderboardContainer.style.opacity = 1;
         leaderboardContainer.style.scale = new StyleScale(new Scale(Vector2.one));
-    }
+    }*/
 
     void OnSubmitClicked()
     {
@@ -190,11 +190,11 @@ public class LeaderboardSceneController : MonoBehaviour
         Debug.Log("🔄 Retry button clicked");
 
         // Hide retry button with animation
-        StartCoroutine(AnimateHideRetryButton());
+        UIAnimator.Instance.FadeOutElement(retryButton, 0.2f);
         StartCoroutine(SubmitScoreRoutine());
     }
 
-    IEnumerator AnimateHideRetryButton()
+    /*IEnumerator AnimateHideRetryButton()
     {
         if (retryButton == null) yield break;
 
@@ -210,7 +210,7 @@ public class LeaderboardSceneController : MonoBehaviour
 
         retryButton.style.display = DisplayStyle.None;
         retryButton.style.opacity = 1;
-    }
+    }*/
 
     IEnumerator SubmitScoreRoutine()
     {
@@ -223,20 +223,8 @@ public class LeaderboardSceneController : MonoBehaviour
         // Show loading spinner with animation
         if (loadingSpinner != null)
         {
-            loadingSpinner.style.display = DisplayStyle.Flex;
-            loadingSpinner.style.opacity = 0;
-
-            float elapsed = 0;
-            while (elapsed < 0.2f)
-            {
-                elapsed += Time.deltaTime;
-                loadingSpinner.style.opacity = elapsed / 0.2f;
-                yield return null;
-            }
-            loadingSpinner.style.opacity = 1;
-
-            // Start spinner rotation
-            StartCoroutine(AnimateSpinner());
+            UIAnimator.Instance.FadeInElement(loadingSpinner, 0.2f);
+            UIAnimator.Instance.RotateElement(loadingSpinner, 360f);
         }
 
         // Show status message
@@ -244,20 +232,8 @@ public class LeaderboardSceneController : MonoBehaviour
         {
             statusMessage.text = "Submitting score...";
             statusMessage.style.color = Color.white;
-            statusMessage.style.display = DisplayStyle.Flex;
-            statusMessage.style.opacity = 0;
-
-            float elapsed = 0;
-            while (elapsed < 0.2f)
-            {
-                elapsed += Time.deltaTime;
-                statusMessage.style.opacity = elapsed / 0.2f;
-                yield return null;
-            }
-            statusMessage.style.opacity = 1;
-
-            // Pulse animation while submitting
-            StartCoroutine(AnimatePulseText());
+            UIAnimator.Instance.FadeInElement(statusMessage, 0.2f);
+            UIAnimator.Instance.PulseElement(statusMessage);
         }
 
         // Simulate network delay (2 seconds)
@@ -283,14 +259,7 @@ public class LeaderboardSceneController : MonoBehaviour
         // Hide spinner
         if (loadingSpinner != null)
         {
-            float elapsed = 0;
-            while (elapsed < 0.2f)
-            {
-                elapsed += Time.deltaTime;
-                loadingSpinner.style.opacity = 1 - (elapsed / 0.2f);
-                yield return null;
-            }
-            loadingSpinner.style.display = DisplayStyle.None;
+            UIAnimator.Instance.FadeOutElement(loadingSpinner, 0.2f);
         }
 
         if (success)
@@ -305,16 +274,7 @@ public class LeaderboardSceneController : MonoBehaviour
                 statusMessage.style.color = Color.green;
 
                 // Pop animation
-                float elapsed = 0;
-                while (elapsed < 0.3f)
-                {
-                    elapsed += Time.deltaTime;
-                    float t = elapsed / 0.3f;
-                    float scale = 1 + Mathf.Sin(t * Mathf.PI) * 0.2f;
-                    statusMessage.style.scale = new StyleScale(new Scale(new Vector2(scale, scale)));
-                    yield return null;
-                }
-                statusMessage.style.scale = new StyleScale(new Scale(Vector2.one));
+                UIAnimator.Instance.PulseElement(statusMessage, 0.3f, 1.2f);
             }
 
             // NOW show the leaderboard with the score
@@ -326,14 +286,7 @@ public class LeaderboardSceneController : MonoBehaviour
             // Hide status message
             if (statusMessage != null)
             {
-                float elapsed = 0;
-                while (elapsed < 0.2f)
-                {
-                    elapsed += Time.deltaTime;
-                    statusMessage.style.opacity = 1 - (elapsed / 0.2f);
-                    yield return null;
-                }
-                statusMessage.style.display = DisplayStyle.None;
+                UIAnimator.Instance.FadeOutElement(statusMessage, 0.2f);
             }
 
             // Hide submit button after successful submission
@@ -353,40 +306,14 @@ public class LeaderboardSceneController : MonoBehaviour
                 statusMessage.style.color = Color.red;
 
                 // Shake animation
-                float shakeElapsed = 0;
-                while (shakeElapsed < 0.5f)
-                {
-                    shakeElapsed += Time.deltaTime;
-                    float offsetX = Random.Range(-5f, 5f);
-                    float offsetY = Random.Range(-2f, 2f);
-                    statusMessage.style.translate = new StyleTranslate(new Translate(offsetX, offsetY));
-                    yield return null;
-                }
-                statusMessage.style.translate = new StyleTranslate(new Translate(0, 0));
+                UIAnimator.Instance.ShakeElement(statusMessage, 0.5f, 5f, 2f);
             }
 
             // Show retry button with pop animation
             if (retryButton != null)
             {
                 retryButton.style.display = DisplayStyle.Flex;
-                retryButton.style.opacity = 0;
-                retryButton.style.scale = new StyleScale(new Scale(new Vector2(0.8f, 0.8f)));
-
-                float elapsed = 0;
-                while (elapsed < 0.3f)
-                {
-                    elapsed += Time.deltaTime;
-                    float t = elapsed / 0.3f;
-                    retryButton.style.opacity = t;
-                    retryButton.style.scale = new StyleScale(new Scale(new Vector2(
-                        0.8f + 0.2f * t,
-                        0.8f + 0.2f * t
-                    )));
-                    yield return null;
-                }
-
-                retryButton.style.opacity = 1;
-                retryButton.style.scale = new StyleScale(new Scale(Vector2.one));
+                UIAnimator.Instance.AnimateEntrance(retryButton, 0.3f);
             }
 
             // Re-enable submit button for retry
@@ -417,7 +344,7 @@ public class LeaderboardSceneController : MonoBehaviour
         StartCoroutine(AnimateScoreEntries());
 
         // Animate the highlight
-        StartCoroutine(AnimateHighlight());
+        //StartCoroutine(AnimateHighlight());
     }
 
     IEnumerator AnimateScoreEntries()
@@ -434,30 +361,12 @@ public class LeaderboardSceneController : MonoBehaviour
 
             yield return new WaitForSeconds(0.1f * index);
 
-            float elapsed = 0;
-            float duration = 0.3f;
-
-            while (elapsed < duration)
-            {
-                elapsed += Time.deltaTime;
-                float t = elapsed / duration;
-
-                entry.style.opacity = t;
-                entry.style.translate = new StyleTranslate(new Translate(
-                    Mathf.Lerp(20, 0, t),
-                    0
-                ));
-
-                yield return null;
-            }
-
-            entry.style.opacity = 1;
-            entry.style.translate = new StyleTranslate(new Translate(0, 0));
+            UIAnimator.Instance.SlideInElement(entry, new Vector2(20, 0), 0.3f);
             index++;
         }
     }
 
-    IEnumerator AnimateSpinner()
+    /*IEnumerator AnimateSpinner()
     {
         float rotation = 0;
         while (loadingSpinner != null && loadingSpinner.style.display == DisplayStyle.Flex)
@@ -498,7 +407,7 @@ public class LeaderboardSceneController : MonoBehaviour
             }
             firstEntry.style.scale = new StyleScale(new Scale(Vector2.one));
         }
-    }
+    }*/
 
     void AddScoreEntry(string name, int score, int rank, bool highlight)
     {

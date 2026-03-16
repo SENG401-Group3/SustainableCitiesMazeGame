@@ -92,6 +92,11 @@ public class ProfileManager : MonoBehaviour
                 DBManager.username = data.username;
                 DBManager.score = data.score;
 
+                Debug.Log("Writing details for" + data.username);
+                Debug.Log(greetingLabel);
+                Debug.Log(namesLabel);
+                Debug.Log(scoreLabel);
+
                 greetingLabel.text = "Welcome " + data.firstname + " " + data.lastname;
 
                 namesLabel.text = "Full Name: " + data.firstname + " " + data.lastname + "\n"

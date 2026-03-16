@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/USS/main%20menu.uss?fileID=7433441132597879392&amp;guid=0bc041f9531c6b046b460760c2a027b5&amp;type=3#main menu"/>
-    <ui:VisualElement name="AboutPanel" class="panel" style="flex-grow: 1;">
+    <ui:VisualElement name="AboutPanel" class="panel welcome-panel" style="flex-grow: 1;">
         <ui:VisualElement name="ButtonBar" style="flex-grow: 1; max-height: 10%; align-self: flex-start; min-width: 70%;">
             <ui:Button text="Back" name="BackButton" style="align-self: flex-start; width: auto; max-width: none; min-width: 30%; min-height: auto; max-height: 80%;"/>
         </ui:VisualElement>

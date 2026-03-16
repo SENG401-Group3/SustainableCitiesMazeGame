@@ -153,6 +153,24 @@ public class Registration : MonoBehaviour
         return true;
     }
 
+    public bool VerifyInputs(string firstname, string lastname, string username, string password)
+    {
+        if (string.IsNullOrEmpty(firstname) || string.IsNullOrEmpty(lastname) ||
+            string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            return false;
+
+        if (username.Length < 6 || password.Length < 8 || password.Length > 20)
+            return false;
+
+        if (!Regex.IsMatch(username, @"^[a-zA-Z0-9_@!]+$"))
+            return false;
+
+        if (!Regex.IsMatch(password, @"^(?=.*[A-Z])(?=.*[\W_]).+$"))
+            return false;
+
+        return true;
+    }
+    
     public void ShowError(string message)
     {
         successLabel.text = message;

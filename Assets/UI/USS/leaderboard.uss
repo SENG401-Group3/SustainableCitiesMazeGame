@@ -1,0 +1,24 @@
+:root {
+}
+
+.unity-button {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    font-size: 20%;
+    min-width: 35%;
+    min-height: 10%;
+    max-width: none;
+    max-height: none;
+}
+
+.unity-button:hover {
+    border-left-color: rgba(255, 0, 89, 0.9);
+    border-right-color: rgba(255, 0, 89, 0.9);
+    border-top-color: rgba(255, 0, 89, 0.9);
+    border-bottom-color: rgba(255, 0, 89, 0.9);
+    background-color: rgb(247, 188, 74);
+    scale: 1.04 1.04;
+    color: rgb(27, 27, 27);
+}
