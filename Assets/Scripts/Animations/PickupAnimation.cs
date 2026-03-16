@@ -13,7 +13,7 @@ public class PickupAnimation : MonoBehaviour
     [Header("Pickup Effect")]
     [SerializeField] private GameObject pickupEffectPrefab;
     [SerializeField] private AudioClip pickupSound;
-    [SerializeField] private float destroyDelay = 0.5f;
+    // [SerializeField] private float destroyDelay = 0.5f;  // REMOVED - unused
 
     private Vector3 startPosition;
     private float floatOffset;
@@ -24,15 +24,15 @@ public class PickupAnimation : MonoBehaviour
     void Start()
     {
         Debug.Log($"✅ PickupAnimation START on {gameObject.name}");
-        
+
         // Store original position and scale
         startPosition = transform.position;
         originalScale = transform.localScale;
         floatOffset = Random.Range(0f, Mathf.PI * 2f);
-        
+
         // Get sprite renderer for fade effects
         spriteRenderer = GetComponent<SpriteRenderer>();
-        
+
         // Start floating animation
         StartCoroutine(FloatAnimation());
     }
@@ -40,23 +40,23 @@ public class PickupAnimation : MonoBehaviour
     IEnumerator FloatAnimation()
     {
         Debug.Log($"🔄 FloatAnimation STARTED on {gameObject.name}");
-        
+
         while (!isPickedUp)
         {
             // Floating up and down
             float newY = startPosition.y + Mathf.Sin(Time.time * floatSpeed + floatOffset) * floatHeight;
             transform.position = new Vector3(transform.position.x, newY, transform.position.z);
-            
+
             // Slow rotation
             transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
-            
+
             // Scale pulse (using original scale as base)
             float pulse = 1f + Mathf.Sin(Time.time * scalePulseSpeed) * scalePulseAmount;
             transform.localScale = originalScale * pulse;
-            
+
             yield return null;
         }
-        
+
         Debug.Log($"⏹️ FloatAnimation STOPPED on {gameObject.name}");
     }
 
@@ -130,7 +130,7 @@ public class PickupAnimation : MonoBehaviour
 
             // Scale up dramatically
             transform.localScale = Vector3.Lerp(startScale, targetScale, t);
-            
+
             // Spin multiple times
             float spin = Mathf.Lerp(0f, 720f, t);
             transform.rotation = Quaternion.Euler(0, 0, startRotation + spin);

@@ -641,8 +641,8 @@ MonoBehaviour:
   selectionDoc: {fileID: 1094860892}
   tutorialDoc: {fileID: 933287560}
   profileDoc: {fileID: 1884617829}
-  profileManager: {fileID: 359830573}
   profileEditorDoc: {fileID: 359830575}
+  profileManager: {fileID: 359830573}
 --- !u!4 &976698197
 Transform:
   m_ObjectHideFlags: 0
