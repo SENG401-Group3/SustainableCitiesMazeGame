@@ -4,6 +4,7 @@ using UnityEngine;
 
 public static class DBManager
 {
+    public static string hostname = "sustainabilitymazegame.mysql.database.azure.com";
     public static string firstname;
     public static string lastname;
     public static string username;

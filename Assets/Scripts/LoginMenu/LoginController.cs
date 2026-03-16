@@ -81,7 +81,7 @@ public class LoginController : MonoBehaviour
         form.AddField("username", usernameInput.value.Trim());
         form.AddField("password", passwordInput.value.Trim());
 
-        using (UnityWebRequest request = UnityWebRequest.Post("http://localhost/SQLConnect/login.php", form))
+        using (UnityWebRequest request = UnityWebRequest.Post(DBManager.hostname + "/login.php", form))
         {
             yield return request.SendWebRequest();
 

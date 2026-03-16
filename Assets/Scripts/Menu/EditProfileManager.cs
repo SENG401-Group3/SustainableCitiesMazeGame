@@ -78,7 +78,7 @@ public class EditProfileManager : MonoBehaviour
         form.AddField("username", usernameInput.value.Trim());
         form.AddField("password", passwordInput.value.Trim());
 
-        using (UnityWebRequest request = UnityWebRequest.Post("http://localhost/SQLConnect/editprofile.php", form))
+        using (UnityWebRequest request = UnityWebRequest.Post(DBManager.hostname + "/editprofile.php", form))
         {
             yield return request.SendWebRequest();
 
