@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 5294331902779606954}
   - component: {fileID: 3562427730077023601}
   - component: {fileID: 6751678386274030771}
+  - component: {fileID: -3028709770721032042}
+  - component: {fileID: 10482015539797858}
   m_Layer: 0
   m_Name: HintScroll
   m_TagString: Untagged
@@ -105,7 +107,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a338ba70fdea467a83d8a0e4ad396c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HintScroll
-  messageHandler: {fileID: 0}
 --- !u!70 &6751678386274030771
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -143,3 +144,36 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 2}
   m_Direction: 0
+--- !u!114 &-3028709770721032042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7666008876014558739}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 365c9480d40b6fe498cbcfd52e71b4ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PickupAnimation
+  floatHeight: 0.4
+  floatSpeed: 2
+  rotationSpeed: 120
+  scalePulseAmount: 0.25
+  scalePulseSpeed: 4
+  pickupEffectPrefab: {fileID: 3132300966347646534, guid: 044bb9b535cb7e74a8fb186d709689ce, type: 3}
+  pickupSound: {fileID: 0}
+  destroyDelay: 0.5
+--- !u!114 &10482015539797858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7666008876014558739}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8770044556bcb6948bf427cb3e3e1b2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HintScrollPickup
+  hintMessage: Try looking for hidden paths!
