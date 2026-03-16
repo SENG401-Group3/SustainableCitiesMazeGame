@@ -721,6 +721,7 @@ GameObject:
   - component: {fileID: 1576454051}
   - component: {fileID: 1576454052}
   - component: {fileID: 1576454054}
+  - component: {fileID: 1576454055}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -895,7 +896,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SimplePlayerAnimation
   idleSprite: {fileID: -7446568635235715570, guid: 47acc353888fc9943963a1d025355510, type: 3}
   walkSprite: {fileID: -7743937721157804551, guid: 47acc353888fc9943963a1d025355510, type: 3}
-  jumpSprite: {fileID: 4068640662623103159, guid: 47acc353888fc9943963a1d025355510, type: 3}
   idleThreshold: 0.1
 --- !u!58 &1576454054
 CircleCollider2D:
@@ -933,6 +933,43 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: -0.7360774, y: -1.8401915}
   m_Radius: 1.7870331
+--- !u!70 &1576454055
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1576454044}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: -0.972952, y: -3.6582985}
+  m_Size: {x: 2.9459038, y: 6.448531}
+  m_Direction: 0
 --- !u!1 &1629865493
 GameObject:
   m_ObjectHideFlags: 0
