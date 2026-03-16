@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 7683598677475463711}
   - component: {fileID: 3931104108830888277}
   - component: {fileID: 771742032302713577}
+  - component: {fileID: -6613085289010419490}
+  - component: {fileID: 4708726585695198520}
   m_Layer: 0
   m_Name: TreasureChest
   m_TagString: Untagged
@@ -29,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 422.4816, y: -123.31428, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 1}
+  m_LocalScale: {x: 10, y: 10, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -151,3 +153,35 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.46, y: 0.46}
   m_EdgeRadius: 0
+--- !u!114 &-6613085289010419490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2740750108815814103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 365c9480d40b6fe498cbcfd52e71b4ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PickupAnimation
+  floatHeight: 0.3
+  floatSpeed: 1.5
+  rotationSpeed: 90
+  scalePulseAmount: 0.1
+  scalePulseSpeed: 2
+  pickupEffectPrefab: {fileID: 3132300966347646534, guid: 044bb9b535cb7e74a8fb186d709689ce, type: 3}
+  pickupSound: {fileID: 0}
+  destroyDelay: 0.5
+--- !u!114 &4708726585695198520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2740750108815814103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fcbe7410d744354c838f500c8aad687, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TreasureChestPickup
