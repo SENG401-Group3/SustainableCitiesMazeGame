@@ -3,38 +3,47 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
+
+/* Manages the player's score during gameplay.
+ Handles progress saving, scoring, and communication with CityUpdater. */
+
 public class CityGameManager : MonoBehaviour
 {
-    public Text scoreText, artifactsText;
-    private int sessionScore = 0;
-    private int artifactsCollected = 0;
+    [Header("Session Data")]
+    private int sessionScore = 0;   // Score earned in current city session
+    private int currentCity;       // Current city index (1-5)
 
-    private int currentCity;
+    
+    /// Singleton instance for global access
+    
+    public static CityGameManager Instance { get; private set; }
 
-    // Add this for singleton pattern to avoid duplicates
-    public static CityGameManager Instance;
-
-    void Awake()
+    /*Unity's Awake method - sets up singleton pattern and persistence*/
+    
+    public void Awake()
     {
-        // Singleton pattern to keep only one instance
+        // Singleton pattern to ensure only one instance exists
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // This keeps it alive when loading new scenes
+            DontDestroyOnLoad(gameObject); // Keep alive when loading new scenes
             Debug.Log("✅ CityGameManager set to persist between scenes");
         }
         else
         {
-            Destroy(gameObject); // Destroy duplicate if one already exists
+            Destroy(gameObject); // Destroy duplicate instances
             Debug.Log("❌ Duplicate CityGameManager destroyed");
         }
     }
 
-    void Start()
+    
+    // Unity's Start method - initializes city data and loads progress
+ 
+    public void Start()
     {
         currentCity = PlayerPrefs.GetInt("CurrentCity", 1);
 
-        // SAFETY CHECK: If we're on City 1 and TotalScore is high, something's wrong
+        // Safety check: If on City 1 but TotalScore is abnormally high, reset
         int totalScore = PlayerPrefs.GetInt("TotalScore", 0);
         if (currentCity == 1 && totalScore > 100)
         {
@@ -46,38 +55,38 @@ public class CityGameManager : MonoBehaviour
 
         Debug.Log($"🏁 CityGameManager Started for City {currentCity}. Initial sessionScore: {sessionScore}, TotalScore: {totalScore}");
 
-        // If we're starting a new game (City 1), make sure session is clean
+        // Reset session data when starting a new game (City 1)
         if (currentCity == 1)
         {
             sessionScore = 0;
-            artifactsCollected = 0;
             Debug.Log("🆕 City 1 detected - session score reset to 0");
         }
 
-        // Try to load any existing progress for this city
+        // Load any existing progress for this city
         LoadCityProgress();
     }
 
-    void LoadCityProgress()
+    
+    // Loads saved progress for the current city from PlayerPrefs
+    private void LoadCityProgress()
     {
-        // Check if we have saved progress for this city
+        // Retrieve temporary score for this city (if any)
         int savedScore = PlayerPrefs.GetInt($"City{currentCity}TempScore", -1);
-        int savedArtifacts = PlayerPrefs.GetInt($"City{currentCity}TempArtifacts", -1);
 
         if (savedScore > 0)
         {
             sessionScore = savedScore;
-            artifactsCollected = savedArtifacts;
-            Debug.Log($"📂 Loaded saved progress for City {currentCity}: Score={sessionScore}, Artifacts={artifactsCollected}");
+            Debug.Log($"📂 Loaded saved progress for City {currentCity}: Score={sessionScore}");
         }
 
         UpdateUI();
     }
 
-    public void AddScoreAndArtifacts(int points)
+   
+    // Adds points when player answers correctly
+    public void AddScore(int points)
     {
         sessionScore += points;
-        artifactsCollected += 1;
 
         Debug.Log($"➕ Added {points} points. City {currentCity} total now: {sessionScore}");
 
@@ -86,11 +95,14 @@ public class CityGameManager : MonoBehaviour
 
         UpdateUI();
 
-        // DATABASE CODE COMMENTED OUT - causing null reference errors
+        // Database update code is commented out to avoid null reference errors
         // StartCoroutine(UpdateScore(points));
     }
 
     /*
+   
+    // Coroutine to update score on remote server (currently disabled)
+   
     private IEnumerator UpdateScore(int score)
     {
         Debug.Log("Sending score update...");
@@ -117,49 +129,46 @@ public class CityGameManager : MonoBehaviour
     }
     */
 
-    void SaveCityProgress()
+    // Saves temporary progress for the current city to PlayerPrefs
+    
+    private void SaveCityProgress()
     {
-        // Save temporary progress for this city
         PlayerPrefs.SetInt($"City{currentCity}TempScore", sessionScore);
-        PlayerPrefs.SetInt($"City{currentCity}TempArtifacts", artifactsCollected);
         PlayerPrefs.Save();
 
-        Debug.Log($"💾 Saved progress for City {currentCity}: Score={sessionScore}, Artifacts={artifactsCollected}");
+        Debug.Log($"💾 Saved progress for City {currentCity}: Score={sessionScore}");
     }
 
-    // GETTERS FOR CITYUPDATER
+
+    /// Gets the current session score (called by CityUpdater)
+    
     public int GetPlayerScore()
     {
         Debug.Log($"📤 GetPlayerScore called for City {currentCity}: returning {sessionScore}");
         return sessionScore;
     }
 
-    public int GetArtifactsCollected()
+  
+    /// Updates UI elements with current score
+  
+    private void UpdateUI()
     {
-        Debug.Log($"📤 GetArtifactsCollected called: returning {artifactsCollected}");
-        return artifactsCollected;
+        // UI text elements have been removed per request
+        // Keeping method structure for potential future UI implementation
+        Debug.Log($"🖥️ UI Update would show: Score={sessionScore}");
     }
 
-    void UpdateUI()
-    {
-        if (scoreText != null)
-        {
-            scoreText.text = $"Score: {sessionScore}";
-            Debug.Log($"🖥️ UI Updated: scoreText = {sessionScore}");
-        }
-        if (artifactsText != null) artifactsText.text = $"Artifacts: {artifactsCollected}";
-    }
-
-    // Clear temp progress when city is completed
+    
+    /*Clears temporary progress when a city is completed
+    Called by CityUpdater*/
+   
     public void ClearTempProgress()
     {
         Debug.Log($"🧹 Clearing progress for City {currentCity}. Final score: {sessionScore}");
 
         sessionScore = 0;
-        artifactsCollected = 0;
 
         PlayerPrefs.DeleteKey($"City{currentCity}TempScore");
-        PlayerPrefs.DeleteKey($"City{currentCity}TempArtifacts");
         PlayerPrefs.Save();
 
         UpdateUI();

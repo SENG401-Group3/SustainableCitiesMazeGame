@@ -238,7 +238,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1901080423}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5d1be77b873e654db8247a2dc4e4158, type: 3}
+  m_Script: {fileID: 11500000, guid: facf7b253a71a42e2897e99e77606f94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LeaderboardSceneController
   document: {fileID: 1901080425}
