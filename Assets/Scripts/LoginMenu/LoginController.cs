@@ -88,13 +88,17 @@ public class LoginController : MonoBehaviour
 
             if (request.result == UnityWebRequest.Result.Success)
             {
-                ProgressData data = JsonUtility.FromJson<ProgressData>(request.downloadHandler.text);
                 Debug.Log("Server response: " + request.downloadHandler.text);
 
-                DBManager.username = usernameInput.value.Trim();
+                DBManager.firstname = data.firstname;
+                DBManager.lastname = data.lastname;
+                DBManager.username = data.username;
+                DBManager.highscore = data.highscore;
+                DBManager.citynumber = data.citynumber;
+                DBManager.currentscore = data.currentscore;
+
                 usernameInput.value = "";
-                DBManager.citynumber = data.city;
-                DBManager.score = data.score;
+                passwordInput.value = "";
 
                 successLabel.text = "Login successful!";
                 successLabel.style.visibility = Visibility.Visible;
@@ -113,14 +117,7 @@ public class LoginController : MonoBehaviour
         }
     }
 
-    public class ProgressData
-    {
-        public string username;
-        public int city;
-        public int score;
-    }
-
-
+    
     /*public void VerifyInputs()
     {
         // place constraints on username and password here, such as length, special characters, etc.
