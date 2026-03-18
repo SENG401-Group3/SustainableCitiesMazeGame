@@ -77,7 +77,7 @@ public class Registration : MonoBehaviour
         form.AddField("username", usernameInput.value.Trim());
         form.AddField("password", passwordInput.value.Trim());
 
-        using (UnityWebRequest request = UnityWebRequest.Post("http://localhost/SQLConnect/register.php", form))
+        using (UnityWebRequest request = UnityWebRequest.Post(DBManager.hostname + "/register.php", form))
         {
             yield return request.SendWebRequest();
 

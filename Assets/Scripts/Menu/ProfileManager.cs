@@ -78,7 +78,7 @@ public class ProfileManager : MonoBehaviour
         WWWForm form = new WWWForm();
         form.AddField("username", DBManager.username);
 
-        using (UnityWebRequest request = UnityWebRequest.Post("http://localhost/SQLConnect/getuser.php", form))
+        using (UnityWebRequest request = UnityWebRequest.Post(DBManager.hostname + "/getuser.php", form))
         {
             yield return request.SendWebRequest();
 

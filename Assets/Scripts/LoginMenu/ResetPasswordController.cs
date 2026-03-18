@@ -71,7 +71,7 @@ public class ResetPasswordController : MonoBehaviour
         form.AddField("newPassword", newPasswordInput.text);
         form.AddField("confirmPassword", confirmPasswordInput.text);
 
-        using (UnityWebRequest www = UnityWebRequest.Post("http://localhost/SQLConnect/resetpassword.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(DBManager.hostname + "/resetpassword.php", form))
         {
             yield return www.SendWebRequest();
 
