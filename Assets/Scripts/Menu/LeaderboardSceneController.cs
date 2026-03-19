@@ -4,55 +4,29 @@ using UnityEngine.UIElements;
 using System.Collections;
 using System.Collections.Generic;
 
-/*
- * Controls the leaderboard scene including score submission,
- * animations, and UI interactions.
- */
-
 public class LeaderboardSceneController : MonoBehaviour
 {
-    [Header("UI Document")]
-    [SerializeField] private UIDocument document; // Reference to the UIDocument containing the leaderboard UI
+    //public UIDocument document;
 
-    [Header("UI Elements")]
-    private VisualElement root;                // Root VisualElement of the UIDocument
-    private VisualElement leaderboardContainer; // Main container for leaderboard content
-    private VisualElement scoreList;            // Container for score entries
-    private Button submitButton;                // Button to submit score
-    private Button retryButton;                  // Button to retry submission after failure
-    private Button backToMenuButton;             // Button to return to main menu
-    private VisualElement loadingSpinner;        // Loading spinner animation element
-    private Label statusMessage;                  // Status message for submission feedback
+    private VisualElement root;
+    private VisualElement leaderboardContainer;
+    private VisualElement scoreList;
+    private Button submitButton;
+    private Button retryButton;
+    private Button backToMenuButton;
+    private VisualElement loadingSpinner;
+    private Label statusMessage;
 
-    [Header("Score Data")]
-    private int playerScore;      // Player's final score
-    private string playerName = "MAKUO"; // Player name for leaderboard
+    private int playerScore;
+    private string playerName = "MAKUO";
+    private bool isSubmitting = false;
+    private bool scoreSubmitted = false;
 
-    [Header("Submission State")]
-    private bool isSubmitting = false;   // Whether a submission is in progress
-    private bool scoreSubmitted = false;  // Whether score has been successfully submitted
-
-    /*
-     * Unity's Start method - initializes UI elements and sets up the leaderboard
-     */
     void Start()
     {
-        // Try to get UIDocument component if not assigned
-        if (document == null)
-        {
-            document = GetComponent<UIDocument>();
+        root = GetComponent<UIDocument>().rootVisualElement;
 
-            if (document == null)
-            {
-                Debug.LogError("❌ LeaderboardSceneController: UIDocument not assigned and not found on GameObject!");
-                return;
-            }
-        }
-
-        // Get the root VisualElement
-        root = document.rootVisualElement;
-
-        // Find all UI elements by their names (must match UXML exactly)
+        // Get UI elements
         leaderboardContainer = root.Q<VisualElement>("LeaderboardContainer");
         scoreList = root.Q<VisualElement>("ScoreList");
         submitButton = root.Q<Button>("SubmitButton");
@@ -61,11 +35,11 @@ public class LeaderboardSceneController : MonoBehaviour
         loadingSpinner = root.Q<VisualElement>("LoadingSpinner");
         statusMessage = root.Q<Label>("StatusMessage");
 
-        // Get the final score from PlayerPrefs
+        // Get the final score with detailed debugging
         playerScore = PlayerPrefs.GetInt("TotalScore", 0);
         Debug.Log($"🏆 LeaderboardScene - Final TotalScore from PlayerPrefs: {playerScore}");
 
-        // Debug: Check all score-related PlayerPrefs
+        // Check ALL score-related PlayerPrefs
         Debug.Log("📊 Checking ALL score PlayerPrefs:");
 
         // Check individual city scores
@@ -78,7 +52,7 @@ public class LeaderboardSceneController : MonoBehaviour
         }
         Debug.Log($"📊 Sum of all city scores: {totalFromCities}");
 
-        // Check temporary scores for each city
+        // Check temp scores
         for (int i = 1; i <= 5; i++)
         {
             int tempScore = PlayerPrefs.GetInt($"City{i}TempScore", -1);
@@ -86,7 +60,7 @@ public class LeaderboardSceneController : MonoBehaviour
                 Debug.Log($"   City{i}TempScore: {tempScore}");
         }
 
-        // Set up button click events
+        // Setup buttons
         if (submitButton != null)
             submitButton.clicked += OnSubmitClicked;
 
@@ -96,45 +70,46 @@ public class LeaderboardSceneController : MonoBehaviour
         if (backToMenuButton != null)
             backToMenuButton.clicked += () => {
                 Debug.Log("🔴 Back to Menu button clicked - resetting game...");
-                // Reset all game data for a new playthrough
+                // Reset everything for a new game
                 ResetGameForNewPlaythrough();
                 Debug.Log("🏁 Returning to main menu - reset to City 1");
                 SceneManager.LoadScene("CitySelection");
             };
 
-        // Hide certain UI elements initially
+        // Hide elements initially
         if (retryButton != null) retryButton.style.display = DisplayStyle.None;
         if (loadingSpinner != null) loadingSpinner.style.display = DisplayStyle.None;
         if (statusMessage != null) statusMessage.style.display = DisplayStyle.None;
 
-        // Hide score list initially - only show after successful submission
+        // Hide the score list initially - show only after submission
         if (scoreList != null)
         {
             scoreList.style.display = DisplayStyle.None;
         }
 
-        // Play entrance animation
-        StartCoroutine(AnimateLeaderboardEntrance());
+        // Animate the leaderboard entrance
+        UIAnimator.Instance.AnimateEntrance(leaderboardContainer);
     }
 
-    /*
-     * Resets all game data for a new playthrough
-     * Called when returning to main menu
-     */
+    // Add this new method to reset all game data
     void ResetGameForNewPlaythrough()
     {
         Debug.Log("🔄 ===== RESETTING GAME FOR NEW PLAYTHROUGH =====");
 
-        // Store score before reset for debug
+        // Check score before reset
         int beforeReset = PlayerPrefs.GetInt("TotalScore", 0);
         Debug.Log($"📊 TotalScore BEFORE reset: {beforeReset}");
 
-        // Reset game state
-        PlayerPrefs.SetInt("CurrentCity", 1);      // Start from City 1
-        PlayerPrefs.SetInt("GameComplete", 0);      // Clear game complete flag
-        PlayerPrefs.SetInt("TotalScore", 0);        // Reset total score to zero
+        // Reset to City 1
+        PlayerPrefs.SetInt("CurrentCity", 1);
 
-        // Reset individual city scores and progress
+        // Clear game complete flag
+        PlayerPrefs.SetInt("GameComplete", 0);
+
+        // RESET TOTAL SCORE TO ZERO for new game
+        PlayerPrefs.SetInt("TotalScore", 0);
+
+        // Reset individual city scores
         for (int i = 1; i <= 5; i++)
         {
             int cityScoreBefore = PlayerPrefs.GetInt($"City{i}Score", 0);
@@ -150,7 +125,6 @@ public class LeaderboardSceneController : MonoBehaviour
             PlayerPrefs.DeleteKey($"City{i}TempArtifacts");
         }
 
-        // Save all changes
         PlayerPrefs.Save();
 
         // Verify reset
@@ -159,46 +133,6 @@ public class LeaderboardSceneController : MonoBehaviour
         Debug.Log("✅ ===== GAME RESET COMPLETE =====");
     }
 
-    /*
-     * Animates the leaderboard panel entrance with scale and fade effects
-     */
-    IEnumerator AnimateLeaderboardEntrance()
-    {
-        if (leaderboardContainer == null) yield break;
-
-        // Start small and transparent
-        leaderboardContainer.style.opacity = 0;
-        leaderboardContainer.style.scale = new StyleScale(new Scale(new Vector2(0.8f, 0.8f)));
-
-        // Animate to full size over duration
-        float elapsed = 0;
-        float duration = 0.5f;
-
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            float t = elapsed / duration;
-
-            // Use easing function for bounce effect
-            float scaleT = Mathf.Sin(t * Mathf.PI * 0.5f);
-
-            leaderboardContainer.style.opacity = t;
-            leaderboardContainer.style.scale = new StyleScale(new Scale(new Vector2(
-                0.8f + 0.2f * scaleT,
-                0.8f + 0.2f * scaleT
-            )));
-
-            yield return null;
-        }
-
-        // Ensure final state is correct
-        leaderboardContainer.style.opacity = 1;
-        leaderboardContainer.style.scale = new StyleScale(new Scale(Vector2.one));
-    }
-
-    /*
-     * Handler for submit button click
-     */
     void OnSubmitClicked()
     {
         if (isSubmitting || scoreSubmitted) return;
@@ -206,107 +140,42 @@ public class LeaderboardSceneController : MonoBehaviour
         StartCoroutine(SubmitScoreRoutine());
     }
 
-    /*
-     * Handler for retry button click after failed submission
-     */
     void OnRetryClicked()
     {
         if (isSubmitting) return;
         Debug.Log("🔄 Retry button clicked");
 
         // Hide retry button with animation
-        StartCoroutine(AnimateHideRetryButton());
+        UIAnimator.Instance.FadeOutElement(retryButton, 0.2f);
         StartCoroutine(SubmitScoreRoutine());
     }
 
-    /*
-     * Animates hiding the retry button with fade out
-     */
-    IEnumerator AnimateHideRetryButton()
-    {
-        if (retryButton == null) yield break;
-
-        float elapsed = 0;
-        float duration = 0.2f;
-
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            retryButton.style.opacity = 1 - (elapsed / duration);
-            yield return null;
-        }
-
-        retryButton.style.display = DisplayStyle.None;
-        retryButton.style.opacity = 1; // Reset opacity for next time
-    }
-
-    /*
-     * Coroutine that handles the score submission process with animations
-     * Simulates network delay and success/failure states
-     */
     IEnumerator SubmitScoreRoutine()
     {
         isSubmitting = true;
         Debug.Log("⏳ Starting submission routine...");
 
-        // Disable submit button to prevent double submission
+        // Disable submit button
         if (submitButton != null) submitButton.SetEnabled(false);
 
-        // Show loading spinner with fade in animation
+        // Show loading spinner with animation
         if (loadingSpinner != null)
         {
-            loadingSpinner.style.display = DisplayStyle.Flex;
-            loadingSpinner.style.opacity = 0;
-
-            float elapsed = 0;
-            while (elapsed < 0.2f)
-            {
-                elapsed += Time.deltaTime;
-                loadingSpinner.style.opacity = elapsed / 0.2f;
-                yield return null;
-            }
-            loadingSpinner.style.opacity = 1;
-
-            // Start spinner rotation
-            StartCoroutine(AnimateSpinner());
+            UIAnimator.Instance.FadeInElement(loadingSpinner, 0.2f);
+            UIAnimator.Instance.RotateElement(loadingSpinner, 360f);
         }
 
-        // Show status message with fade in
+        // Show status message
         if (statusMessage != null)
         {
             statusMessage.text = "Submitting score...";
             statusMessage.style.color = Color.white;
-            statusMessage.style.display = DisplayStyle.Flex;
-            statusMessage.style.opacity = 0;
-
-            float elapsed = 0;
-            while (elapsed < 0.2f)
-            {
-                elapsed += Time.deltaTime;
-                statusMessage.style.opacity = elapsed / 0.2f;
-                yield return null;
-            }
-            statusMessage.style.opacity = 1;
-
-            // Start pulse animation on text
-            StartCoroutine(AnimatePulseText());
+            UIAnimator.Instance.FadeInElement(statusMessage, 0.2f);
+            UIAnimator.Instance.PulseElement(statusMessage);
         }
 
         // Simulate network delay (2 seconds)
-        float submitElapsed = 0;
-        while (submitElapsed < 2f)
-        {
-            submitElapsed += Time.deltaTime;
-
-            // Animate dots while waiting
-            if (statusMessage != null)
-            {
-                int dots = ((int)(submitElapsed * 2)) % 4;
-                statusMessage.text = "Submitting score" + new string('.', dots);
-            }
-
-            yield return null;
-        }
+        yield return UIAnimator.Instance.AnimateLoading(statusMessage, "Submitting score", 2f);
 
         // Simulate success/failure (80% success rate)
         bool success = Random.Range(0, 10) > 2;
@@ -315,19 +184,12 @@ public class LeaderboardSceneController : MonoBehaviour
         // Hide spinner
         if (loadingSpinner != null)
         {
-            float elapsed = 0;
-            while (elapsed < 0.2f)
-            {
-                elapsed += Time.deltaTime;
-                loadingSpinner.style.opacity = 1 - (elapsed / 0.2f);
-                yield return null;
-            }
-            loadingSpinner.style.display = DisplayStyle.None;
+            UIAnimator.Instance.FadeOutElement(loadingSpinner, 0.2f);
         }
 
         if (success)
         {
-            // Handle successful submission
+            // SUCCESS ANIMATION
             scoreSubmitted = true;
             Debug.Log($"✅ Submission successful! Score: {playerScore}");
 
@@ -336,36 +198,20 @@ public class LeaderboardSceneController : MonoBehaviour
                 statusMessage.text = "✓ SCORE SUBMITTED!";
                 statusMessage.style.color = Color.green;
 
-                // Pop animation on success message
-                float elapsed = 0;
-                while (elapsed < 0.3f)
-                {
-                    elapsed += Time.deltaTime;
-                    float t = elapsed / 0.3f;
-                    float scale = 1 + Mathf.Sin(t * Mathf.PI) * 0.2f;
-                    statusMessage.style.scale = new StyleScale(new Scale(new Vector2(scale, scale)));
-                    yield return null;
-                }
-                statusMessage.style.scale = new StyleScale(new Scale(Vector2.one));
+                // Pop animation
+                UIAnimator.Instance.PulseElement(statusMessage, 0.3f, 1.2f);
             }
 
-            // Show the leaderboard with player's score
+            // NOW show the leaderboard with the score
             ShowLeaderboardWithScore();
 
-            // Wait before hiding success message
+            // Wait before hiding status
             yield return new WaitForSeconds(1.5f);
 
             // Hide status message
             if (statusMessage != null)
             {
-                float elapsed = 0;
-                while (elapsed < 0.2f)
-                {
-                    elapsed += Time.deltaTime;
-                    statusMessage.style.opacity = 1 - (elapsed / 0.2f);
-                    yield return null;
-                }
-                statusMessage.style.display = DisplayStyle.None;
+                UIAnimator.Instance.FadeOutElement(statusMessage, 0.2f);
             }
 
             // Hide submit button after successful submission
@@ -376,7 +222,7 @@ public class LeaderboardSceneController : MonoBehaviour
         }
         else
         {
-            // Handle failed submission
+            // FAILURE ANIMATION
             Debug.Log("❌ Submission failed - showing retry option");
 
             if (statusMessage != null)
@@ -384,82 +230,48 @@ public class LeaderboardSceneController : MonoBehaviour
                 statusMessage.text = "✗ SUBMISSION FAILED";
                 statusMessage.style.color = Color.red;
 
-                // Shake animation on failure message
-                float shakeElapsed = 0;
-                while (shakeElapsed < 0.5f)
-                {
-                    shakeElapsed += Time.deltaTime;
-                    float offsetX = Random.Range(-5f, 5f);
-                    float offsetY = Random.Range(-2f, 2f);
-                    statusMessage.style.translate = new StyleTranslate(new Translate(offsetX, offsetY));
-                    yield return null;
-                }
-                statusMessage.style.translate = new StyleTranslate(new Translate(0, 0));
+                // Shake animation
+                UIAnimator.Instance.ShakeElement(statusMessage, 0.5f, 5f, 2f);
             }
 
             // Show retry button with pop animation
             if (retryButton != null)
             {
                 retryButton.style.display = DisplayStyle.Flex;
-                retryButton.style.opacity = 0;
-                retryButton.style.scale = new StyleScale(new Scale(new Vector2(0.8f, 0.8f)));
-
-                float elapsed = 0;
-                while (elapsed < 0.3f)
-                {
-                    elapsed += Time.deltaTime;
-                    float t = elapsed / 0.3f;
-                    retryButton.style.opacity = t;
-                    retryButton.style.scale = new StyleScale(new Scale(new Vector2(
-                        0.8f + 0.2f * t,
-                        0.8f + 0.2f * t
-                    )));
-                    yield return null;
-                }
-
-                retryButton.style.opacity = 1;
-                retryButton.style.scale = new StyleScale(new Scale(Vector2.one));
+                UIAnimator.Instance.AnimateEntrance(retryButton, 0.3f);
             }
 
-            // Re-enable submit button for another attempt
+            // Re-enable submit button for retry
             if (submitButton != null) submitButton.SetEnabled(true);
         }
 
         isSubmitting = false;
     }
 
-    /*
-     * Displays the leaderboard with player score after successful submission
-     */
     void ShowLeaderboardWithScore()
     {
         if (scoreList == null) return;
 
         Debug.Log($"📊 Showing leaderboard with score: {playerScore}");
 
-        // Make score list visible
+        // Show the score list
         scoreList.style.display = DisplayStyle.Flex;
         scoreList.Clear();
 
-        // Add player as #1 with highlight
+        // Add player as #1 with HIGHLIGHT using the ACTUAL score
         AddScoreEntry(playerName, playerScore, 1, true);
-
-        // Add dummy competitor scores for context
         AddScoreEntry("EcoWarrior", 1500, 2, false);
         AddScoreEntry("GreenMachine", 1200, 3, false);
         AddScoreEntry("SolarSam", 900, 4, false);
         AddScoreEntry("RecycleRex", 750, 5, false);
 
-        // Animate entries appearing
+        // Animate the entries
         StartCoroutine(AnimateScoreEntries());
 
-        // Animate player's highlighted entry
-        StartCoroutine(AnimateHighlight());
+        // Animate the highlight
+        //StartCoroutine(AnimateHighlight());
     }
 
-    /*
-     * Animates score entries appearing with staggered fade-in
-     */
     IEnumerator AnimateScoreEntries()
     {
         if (scoreList == null) yield break;
@@ -472,36 +284,14 @@ public class LeaderboardSceneController : MonoBehaviour
             entry.style.opacity = 0;
             entry.style.translate = new StyleTranslate(new Translate(20, 0));
 
-            // Stagger animations
             yield return new WaitForSeconds(0.1f * index);
 
-            float elapsed = 0;
-            float duration = 0.3f;
-
-            while (elapsed < duration)
-            {
-                elapsed += Time.deltaTime;
-                float t = elapsed / duration;
-
-                entry.style.opacity = t;
-                entry.style.translate = new StyleTranslate(new Translate(
-                    Mathf.Lerp(20, 0, t),
-                    0
-                ));
-
-                yield return null;
-            }
-
-            entry.style.opacity = 1;
-            entry.style.translate = new StyleTranslate(new Translate(0, 0));
+            UIAnimator.Instance.SlideInElement(entry, new Vector2(20, 0), 0.3f);
             index++;
         }
     }
 
-    /*
-     * Animates the loading spinner rotation
-     */
-    IEnumerator AnimateSpinner()
+    /*IEnumerator AnimateSpinner()
     {
         float rotation = 0;
         while (loadingSpinner != null && loadingSpinner.style.display == DisplayStyle.Flex)
@@ -512,9 +302,6 @@ public class LeaderboardSceneController : MonoBehaviour
         }
     }
 
-    /*
-     * Animates status text with gentle pulse effect
-     */
     IEnumerator AnimatePulseText()
     {
         float elapsed = 0;
@@ -527,9 +314,6 @@ public class LeaderboardSceneController : MonoBehaviour
         }
     }
 
-    /*
-     * Animates the highlighted player entry with pulse effect
-     */
     IEnumerator AnimateHighlight()
     {
         yield return new WaitForSeconds(0.1f);
@@ -537,6 +321,7 @@ public class LeaderboardSceneController : MonoBehaviour
         var firstEntry = scoreList.ElementAt(0);
         if (firstEntry != null)
         {
+            // Pulse animation
             float elapsed = 0;
             while (elapsed < 1f)
             {
@@ -547,34 +332,23 @@ public class LeaderboardSceneController : MonoBehaviour
             }
             firstEntry.style.scale = new StyleScale(new Scale(Vector2.one));
         }
-    }
+    }*/
 
-    /*
-     * Creates and adds a score entry to the leaderboard
-     * 
-     * @param name - Player name to display
-     * @param score - Player score
-     * @param rank - Rank position
-     * @param highlight - Whether this entry should be highlighted
-     */
     void AddScoreEntry(string name, int score, int rank, bool highlight)
     {
         if (scoreList == null) return;
 
-        // Create container for this score entry
         var entry = new VisualElement();
         entry.style.flexDirection = FlexDirection.Row;
         entry.style.justifyContent = Justify.SpaceBetween;
 
-        // Add padding and spacing
         entry.style.paddingTop = 10;
         entry.style.paddingBottom = 10;
         entry.style.paddingLeft = 10;
         entry.style.paddingRight = 10;
         entry.style.marginBottom = 5;
-        entry.style.opacity = 0; // Start invisible for animation
+        entry.style.opacity = 0;
 
-        // Apply different styling for highlighted entries
         if (highlight)
         {
             entry.style.backgroundColor = new Color(0.3f, 0.8f, 0.3f, 0.3f);
@@ -592,26 +366,21 @@ public class LeaderboardSceneController : MonoBehaviour
             entry.style.backgroundColor = new Color(0.2f, 0.2f, 0.2f, 0.8f);
         }
 
-        // Create rank label
         var rankLabel = new Label(rank.ToString());
         rankLabel.style.width = 40;
         rankLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
 
-        // Create name label
         var nameLabel = new Label(name);
         nameLabel.style.width = 150;
 
-        // Create score label
         var scoreLabel = new Label(score.ToString());
         scoreLabel.style.width = 80;
         scoreLabel.style.unityTextAlign = TextAnchor.MiddleRight;
 
-        // Add all labels to entry
         entry.Add(rankLabel);
         entry.Add(nameLabel);
         entry.Add(scoreLabel);
 
-        // Add entry to score list
         scoreList.Add(entry);
     }
 }

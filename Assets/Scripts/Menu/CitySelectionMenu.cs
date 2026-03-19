@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
+//using System.Collections.Generic;
 using System.Collections;
 
 /*
@@ -55,37 +56,27 @@ public class CitySelectionMenu : MonoBehaviour
      */
     private void OnEnable()
     {
-        if (root == null) return;
-
-        // Find the background container element
         backgroundContainer = root.Q<VisualElement>("Background");
 
         // Find and configure the Play button
         playButton = root.Q<Button>("PlayButton");
-        if (playButton != null)
-            playButton.clicked += StartGame;
+        playButton.clicked += StartGame;
 
         // Find and configure the Tutorial button
         tutorialButton = root.Q<Button>("TutorialButton");
-        if (tutorialButton != null)
-            tutorialButton.clicked += ShowTutorial;
-
-        // Note: Scores button was removed as per requirements
+        tutorialButton.clicked += ShowTutorial;
 
         // Find and configure the Settings button
         settingsButton = root.Q<Button>("SettingsButton");
-        if (settingsButton != null)
-            settingsButton.clicked += ShowSettings;
+        settingsButton.clicked += ShowSettings;
 
         // Find and configure the Profile button
         profileButton = root.Q<Button>("ProfileButton");
-        if (profileButton != null)
-            profileButton.clicked += ShowProfile;
+        profileButton.clicked += ShowProfile;
 
         // Find and configure the Quit button
         quitButton = root.Q<Button>("QuitButton");
-        if (quitButton != null)
-            quitButton.clicked += QuitGame;
+        quitButton.clicked += QuitGame;
     }
 
     /*
@@ -93,11 +84,11 @@ public class CitySelectionMenu : MonoBehaviour
      */
     private void OnDisable()
     {
-        if (playButton != null) playButton.clicked -= StartGame;
-        if (tutorialButton != null) tutorialButton.clicked -= ShowTutorial;
-        if (settingsButton != null) settingsButton.clicked -= ShowSettings;
-        if (profileButton != null) profileButton.clicked -= ShowProfile;
-        if (quitButton != null) quitButton.clicked -= QuitGame;
+        playButton.clicked -= StartGame;
+        tutorialButton.clicked -= ShowTutorial;
+        settingsButton.clicked -= ShowSettings;
+        profileButton.clicked -= ShowProfile;
+        quitButton.clicked -= QuitGame;
     }
 
     /*
@@ -158,6 +149,7 @@ public class CitySelectionMenu : MonoBehaviour
      */
     private void StartGame()
     {
+        //PlayButtonSound();
         SceneManager.LoadScene("MazeScene");
     }
 
@@ -166,25 +158,7 @@ public class CitySelectionMenu : MonoBehaviour
      */
     private void ShowTutorial()
     {
-        Debug.Log("🔵 STEP 1: CitySelectionMenu.ShowTutorial() CALLED");
-
-        // Try to find GameUIManager if not already assigned
-        if (gameUIManager == null)
-        {
-            gameUIManager = FindFirstObjectByType<GameUIManager>();
-            Debug.Log($"🔵 STEP 2: GameUIManager found: {gameUIManager != null}");
-        }
-
-        // Show the tutorial panel if GameUIManager is available
-        if (gameUIManager != null)
-        {
-            Debug.Log("🔵 STEP 3: Calling gameUIManager.ShowTutorial()");
-            gameUIManager.ShowTutorial();
-        }
-        else
-        {
-            Debug.LogError("❌ GameUIManager is NULL!");
-        }
+        gameUIManager.ShowTutorial();
     }
 
     /*
@@ -201,10 +175,7 @@ public class CitySelectionMenu : MonoBehaviour
      */
     private void ShowProfile()
     {
-        if (gameUIManager != null)
-            gameUIManager.ShowProfile();
-        else
-            Debug.LogError("❌ Cannot show profile: gameUIManager is null!");
+        gameUIManager.ShowProfile();
     }
 
     /*
@@ -212,10 +183,10 @@ public class CitySelectionMenu : MonoBehaviour
      */
     private void QuitGame()
     {
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-        Application.Quit();
-#endif
+        #if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+        #else
+                Application.Quit();
+        #endif
     }
 }

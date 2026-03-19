@@ -74,7 +74,7 @@
     border-top-color: rgba(255, 0, 89, 0.9);
     border-bottom-color: rgba(255, 0, 89, 0.9);
     background-color: rgb(247, 188, 74);
-    scale: 1.04 1.04;
+    scale: 1.05 1.05;
     color: rgb(27, 27, 27);
 }
 
@@ -166,4 +166,20 @@
     font-size: 180%;
     color: rgb(248, 222, 176);
     min-height: 20%;
+}
+
+.story-panel {
+    background-image: url("project://database/Assets/Animations/story_background.png?fileID=2800000&guid=10b260b2d321b2a498c0e7440b379167&type=3#story_background");
+    background-size: cover;
+    background-position: center;
+}
+
+.welcome-panel {
+    background-image: url("project://database/Assets/Animations/maze_background.png?fileID=8358624118167062924&guid=e287526232780c8499fd82a4c61aa3a9&type=3#maze_background_0");
+    background-size: cover;
+    background-position: center;
+}
+
+* {
+    unity-font: "UncialAntiqua";
 }

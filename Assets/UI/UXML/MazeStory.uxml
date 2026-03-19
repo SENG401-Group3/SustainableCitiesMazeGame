@@ -1,0 +1,11 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/USS/main%20menu.uss?fileID=7433441132597879392&amp;guid=0bc041f9531c6b046b460760c2a027b5&amp;type=3#main menu"/>
+    <ui:VisualElement name="StoryPanel" class="panel story-panel" style="flex-grow: 1; align-self: auto; align-content: center;">
+        <ui:VisualElement name="Container" class="menu" style="flex-grow: 1; min-width: 100%; max-height: 75%; align-content: flex-end; flex-wrap: wrap;">
+            <ui:Label text="" name="StoryLabel" class="sub-text" style="flex-shrink: 1; flex-grow: 1; font-size: 32%; max-width: 90%; max-height: 80%; flex-wrap: wrap; align-self: center; min-width: 80%; min-height: auto; margin-bottom: 4px; white-space: normal; margin-right: 2px; padding-left: 2px; justify-content: center; -unity-paragraph-spacing: 10px; -unity-text-align: middle-left;"/>
+            <ui:VisualElement name="ButtonBar" class="button-bar" style="flex-grow: 1; min-height: auto; max-height: 10%; max-width: 30%; align-self: center; min-width: auto; margin-top: 5%;">
+                <ui:Button text="Next" name="NextButton" style="flex-shrink: 0; visibility: visible;"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,48 +1,39 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-/*
- * Controls the tutorial panel UI, specifically handling the back button
- * functionality to return to the main menu.
- */
-
 public class TutorialController : MonoBehaviour
 {
-    /*
-     * Unity's OnEnable method - called when the GameObject becomes enabled and active
-     * Sets up the back button click event handler
-     */
+    [SerializeField] private GameUIManager gameUIManager;
+    private VisualElement root;
+    private Button backButton;
+
+    private void Awake()
+    {
+        // Fetch the panel as soon as it is initialized
+        root = GetComponent<UIDocument>().rootVisualElement;
+    }
+
     private void OnEnable()
     {
-        // Get the root VisualElement from the UIDocument component
-        var root = GetComponent<UIDocument>().rootVisualElement;
+        // Retrieving and configuring buttons
+        backButton = root.Q<Button>("BackButton");
+        backButton.clicked += OnBackClicked;
+    }
 
-        // Find the back button in the UXML hierarchy
-        var backButton = root.Q<Button>("BackButton");
+    private void OnBackClicked()
+    {
+        gameUIManager.ShowSelection();
+    }
 
-        // Check if back button was found
-        if (backButton != null)
-        {
-            Debug.Log("✅ Back button found!");
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        
+    }
 
-            // Add click event handler to the back button
-            backButton.clicked += () => {
-                Debug.Log("✅ Back button clicked!");
-
-                // Find the GameUIManager in the scene
-                var gameUIManager = FindFirstObjectByType<GameUIManager>();
-
-                // Hide the tutorial panel if GameUIManager exists
-                if (gameUIManager != null)
-                {
-                    gameUIManager.HideTutorial();
-                }
-            };
-        }
-        else
-        {
-            // Log error if back button couldn't be found in UXML
-            Debug.LogError("❌ Back button NOT found!");
-        }
+    // Update is called once per frame
+    void Update()
+    {
+        
     }
 }

@@ -6,10 +6,12 @@ public class MainMenuController : MonoBehaviour
 {
     private VisualElement root;
     [SerializeField] private UIManager uiManager;
-    public Button loginButton;
-    public Button signUpButton;
-    public Button guestButton;
-    public Button aboutButton;
+    private Button loginButton;
+    private Button signUpButton;
+    private Button guestButton;
+    private Button aboutButton;
+    //private Label welcomeLabel;
+
     private void Awake()
     {
         // fetch the panel as soon as it is initialized
@@ -18,6 +20,7 @@ public class MainMenuController : MonoBehaviour
 
     private void OnEnable()
     {
+        // Fetching the buttons and adding events
         loginButton = root.Q<Button>("LoginButton");
         loginButton.clicked += OnLoginClicked;
 
@@ -29,6 +32,12 @@ public class MainMenuController : MonoBehaviour
 
         aboutButton = root.Q<Button>("AboutButton");
         aboutButton.clicked += OnAboutClicked;
+
+        //Typing the heading label
+        //welcomeLabel = root.Q<Label>("WelcomeLabel");
+        /*Debug.Log(TypewriterText.Instance);
+        TypewriterText.Instance.StartTyping(welcomeLabel, welcomeLabel.text);
+        */
     }
 
     private void OnLoginClicked()
@@ -53,8 +62,6 @@ public class MainMenuController : MonoBehaviour
 
     void Start()
     {
-        /*HideAll();
-        root.style.display = DisplayStyle.Flex;*/
     }
 
     // Update is called once per frame
