@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityNetworking;
+using UnityEngine.Networking;
 
 public static class DBManager
 {
@@ -13,7 +13,7 @@ public static class DBManager
     public static int cityNumber;
     public static int currentScore;
     public static bool LoggedIn { get {return username != null;}}
-    public static void LogOut()
+    public static IEnumerator LogOut()
     {
         if (currentScore > highScore)
         {
@@ -24,9 +24,9 @@ public static class DBManager
         form.AddField("username", username);
         form.AddField("highscore", highScore);
         form.AddField("citynumber", cityNumber);
-        form.AddField("currentScore", currentScore);
+        form.AddField("currentscore", currentScore);
 
-        using (UnityWebRequest request = UnityWebRequest.Post(DBManager.hostname + "/saveplayerprogress.php", form))
+        using (UnityWebRequest request = UnityWebRequest.Post(hostname + "/saveplayerprogress.php", form))
         {
             yield return request.SendWebRequest();
 

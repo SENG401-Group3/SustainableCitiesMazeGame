@@ -9,7 +9,7 @@ public class DBManagerTests
         DBManager.firstname = null;
         DBManager.lastname = null;
         DBManager.username = null;
-        DBManager.score = 0;
+        DBManager.highScore = 0;
     }
 
     /// Verifies that LoggedIn returns false when no username is set
