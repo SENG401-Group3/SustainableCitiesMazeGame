@@ -25,7 +25,7 @@ public static class DBManager
         form.AddField("citynumber", cityNumber);
         form.AddField("currentScore", currentScore);
 
-        using (UnityWebRequest request = UnityWebRequest.Post("http://localhost/UnityLoginSystem/update.php", form))
+        using (UnityWebRequest request = UnityWebRequest.Post(DBManager.hostname + "/saveplayerprogress.php", form))
         {
             yield return request.SendWebRequest();
 
