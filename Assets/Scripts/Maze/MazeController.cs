@@ -70,7 +70,7 @@ public class MazeController : MonoBehaviour
     Vector2 dims = GetRoomSize();
     for(int i = -wallThickness; i < mazeDimsX+wallThickness; i++){
       for(int j = -wallThickness; j < mazeDimsY+wallThickness; j++){
-        if(i < 0 || j < 0 || i <= mazeDimsX || j <= mazeDimsY || mazeGrid[i,j] >= 0){
+        if(i < 0 || j < 0 || i >= mazeDimsX || j >= mazeDimsY || mazeGrid[i,j] >= 0){
           GameObject wall = Instantiate(wallPrefab,
               new Vector3(i * dims.x, j * dims.y, 0.0f),
               Quaternion.identity);
