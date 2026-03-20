@@ -70,7 +70,7 @@ public class MazeController : MonoBehaviour
     Vector2 dims = GetRoomSize();
     for(int i = -wallThickness; i < mazeDimsX+wallThickness; i++){
       for(int j = -wallThickness; j < mazeDimsY+wallThickness; j++){
-        if(i < 0 || j < 0 || i >= mazeDimsX || j >= mazeDimsY || mazeGrid[i,j] >= 0){
+        if(i < 0 || j < 0 || i <= mazeDimsX || j <= mazeDimsY || mazeGrid[i,j] >= 0){
           GameObject wall = Instantiate(wallPrefab,
               new Vector3(i * dims.x, j * dims.y, 0.0f),
               Quaternion.identity);
@@ -80,42 +80,6 @@ public class MazeController : MonoBehaviour
         }
       }
     }
-
-    // create the boundaries of the maze
-    // added an inner scope so I can fold it away lol
-    /*
-    {
-      GameObject boundary_00 = Instantiate(wallPrefab,
-          new Vector3((mazeDimsX - 1) * dims.x/2, -1 * dims.y, 0.0f),
-          Quaternion.identity);
-
-      boundary_00.transform.localScale = new Vector3(mazeDimsX + 2, 1, 1);
-      boundaries[0,0] = boundary_00.GetComponent<Wall>();
-
-      GameObject boundary_01 = Instantiate(wallPrefab,
-          new Vector3((mazeDimsX - 1) * dims.x/2, mazeDimsY * dims.y, 0.0f),
-          Quaternion.identity);
-
-      boundary_01.transform.localScale = new Vector3(mazeDimsX + 2, 1, 1);
-      boundaries[1,0] = boundary_01.GetComponent<Wall>();
-
-
-      GameObject boundary_10 = Instantiate(wallPrefab,
-          new Vector3(-1 * dims.x, (mazeDimsY - 1) * dims.y/2, 0.0f),
-          Quaternion.identity);
-
-      boundary_10.transform.localScale = new Vector3(1, mazeDimsY + 2, 1);
-      boundaries[0,0] = boundary_10.GetComponent<Wall>();
-
-      GameObject boundary_11 = Instantiate(wallPrefab,
-          new Vector3(mazeDimsX * dims.y, (mazeDimsY - 1) * dims.y/2, 0.0f),
-          Quaternion.identity);
-
-      boundary_11.transform.localScale = new Vector3(1, mazeDimsY + 2, 1);
-      boundaries[1,0] = boundary_11.GetComponent<Wall>();
-    }
-    */
-
   }
 
   private void spawnArtifact(){
@@ -193,7 +157,7 @@ public class MazeController : MonoBehaviour
 
     // create the maze object
     // I am just using a preexisting maze object
-    mazeWalls = new Wall[mazeDimsX+wallThickness*2, mazeDimsY+wallThickness*2];
+    mazeWalls = new Wall[mazeDimsX+wallThickness*2, mazeDimsY+wallThickness];
 
     // set the dimensions of the maze
     maze.mazeDimsX = mazeDimsX;
