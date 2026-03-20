@@ -39,6 +39,9 @@ public class MazeController : MonoBehaviour
   [SerializeField]
   private float camTilesZoom;
 
+  [SerializeField]
+  private int wallThickness;
+
   private Wall[,] mazeWalls = null;
   private Wall[,] boundaries = new Wall[2,2];
 
@@ -65,21 +68,22 @@ public class MazeController : MonoBehaviour
 
   private void renderMaze(int[,] mazeGrid){
     Vector2 dims = GetRoomSize();
-    for(int i = 0; i < mazeDimsX; i++){
-      for(int j = 0; j < mazeDimsY; j++){
-        if(mazeGrid[i,j] >= 0){
+    for(int i = -wallThickness; i < mazeDimsX+wallThickness; i++){
+      for(int j = -wallThickness; j < mazeDimsY+wallThickness; j++){
+        if(i < 0 || j < 0 || i >= mazeDimsX || j >= mazeDimsY || mazeGrid[i,j] >= 0){
           GameObject wall = Instantiate(wallPrefab,
               new Vector3(i * dims.x, j * dims.y, 0.0f),
               Quaternion.identity);
 
           wall.name = "Room_" + i.ToString() + "_" + j.ToString();
-          mazeWalls[i, j] = wall.GetComponent<Wall>();
+          mazeWalls[i+wallThickness, j+wallThickness] = wall.GetComponent<Wall>();
         }
       }
     }
 
     // create the boundaries of the maze
     // added an inner scope so I can fold it away lol
+    /*
     {
       GameObject boundary_00 = Instantiate(wallPrefab,
           new Vector3((mazeDimsX - 1) * dims.x/2, -1 * dims.y, 0.0f),
@@ -110,6 +114,7 @@ public class MazeController : MonoBehaviour
       boundary_11.transform.localScale = new Vector3(1, mazeDimsY + 2, 1);
       boundaries[1,0] = boundary_11.GetComponent<Wall>();
     }
+    */
 
   }
 
@@ -188,7 +193,7 @@ public class MazeController : MonoBehaviour
 
     // create the maze object
     // I am just using a preexisting maze object
-    mazeWalls = new Wall[mazeDimsX, mazeDimsY];
+    mazeWalls = new Wall[mazeDimsX+wallThickness*2, mazeDimsY+wallThickness*2];
 
     // set the dimensions of the maze
     maze.mazeDimsX = mazeDimsX;

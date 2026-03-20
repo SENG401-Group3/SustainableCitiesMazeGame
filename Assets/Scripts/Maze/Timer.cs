@@ -20,10 +20,12 @@ public class Timer : MonoBehaviour
     parentCanvas = gameObject.GetComponent<Transform>();
 
     // specify where the text will sit
-    // baseAnchorPosition = new Vector2(-250, -150);
+    baseAnchorPosition = new Vector2(250, 150);
 
     // create a text object
     CreateTextObject("");
+
+    time = 0;
   }
 
   public TextMeshProUGUI CreateTextObject(string textString)
@@ -36,6 +38,7 @@ public class Timer : MonoBehaviour
     textComponent.fontSize = fontSize;
     textComponent.color = Color.white;
     textComponent.textWrappingMode = TextWrappingModes.NoWrap;
+    textComponent.alignment = TextAlignmentOptions.TopRight;
 
     // Optional: Adjust RectTransform properties
     // TODO: keep text in bottom corner irrespective of screen size or message length

@@ -1156,6 +1156,7 @@ MonoBehaviour:
   mazeDimsX: 25
   mazeDimsY: 25
   camTilesZoom: 5.5
+  wallThickness: 6
 --- !u!4 &1891565986
 Transform:
   m_ObjectHideFlags: 0
@@ -1176,12 +1177,30 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1649814069112273565, guid: e7fb565500b504c2dba2e959e5926d5c, type: 3}
   m_PrefabInstance: {fileID: 6451592689806786814}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1959697866}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 18de4a3bd1ebc4a6eb8845bd6406e6a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MessageHandler
+--- !u!1 &1959697866 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4337958989848055632, guid: e7fb565500b504c2dba2e959e5926d5c, type: 3}
+  m_PrefabInstance: {fileID: 6451592689806786814}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1959697871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1959697866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94d390426fb65474d9982c291568d858, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameScripts::Timer
+  fontSize: 24
 --- !u!1 &1989048484
 GameObject:
   m_ObjectHideFlags: 0
@@ -1333,7 +1352,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4337958989848055632, guid: e7fb565500b504c2dba2e959e5926d5c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1959697871}
   m_SourcePrefab: {fileID: 100100000, guid: e7fb565500b504c2dba2e959e5926d5c, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
