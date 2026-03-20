@@ -161,7 +161,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 299329092}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 384024ea7e575ca499c432a43503c28c, type: 3}
+  m_Script: {fileID: 11500000, guid: 8fe0e30f9eb8388449aac7c8a948f5fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResetPasswordController
   uiManager: {fileID: 2127508802}
