@@ -89,13 +89,14 @@ public class LoginController : MonoBehaviour
             if (request.result == UnityWebRequest.Result.Success)
             {
                 Debug.Log("Server response: " + request.downloadHandler.text);
+                UserData data = JsonUtility.FromJson<UserData>(request.downloadHandler.text);
 
                 DBManager.firstname = data.firstname;
                 DBManager.lastname = data.lastname;
                 DBManager.username = data.username;
-                DBManager.highscore = data.highscore;
-                DBManager.citynumber = data.citynumber;
-                DBManager.currentscore = data.currentscore;
+                DBManager.highScore = data.highScore;
+                DBManager.cityNumber = data.cityNumber;
+                DBManager.currentScore = data.currentScore;
 
                 usernameInput.value = "";
                 passwordInput.value = "";
@@ -115,6 +116,16 @@ public class LoginController : MonoBehaviour
                 successLabel.style.visibility = Visibility.Visible;
             }
         }
+    }
+
+    public class UserData
+    {
+        public string username;
+        public string firstname;
+        public string lastname;
+        public int highScore;
+        public int cityNumber;
+        public int currentScore;
     }
 
     

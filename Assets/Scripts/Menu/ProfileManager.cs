@@ -50,10 +50,7 @@ public class ProfileManager : MonoBehaviour
     public void OnLogoutClicked()
     {
         // clear current user data
-        DBManager.firstname = null;
-        DBManager.lastname = null;
-        DBManager.username = null;
-        DBManager.score = 0;
+        StartCoroutine(DBManager.LogOut());
         SceneManager.LoadScene("UI");
     }
 
@@ -90,7 +87,9 @@ public class ProfileManager : MonoBehaviour
                 DBManager.firstname = data.firstname;
                 DBManager.lastname = data.lastname;
                 DBManager.username = data.username;
-                DBManager.score = data.score;
+                DBManager.highScore = data.highScore;
+                DBManager.cityNumber = data.cityNumber;
+                DBManager.currentScore = data.currentScore;
 
                 Debug.Log("Writing details for" + data.username);
                 Debug.Log(greetingLabel);
@@ -101,7 +100,7 @@ public class ProfileManager : MonoBehaviour
 
                 namesLabel.text = "Full Name: " + data.firstname + " " + data.lastname + "\n"
                 + "Username: " + data.username;
-                scoreLabel.text = "Score: " + data.score;
+                scoreLabel.text = "High Score: " + data.highScore;
             }
         }
     }
@@ -113,7 +112,9 @@ public class ProfileManager : MonoBehaviour
         public string username;
         public string firstname;
         public string lastname;
-        public int score;
+        public int highScore;
+        public int cityNumber;
+        public int currentScore;
     }
 
     // Update is called once per frame
