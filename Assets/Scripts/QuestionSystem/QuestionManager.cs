@@ -4,6 +4,7 @@ using UnityEngine.UIElements;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
+using System;
 
 /* Manages the question UI flow, including displaying questions,
  handling answer selection, scoring, and progression. */
@@ -197,7 +198,7 @@ public class QuestionManager : MonoBehaviour
         }
 
         // Select random question
-        currentQuestion = QuestionsBank.AllQuestions[Random.Range(0, QuestionsBank.AllQuestions.Count)];
+        currentQuestion = QuestionsBank.AllQuestions[UnityEngine.Random.Range(0, QuestionsBank.AllQuestions.Count)];
 
         // Shuffle choices and get correct answer index
         shuffledChoices = QuestionsBank.GetShuffledChoices(currentQuestion, out correctIndex);
@@ -255,6 +256,9 @@ public class QuestionManager : MonoBehaviour
 
             // Award points based on attempt count (10, 5, or 3 points)
             int points = (attemptCount == 1) ? 10 : (attemptCount == 2 ? 5 : 3);
+            int time = PlayerPrefs.GetInt("Time");
+            Debug.Log(time);
+            points = (int)(Math.Exp(-0.000693841021582*time)*points); // adjust points based on time taken
 
             Debug.Log($"✅ CORRECT! Awarding {points} points on attempt {attemptCount}");
 
@@ -269,6 +273,7 @@ public class QuestionManager : MonoBehaviour
             CityGameManager gm = FindFirstObjectByType<CityGameManager>();
             if (gm != null)
             {
+                // adjust the points based on the time taken
                 gm.AddScore(points);
                 Debug.Log($"✅ Added {points} points to CityGameManager. Total now: {gm.GetPlayerScore()}");
             }

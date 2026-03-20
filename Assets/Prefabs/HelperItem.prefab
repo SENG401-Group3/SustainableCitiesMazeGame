@@ -83,7 +83,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: -2135585597343286014, guid: 5aa8b770bc43046bc8d993d0d5b7f4a5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -107,6 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1149eaff734041e793b90abefbb4a71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HelperItem
+  messageHandler: {fileID: 0}
 --- !u!58 &7981094289979125855
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -162,11 +163,6 @@ MonoBehaviour:
   scalePulseSpeed: 3
   pickupEffectPrefab: {fileID: 3132300966347646534, guid: 044bb9b535cb7e74a8fb186d709689ce, type: 3}
   pickupSound: {fileID: 0}
-  destroyDelay: 0.5
-  fadeColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  fadeDuration: 0.8
-  scaleMultiplier: 3
-  spinTimes: 3
 --- !u!114 &-1009116728083433524
 MonoBehaviour:
   m_ObjectHideFlags: 0

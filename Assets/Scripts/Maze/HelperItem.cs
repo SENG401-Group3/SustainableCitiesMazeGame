@@ -6,9 +6,10 @@ public class HelperItem : Interactable
 {
   public enum itemName {
     SpeedBoost = 0,
-
+    Telescope,
+    Checkpoint,
+    Teleport
   };
-  // private static List<string> itemNames = new List<string>{ "Speed Boost" };
 
   // c# does weird things with accessors so these attributes have to be public
   private itemName id;
