@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 
 public static class DBManager
 {
-    public static string hostname = "http://sustainabilitymazegame.mysql.database.azure.com/SQLConnect";
+    public static string hostname = "https://sustainabilitymaze-backend.azurewebsites.net/SQLConnect";
     public static string firstname;
     public static string lastname;
     public static string username;
