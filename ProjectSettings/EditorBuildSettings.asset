@@ -6,11 +6,14 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/LoginMenu/UI.unity
+    guid: 3f8490a6a7f980d42bdbf9a622ee65da
+  - enabled: 1
     path: Assets/Scenes/GameScenes/CitySelection.unity
     guid: 4d0686b74a09a4cc48acb3412f1e489f
   - enabled: 1
-    path: Assets/Scenes/LoginMenu/UI.unity
-    guid: 3f8490a6a7f980d42bdbf9a622ee65da
+    path: Assets/Scenes/GameScenes/Story.unity
+    guid: 86de7b390c1d7a34f84b3566cd6171cd
   - enabled: 1
     path: Assets/Scenes/Maze/MazeScene.unity
     guid: 99589be6ea3b2451d960a1516a51a1bb
