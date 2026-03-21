@@ -8,14 +8,14 @@ public class UIManager : MonoBehaviour
     [SerializeField] private UIDocument loginDoc;
     [SerializeField] private UIDocument aboutDoc;
     [SerializeField] private UIDocument resetPasswordDoc;
-    [SerializeField] private UIDocument storyDoc;
+    //[SerializeField] private UIDocument storyDoc;
 
     private VisualElement welcome;
     private VisualElement signup;
     private VisualElement login;
     private VisualElement about;
     private VisualElement resetPassword;
-    private VisualElement story;
+    //private VisualElement story;
 
     void Awake()
     {
@@ -24,13 +24,12 @@ public class UIManager : MonoBehaviour
         login = loginDoc.rootVisualElement;
         about = aboutDoc.rootVisualElement;
         resetPassword = resetPasswordDoc.rootVisualElement;
-        story = storyDoc.rootVisualElement;
+        //story = storyDoc.rootVisualElement;
     }
 
     void Start()
     {
-        HideAll();
-        story.style.display = DisplayStyle.Flex; // Show main menu at start
+        ShowWelcome(); // Show main menu at start
     }
 
     public void ShowWelcome()
@@ -70,6 +69,6 @@ public class UIManager : MonoBehaviour
         login.style.display = DisplayStyle.None;
         about.style.display = DisplayStyle.None;
         resetPassword.style.display = DisplayStyle.None;
-        story.style.display = DisplayStyle.None;
+        //story.style.display = DisplayStyle.None;
     }
 }

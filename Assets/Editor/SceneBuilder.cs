@@ -8,8 +8,9 @@ public class SceneBuilder : MonoBehaviour
     {
         // List of all scene paths
         string[] scenePaths = {
-            "Assets/Scenes/GameScenes/CitySelection.unity",
             "Assets/Scenes/LoginMenu/UI.unity",
+            "Assets/Scenes/GameScenes/CitySelection.unity",
+            "Assets/Scenes/GameScenes/Story.unity",
             "Assets/Scenes/Maze/MazeScene.unity",
             "Assets/Scenes/GameScenes/QuestionScene.unity",
             "Assets/Scenes/GameScenes/LeaderboardScene.unity"

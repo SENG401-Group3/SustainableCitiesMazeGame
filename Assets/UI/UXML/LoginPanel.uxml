@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/USS/main%20menu.uss?fileID=7433441132597879392&amp;guid=0bc041f9531c6b046b460760c2a027b5&amp;type=3#main menu"/>
-    <ui:VisualElement name="Panel" class="panel" style="flex-grow: 1; visibility: visible;">
+    <ui:VisualElement name="Panel" class="panel login-panel" style="flex-grow: 1; visibility: visible; background-image: url(&quot;project://database/Assets/Animations/profile_ZO.png?fileID=-5133253111266843901&amp;guid=5a5af8e733d822740863c38e78eb290c&amp;type=3#profile_ZO_0&quot;);">
         <ui:VisualElement name="Form" class="menu" style="flex-grow: 1; justify-content: center; flex-wrap: nowrap; align-content: stretch; flex-shrink: 1;">
             <ui:Label text="Login&#10;" name="LoginLabel" class="text" style="color: rgb(255, 228, 181); margin-right: 2px; margin-bottom: 8px;"/>
             <ui:TextField label="username:" placeholder-text="Enter username" name="UsernameField" multiline="true" class="unity-text-field__input field" style="align-self: auto;"/>
@@ -11,7 +11,8 @@
                 <ui:Button text="Back to Home" name="BackButton"/>
                 <ui:Button text="Log back in" name="LoginButton"/>
             </ui:VisualElement>
-            <ui:Label text="Logged in successfully!" name="SuccessStatement" triple-click-selects-line="false" style="font-size: 50%; align-content: flex-start; align-self: center; color: rgb(255, 228, 181); visibility: hidden; padding-top: 6px; padding-bottom: 6px; padding-left: 2px; margin-right: 2px; margin-bottom: 4px;"/>
+            <ui:VisualElement name="LoadingSpinner" style="width: 50px; height: 50px; background-color: rgb(255, 228, 181); border-radius: 25px; margin: 20px; display: none; align-self: center; font-size: 14%; border-top-left-radius: 25px; border-top-right-radius: 25px; border-bottom-right-radius: 25px; border-bottom-left-radius: 25px;"/>
+            <ui:Label text="Logged in successfully!" name="SuccessStatement" triple-click-selects-line="false" style="font-size: 50%; align-content: flex-start; align-self: center; color: rgb(255, 228, 181); visibility: visible; padding-top: 6px; padding-bottom: 6px; padding-left: 2px; margin-right: 2px; margin-bottom: 4px; display: none;"/>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
