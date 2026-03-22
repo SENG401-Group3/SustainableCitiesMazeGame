@@ -19,7 +19,7 @@ public class CitySelectionMenu : MonoBehaviour
 
     [Header("Static State")]
     private static int pendingCityIndex = -1; // Used to override the current city when returning from another scene
-    private int currentCityIndex = 1; // Current city being displayed (1-5)
+    private int currentCityIndex = DBManager.cityNumber; // Current city being displayed (1-5)
 
     [Header("UI Elements")]
     private VisualElement root; // Root VisualElement of the UIDocument
@@ -113,7 +113,7 @@ public class CitySelectionMenu : MonoBehaviour
         else
         {
             // Use the saved city index from PlayerPrefs
-            currentCityIndex = PlayerPrefs.GetInt("CurrentCity", 1);
+            currentCityIndex = DBManager.cityNumber;
         }
 
         // Update the background to match the current city
