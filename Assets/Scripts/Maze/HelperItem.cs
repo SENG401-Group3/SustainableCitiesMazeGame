@@ -7,9 +7,11 @@ public class HelperItem : Interactable
   public enum itemName {
     SpeedBoost = 0,
     Telescope,
-    Checkpoint,
     Teleport
   };
+
+  [SerializeField]
+  private List<Sprite> sprites;
 
   // c# does weird things with accessors so these attributes have to be public
   private itemName id;
@@ -24,6 +26,11 @@ public class HelperItem : Interactable
       this.id = 0;
 
     // TODO: unique sprite for each item
+    if(sprites[id] != null){
+      GetComponent<SpriteRenderer>().sprite = sprites[id];
+      // GetComponent<PickupAnimation>().enabled = false;
+      GetComponent<Transform>().localScale = new Vector3(0.4f, 0.4f, 1f);
+    }
   }
 
   public override void handleCollision(Collider2D collider){
