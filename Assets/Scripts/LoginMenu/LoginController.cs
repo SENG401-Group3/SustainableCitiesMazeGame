@@ -102,31 +102,39 @@ public class LoginController : MonoBehaviour
                 Debug.Log("Server response: " + request.downloadHandler.text);
                 UserData data = JsonUtility.FromJson<UserData>(request.downloadHandler.text);
 
-                Debug.Log("Username is: " + data.username);
+                if (data.error != null)
+                {
+                    Debug.Log("Login error: " + data.error);
+                    successLabel.text = data.error;
+                }
 
-                DBManager.firstname = data.firstname;
-                DBManager.lastname = data.lastname;
-                DBManager.username = data.username;
-                DBManager.highScore = data.highScore;
-                DBManager.cityNumber = data.cityNumber;
-                DBManager.currentScore = data.currentScore;
+                else {
+                    Debug.Log("Username is: " + data.username);
 
-                usernameInput.value = "";
-                passwordInput.value = "";
+                    DBManager.firstname = data.firstname;
+                    DBManager.lastname = data.lastname;
+                    DBManager.username = data.username;
+                    DBManager.highScore = data.highScore;
+                    DBManager.cityNumber = data.cityNumber;
+                    DBManager.currentScore = data.currentScore;
 
-                UIAnimator.Instance.FadeOutElement(loadingSpinner, 0.2f);
+                    usernameInput.value = "";
+                    passwordInput.value = "";
 
-                successLabel.text = "✓ Login successful!";
-                UIAnimator.Instance.PulseElement(successLabel);
-                //successLabel.style.visibility = Visibility.Visible;
+                    UIAnimator.Instance.FadeOutElement(loadingSpinner, 0.2f);
 
-                yield return new WaitForSeconds(1f);
-                Debug.Log("Saved username: " + DBManager.username);
+                    successLabel.text = "✓ Login successful!";
+                    UIAnimator.Instance.PulseElement(successLabel);
+                    //successLabel.style.visibility = Visibility.Visible;
 
-                UIAnimator.Instance.FadeOutElement(successLabel, 0.2f);
+                    yield return new WaitForSeconds(1f);
+                    Debug.Log("Saved username: " + DBManager.username);
 
-                SceneManager.LoadScene("CitySelection");
-                successLabel.text = "";
+                    UIAnimator.Instance.FadeOutElement(successLabel, 0.2f);
+
+                    SceneManager.LoadScene("CitySelection");
+                    successLabel.text = "";
+                }
             }
             else
             {
@@ -145,6 +153,7 @@ public class LoginController : MonoBehaviour
         public int highScore;
         public int cityNumber;
         public int currentScore;
+        public string error;
     }
 
     
