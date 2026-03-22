@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
-//using System.Collections.Generic;
 using System.Collections;
 
 /*
@@ -17,9 +16,7 @@ public class CitySelectionMenu : MonoBehaviour
     [Header("City Backgrounds")]
     [SerializeField] private Sprite[] cityBackgrounds; // Array of background images for cities 1-5 (assigned in Inspector)
 
-    [Header("Static State")]
-    private static int pendingCityIndex = -1; // Used to override the current city when returning from another scene
-    private int currentCityIndex = DBManager.cityNumber; // Current city being displayed (1-5)
+    private int currentCityIndex = 1; // Current city being displayed (1-5)
 
     [Header("UI Elements")]
     private VisualElement root; // Root VisualElement of the UIDocument
@@ -29,12 +26,6 @@ public class CitySelectionMenu : MonoBehaviour
     private Button settingsButton; // Button to show settings
     private Button profileButton; // Button to show profile
     private Button quitButton; // Button to quit the game
-
-    // Public property to set the pending city index from other scripts
-    public static int PendingCityIndex
-    {
-        set { pendingCityIndex = value; }
-    }
 
     // Public read-only property to access city backgrounds if needed
     public Sprite[] CityBackgrounds
@@ -56,27 +47,35 @@ public class CitySelectionMenu : MonoBehaviour
      */
     private void OnEnable()
     {
+        if (root == null) return;
+
+        // Find the background container element
         backgroundContainer = root.Q<VisualElement>("Background");
 
         // Find and configure the Play button
         playButton = root.Q<Button>("PlayButton");
-        playButton.clicked += StartGame;
+        if (playButton != null)
+            playButton.clicked += StartGame;
 
         // Find and configure the Tutorial button
         tutorialButton = root.Q<Button>("TutorialButton");
-        tutorialButton.clicked += ShowTutorial;
+        if (tutorialButton != null)
+            tutorialButton.clicked += ShowTutorial;
 
         // Find and configure the Settings button
         settingsButton = root.Q<Button>("SettingsButton");
-        settingsButton.clicked += ShowSettings;
+        if (settingsButton != null)
+            settingsButton.clicked += ShowSettings;
 
         // Find and configure the Profile button
         profileButton = root.Q<Button>("ProfileButton");
-        profileButton.clicked += ShowProfile;
+        if (profileButton != null)
+            profileButton.clicked += ShowProfile;
 
         // Find and configure the Quit button
         quitButton = root.Q<Button>("QuitButton");
-        quitButton.clicked += QuitGame;
+        if (quitButton != null)
+            quitButton.clicked += QuitGame;
     }
 
     /*
@@ -84,11 +83,11 @@ public class CitySelectionMenu : MonoBehaviour
      */
     private void OnDisable()
     {
-        playButton.clicked -= StartGame;
-        tutorialButton.clicked -= ShowTutorial;
-        settingsButton.clicked -= ShowSettings;
-        profileButton.clicked -= ShowProfile;
-        quitButton.clicked -= QuitGame;
+        if (playButton != null) playButton.clicked -= StartGame;
+        if (tutorialButton != null) tutorialButton.clicked -= ShowTutorial;
+        if (settingsButton != null) settingsButton.clicked -= ShowSettings;
+        if (profileButton != null) profileButton.clicked -= ShowProfile;
+        if (quitButton != null) quitButton.clicked -= QuitGame;
     }
 
     /*
@@ -104,17 +103,8 @@ public class CitySelectionMenu : MonoBehaviour
                 Debug.LogError("❌ GameUIManager not found in scene! Make sure it exists.");
         }
 
-        // Check if there's a pending city index from another scene
-        if (pendingCityIndex != -1)
-        {
-            currentCityIndex = pendingCityIndex;
-            pendingCityIndex = -1; // Reset after use (one-time override)
-        }
-        else
-        {
-            // Use the saved city index from PlayerPrefs
-            currentCityIndex = DBManager.cityNumber;
-        }
+        // Use the saved city index from PlayerPrefs
+        currentCityIndex = PlayerPrefs.GetInt("CurrentCity", 1);
 
         // Update the background to match the current city
         UpdateBackground();
@@ -149,7 +139,6 @@ public class CitySelectionMenu : MonoBehaviour
      */
     private void StartGame()
     {
-        //PlayButtonSound();
         SceneManager.LoadScene("MazeScene");
     }
 
@@ -158,7 +147,25 @@ public class CitySelectionMenu : MonoBehaviour
      */
     private void ShowTutorial()
     {
-        gameUIManager.ShowTutorial();
+        Debug.Log("🔵 STEP 1: CitySelectionMenu.ShowTutorial() CALLED");
+
+        // Try to find GameUIManager if not already assigned
+        if (gameUIManager == null)
+        {
+            gameUIManager = FindFirstObjectByType<GameUIManager>();
+            Debug.Log($"🔵 STEP 2: GameUIManager found: {gameUIManager != null}");
+        }
+
+        // Show the tutorial panel if GameUIManager is available
+        if (gameUIManager != null)
+        {
+            Debug.Log("🔵 STEP 3: Calling gameUIManager.ShowTutorial()");
+            gameUIManager.ShowTutorial();
+        }
+        else
+        {
+            Debug.LogError("❌ GameUIManager is NULL!");
+        }
     }
 
     /*
@@ -166,8 +173,8 @@ public class CitySelectionMenu : MonoBehaviour
      */
     private void ShowSettings()
     {
-        Debug.Log("Settings button clicked");
-        // TODO: Implement settings panel
+        Debug.Log("⚙️ Settings button clicked");
+        // TODO: Implement settings functionality later
     }
 
     /*
@@ -175,7 +182,10 @@ public class CitySelectionMenu : MonoBehaviour
      */
     private void ShowProfile()
     {
-        gameUIManager.ShowProfile();
+        if (gameUIManager != null)
+            gameUIManager.ShowProfile();
+        else
+            Debug.LogError("❌ Cannot show profile: gameUIManager is null!");
     }
 
     /*
@@ -183,10 +193,10 @@ public class CitySelectionMenu : MonoBehaviour
      */
     private void QuitGame()
     {
-        #if UNITY_EDITOR
-                UnityEditor.EditorApplication.isPlaying = false;
-        #else
-                Application.Quit();
-        #endif
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 }

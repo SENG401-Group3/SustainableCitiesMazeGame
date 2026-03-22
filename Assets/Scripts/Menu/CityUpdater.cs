@@ -24,8 +24,8 @@ public class CityUpdater : MonoBehaviour
         }
         else
         {
-            Destroy(gameObject); // Destroy duplicate instances
-            Debug.Log("❌ Duplicate CityUpdater destroyed");
+            Debug.Log("❌ Duplicate CityUpdater detected - destroying");
+            DestroyImmediate(gameObject); // Use DestroyImmediate for tests
         }
     }
 
