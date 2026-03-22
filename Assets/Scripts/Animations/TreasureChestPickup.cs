@@ -1,37 +1,16 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class TreasureChestPickup : MonoBehaviour
+public class TreasureChestPickup : BasePickup
 {
-    private PickupAnimation pickupAnimation;
-
-    void Start()
+    protected override void OnPickupCollected(Collider2D player)
     {
-        pickupAnimation = GetComponent<PickupAnimation>();
-        if (pickupAnimation == null)
-            Debug.LogError("❌ TreasureChestPickup: PickupAnimation component missing!");
+        // Load question scene after short delay to allow animation
+        Invoke("LoadQuestionScene", 0.3f);
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    private void LoadQuestionScene()
     {
-        if (other.CompareTag("Player"))
-        {
-            Debug.Log("🎁 Treasure chest collected!");
-
-            if (pickupAnimation != null)
-            {
-                pickupAnimation.OnPickup();
-                // Load question scene after animation completes
-                Invoke("LoadQuestionScene", 0.3f);
-            }
-            else
-            {
-                LoadQuestionScene();
-            }
-        }
-    }
-
-    void LoadQuestionScene()
-    {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("QuestionScene");
+        SceneManager.LoadScene("QuestionScene");
     }
 }

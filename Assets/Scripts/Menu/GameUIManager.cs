@@ -28,24 +28,38 @@ public class GameUIManager : MonoBehaviour
      */
     void Awake()
     {
+        Debug.Log("🔵 GameUIManager.Awake() called");
+
         // Add null checks for each UIDocument to prevent errors
         if (selectionDoc != null)
+        {
             selection = selectionDoc.rootVisualElement;
+            Debug.Log($"✅ selectionDoc assigned: {selection != null}");
+        }
         else
             Debug.LogError("❌ GameUIManager: selectionDoc is not assigned!");
 
         if (tutorialDoc != null)
+        {
             tutorial = tutorialDoc.rootVisualElement;
+            Debug.Log($"✅ tutorialDoc assigned: {tutorial != null}");
+        }
         else
             Debug.LogError("❌ GameUIManager: tutorialDoc is not assigned!");
 
         if (profileDoc != null)
+        {
             profile = profileDoc.rootVisualElement;
+            Debug.Log($"✅ profileDoc assigned: {profile != null}");
+        }
         else
             Debug.LogError("❌ GameUIManager: profileDoc is not assigned!");
 
         if (profileEditorDoc != null)
+        {
             profileEditor = profileEditorDoc.rootVisualElement;
+            Debug.Log($"✅ profileEditorDoc assigned: {profileEditor != null}");
+        }
         else
             Debug.LogError("❌ GameUIManager: profileEditorDoc is not assigned!");
     }
@@ -55,6 +69,7 @@ public class GameUIManager : MonoBehaviour
      */
     void Start()
     {
+        Debug.Log("🟢 GameUIManager.Start() called");
         ShowSelection(); // Show main menu at start
     }
 
@@ -64,8 +79,17 @@ public class GameUIManager : MonoBehaviour
     public void ShowSelection()
     {
         Debug.Log("📢 ShowSelection() called");
+        Debug.Log($"   selection is null: {selection == null}");
+
+        if (selection == null)
+        {
+            Debug.LogError("❌ selection is null! Make sure selectionDoc is assigned.");
+            return;
+        }
+
         HideAll();
         selection.style.display = DisplayStyle.Flex;
+        Debug.Log("✅ Selection panel should now be visible");
     }
 
     /*
@@ -73,16 +97,39 @@ public class GameUIManager : MonoBehaviour
      */
     public void ShowTutorial()
     {
+        Debug.Log("📢 ShowTutorial() called");
+        Debug.Log($"   tutorial is null: {tutorial == null}");
+
+        if (tutorial == null)
+        {
+            Debug.LogError("❌ tutorial is null! Make sure tutorialDoc is assigned.");
+            return;
+        }
+
         HideAll();
         tutorial.style.display = DisplayStyle.Flex;
+        tutorial.BringToFront();
+        Debug.Log("✅ Tutorial panel should now be visible");
     }
 
     public void ShowProfile()
     {
         Debug.Log("📢 ShowProfile() called");
+        Debug.Log($"   profile is null: {profile == null}");
+
+        if (profile == null)
+        {
+            Debug.LogError("❌ profile is null! Make sure profileDoc is assigned.");
+            return;
+        }
+
         HideAll();
         profile.style.display = DisplayStyle.Flex;
-        profileManager.LoadProfile();
+
+        if (profileManager != null)
+            profileManager.LoadProfile();
+        else
+            Debug.LogError("❌ Cannot load profile: profileManager is null!");
     }
 
     /*
@@ -91,6 +138,14 @@ public class GameUIManager : MonoBehaviour
     public void ShowEditProfile()
     {
         Debug.Log("📢 ShowEditProfile() called");
+        Debug.Log($"   profileEditor is null: {profileEditor == null}");
+
+        if (profileEditor == null)
+        {
+            Debug.LogError("❌ profileEditor is null! Make sure profileEditorDoc is assigned.");
+            return;
+        }
+
         HideAll();
         profileEditor.style.display = DisplayStyle.Flex;
     }
@@ -100,9 +155,9 @@ public class GameUIManager : MonoBehaviour
      */
     private void HideAll()
     {
-        selection.style.display = DisplayStyle.None;
-        tutorial.style.display = DisplayStyle.None;
-        profile.style.display = DisplayStyle.None;
-        profileEditor.style.display = DisplayStyle.None;
+        if (selection != null) selection.style.display = DisplayStyle.None;
+        if (tutorial != null) tutorial.style.display = DisplayStyle.None;
+        if (profile != null) profile.style.display = DisplayStyle.None;
+        if (profileEditor != null) profileEditor.style.display = DisplayStyle.None;
     }
 }

@@ -12,8 +12,7 @@ public class PickupAnimation : MonoBehaviour
 
     [Header("Pickup Effect")]
     [SerializeField] private GameObject pickupEffectPrefab;
-    [SerializeField] private AudioClip pickupSound;
-    // [SerializeField] private float destroyDelay = 0.5f;  // REMOVED - unused
+    // Sound removed
 
     private Vector3 startPosition;
     private float floatOffset;
@@ -88,16 +87,7 @@ public class PickupAnimation : MonoBehaviour
             Debug.Log($"⚠️ No pickupEffectPrefab assigned");
         }
 
-        // Play sound if assigned
-        if (pickupSound != null)
-        {
-            Debug.Log($"🔊 Playing sound");
-            AudioSource.PlayClipAtPoint(pickupSound, transform.position);
-        }
-        else
-        {
-            Debug.Log($"⚠️ No pickupSound assigned");
-        }
+        // Sound removed
 
         Debug.Log($"🎬 Starting PickupEffectAnimation");
         StartCoroutine(PickupEffectAnimation());
