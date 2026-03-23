@@ -117,7 +117,7 @@ public class CityUpdater : MonoBehaviour
             Debug.Log($"✅ City {currentCity} complete! Moving to City {nextCity}");
 
             // Save all PlayerPrefs changes
-            PlayerPrefs.Save();
+            StartCoroutine(SaveProgress());
 
             // Force refresh of current city after saving
             RefreshCurrentCity();
@@ -134,7 +134,7 @@ public class CityUpdater : MonoBehaviour
             PlayerPrefs.SetInt("GameComplete", 1);
 
             // Save the final total
-            PlayerPrefs.Save();
+            StartCoroutine(SaveProgress());
 
             // Go to leaderboard scene directly to show final score
             SceneManager.LoadScene("LeaderboardScene");
