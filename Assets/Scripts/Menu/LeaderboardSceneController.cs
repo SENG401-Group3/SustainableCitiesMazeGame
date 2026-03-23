@@ -291,49 +291,7 @@ public class LeaderboardSceneController : MonoBehaviour
         }
     }
 
-    /*IEnumerator AnimateSpinner()
-    {
-        float rotation = 0;
-        while (loadingSpinner != null && loadingSpinner.style.display == DisplayStyle.Flex)
-        {
-            rotation += 360 * Time.deltaTime;
-            loadingSpinner.style.rotate = new StyleRotate(new Rotate(Angle.Degrees(rotation % 360)));
-            yield return null;
-        }
-    }
-
-    IEnumerator AnimatePulseText()
-    {
-        float elapsed = 0;
-        while (statusMessage != null && statusMessage.style.display == DisplayStyle.Flex)
-        {
-            elapsed += Time.deltaTime;
-            float pulse = 1 + Mathf.Sin(elapsed * 8) * 0.05f;
-            statusMessage.style.scale = new StyleScale(new Scale(new Vector2(pulse, pulse)));
-            yield return null;
-        }
-    }
-
-    IEnumerator AnimateHighlight()
-    {
-        yield return new WaitForSeconds(0.1f);
-
-        var firstEntry = scoreList.ElementAt(0);
-        if (firstEntry != null)
-        {
-            // Pulse animation
-            float elapsed = 0;
-            while (elapsed < 1f)
-            {
-                elapsed += Time.deltaTime;
-                float pulse = 1 + Mathf.Sin(elapsed * 10) * 0.05f;
-                firstEntry.style.scale = new StyleScale(new Scale(new Vector2(pulse, pulse)));
-                yield return null;
-            }
-            firstEntry.style.scale = new StyleScale(new Scale(Vector2.one));
-        }
-    }*/
-
+    
     void AddScoreEntry(string name, int score, int rank, bool highlight)
     {
         if (scoreList == null) return;
