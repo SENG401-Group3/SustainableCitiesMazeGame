@@ -45,6 +45,10 @@ public class MazeController : MonoBehaviour
   private Wall[,] mazeWalls = null;
   private Wall[,] boundaries = new Wall[2,2];
 
+  public MazeGrid getMazeGrid(){
+    return maze;
+  }
+
   public Vector2 GetRoomSize(){
     SpriteRenderer[] spriteRenderers = wallPrefab.GetComponentsInChildren<SpriteRenderer>();
 
@@ -124,6 +128,46 @@ public class MazeController : MonoBehaviour
       
       // set the required attributes in the object
       item.setId(0);
+      item.setMessageHandler(messageHandler);
+      item.itemController = itemController;
+
+      // spawn the item at a given depth
+      item.spawn(new Vector2Int(0, maxDist), maze, GetRoomSize());
+
+    }
+    //
+    // spawn other items
+    numHelperItems = 1;
+    for(int i = 0; i < numHelperItems; i++){
+
+      // spawn the other items
+      GameObject hItem = Instantiate(helperItem,
+          new Vector3(-100, -100, -100),
+          Quaternion.identity);
+      HelperItem item = hItem.GetComponent<HelperItem>();
+      
+      // set the required attributes in the object
+      item.setId((int)HelperItem.itemName.Teleport);
+      item.setMessageHandler(messageHandler);
+      item.itemController = itemController;
+
+      // spawn the item at a given depth
+      item.spawn(new Vector2Int(0, maxDist), maze, GetRoomSize());
+
+    }
+    
+    // spawn other items
+    numHelperItems = 3;
+    for(int i = 0; i < numHelperItems; i++){
+
+      // spawn the other items
+      GameObject hItem = Instantiate(helperItem,
+          new Vector3(-100, -100, -100),
+          Quaternion.identity);
+      HelperItem item = hItem.GetComponent<HelperItem>();
+      
+      // set the required attributes in the object
+      item.setId((int)HelperItem.itemName.Telescope);
       item.setMessageHandler(messageHandler);
       item.itemController = itemController;
 

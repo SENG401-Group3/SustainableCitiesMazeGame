@@ -14,6 +14,9 @@ public class PlayerController : MonoBehaviour, Observer
   private GameObject player;
 
   [SerializeField]
+  private MazeController mazeController;
+
+  [SerializeField]
   private float timeslice;
 
   [SerializeField]
@@ -33,6 +36,7 @@ public class PlayerController : MonoBehaviour, Observer
 
   private Vector2 targetPosition;
   private float targetDistance;
+  private bool teleporting;
 
   Rigidbody2D rb;
   Animator animator;
@@ -83,31 +87,48 @@ public class PlayerController : MonoBehaviour, Observer
       rb.linearVelocity = velocity;
     }
   
+    private void handletouch(Vector3 clickPos){
+        // ignore clicks on buttons
+        Vector2 worldPos = Camera.main.ScreenToWorldPoint(clickPos);
+
+        if(!teleporting){
+          targetPosition.x = worldPos.x;
+          targetPosition.y = worldPos.y;
+          targetDistance = Vector2.Distance(targetPosition, (Vector2)player.transform.position);
+        }else if(worldPos.x >= 0 && worldPos.y >= 0){
+          // make sure we are teleporting on an open tile
+          Vector2 roomSize = mazeController.GetRoomSize();
+          Vector2Int tile_index = new Vector2Int();
+          tile_index.x =(int)((worldPos.x + roomSize.x/2) / roomSize.x);
+          tile_index.y =(int)((worldPos.y + roomSize.y/2) / roomSize.y);
+
+          if(mazeController.getMazeGrid()
+              .getSpawnableTiles( new Vector2Int(0, mazeController.getMazeGrid()
+              .getMaxDistance())).Contains(tile_index))
+          {
+            teleporting = false;
+            player.transform.position = worldPos;
+          }
+
+        }
+
+    }
+
     private void handleInputs(){
       pressedDirections.Clear();
 
       if(Touch.activeTouches.Count > 0){
-        Debug.Log(Touch.activeTouches.Count);
         // Get the first touch
         Vector3 touchPos = Touch.activeTouches[0].screenPosition;
-        touchPos = Camera.main.ScreenToWorldPoint(touchPos);
 
-        targetPosition.x = touchPos.x;
-        targetPosition.y = touchPos.y;
-        targetDistance = Vector2.Distance(targetPosition, (Vector2)player.transform.position);
+        handletouch(touchPos);
+
       // prioritize mouse movement
       }else if(Mouse.current.leftButton.wasPressedThisFrame){
         // read the mouse click point
         Vector3 mousePos = Mouse.current.position.ReadValue();
 
-        // convert that to a point on the screen
-        mousePos = Camera.main.ScreenToWorldPoint(mousePos);
-
-
-        targetPosition.x = mousePos.x;
-        targetPosition.y = mousePos.y;
-        targetDistance = Vector2.Distance(targetPosition, (Vector2)player.transform.position);
-        
+        handletouch(mousePos);
       // allow for keyboard control
       }else{
 
@@ -144,8 +165,15 @@ public class PlayerController : MonoBehaviour, Observer
         maxVel *= (float)1.2;
         itemController.useItem(HelperItem.itemName.SpeedBoost);
       }
-
     }
+
+    public void onTeleportClick(){
+      if(!teleporting && itemController.hasItem(HelperItem.itemName.Teleport)){
+        itemController.useItem(HelperItem.itemName.Teleport);
+        teleporting = true; // now press handler knows to look out for teleport
+      }
+    }
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -156,6 +184,7 @@ public class PlayerController : MonoBehaviour, Observer
       velocity = new Vector2(0,0);
       targetPosition = new Vector2((float)invalidPos, (float)invalidPos);
       pressedDirections = new List<Directions>();
+      teleporting = false;
 
       itemController.addObserver(this);
 
