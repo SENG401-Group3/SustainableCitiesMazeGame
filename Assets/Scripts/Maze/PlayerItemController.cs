@@ -2,9 +2,16 @@ using UnityEngine;
 using System.Collections.Generic;
 using Patterns;
 using UnityEngine.UI;
+using UnityEngine.UI;
 
 public class PlayerItemController : MonoBehaviour, Subject
 {
+  private List<Observer> observers = new List<Observer>();
+
+  [SerializeField]
+  private Button telescopeButton;
+  [SerializeField]
+  private Button teleporterButton;
   private List<Observer> observers = new List<Observer>();
 
   [SerializeField]
@@ -62,6 +69,10 @@ public class PlayerItemController : MonoBehaviour, Subject
     {
       o.notify();
     }
+  }
+
+  public void onTelescopeClick(){
+    useItem(HelperItem.itemName.Telescope);
   }
 
   public void onTelescopeClick(){

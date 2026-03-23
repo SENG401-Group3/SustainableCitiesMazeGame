@@ -12,7 +12,7 @@ public class Pitfall : Interactable
     }
 
     private void returnToMenu(){
-      UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+      UnityEngine.SceneManagement.SceneManager.LoadScene("CitySelection");
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
