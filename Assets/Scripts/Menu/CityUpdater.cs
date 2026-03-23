@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
+using System.Collections;
 
 /* Handles city progression logic, score saving, and scene transitions.
  This component persists between scenes to track which city the player is in.*/
@@ -140,7 +141,7 @@ public class CityUpdater : MonoBehaviour
             SceneManager.LoadScene("LeaderboardScene");
         }
     }
-
+    
     IEnumerator SaveProgress()
     {
         if (DBManager.currentScore + playerScore > DBManager.highScore)
