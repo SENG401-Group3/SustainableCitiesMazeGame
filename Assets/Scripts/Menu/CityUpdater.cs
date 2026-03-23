@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Networking;
 
 /* Handles city progression logic, score saving, and scene transitions.
  This component persists between scenes to track which city the player is in.*/
@@ -116,7 +117,7 @@ public class CityUpdater : MonoBehaviour
             Debug.Log($"✅ City {currentCity} complete! Moving to City {nextCity}");
 
             // Save all PlayerPrefs changes
-            PlayerPrefs.Save();
+            StartCoroutine(SaveProgress());
 
             // Force refresh of current city after saving
             RefreshCurrentCity();
@@ -133,10 +134,38 @@ public class CityUpdater : MonoBehaviour
             PlayerPrefs.SetInt("GameComplete", 1);
 
             // Save the final total
-            PlayerPrefs.Save();
+            StartCoroutine(SaveProgress());
 
             // Go to leaderboard scene directly to show final score
             SceneManager.LoadScene("LeaderboardScene");
+        }
+    }
+
+    IEnumerator SaveProgress()
+    {
+        if (DBManager.currentScore + playerScore > DBManager.highScore)
+        {
+            DBManager.highScore = DBManager.currentScore + playerScore;
+        }
+        
+        WWWForm form = new WWWForm();
+        form.AddField("username", DBManager.username);
+        form.AddField("highscore", DBManager.highScore);
+        form.AddField("citynumber", currentCity + 1);
+        form.AddField("currentscore", playerScore);
+
+        using (UnityWebRequest request = UnityWebRequest.Post(DBManager.hostname + "/saveplayerprogress.php", form))
+        {
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                Debug.Log("Successfully saved progress!");
+            }
+            else
+            {
+                Debug.Log("Error updating score: " + request.error);
+            }
         }
     }
 }

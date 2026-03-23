@@ -87,9 +87,9 @@ public class ProfileManager : MonoBehaviour
                 DBManager.firstname = data.firstname;
                 DBManager.lastname = data.lastname;
                 DBManager.username = data.username;
-                DBManager.highScore = data.highScore;
-                DBManager.cityNumber = data.cityNumber;
-                DBManager.currentScore = data.currentScore;
+                DBManager.highScore = data.highscore;
+                DBManager.cityNumber = data.citynumber;
+                DBManager.currentScore = data.currentscore;
 
                 Debug.Log("Writing details for" + data.username);
                 Debug.Log(greetingLabel);
@@ -112,9 +112,9 @@ public class ProfileManager : MonoBehaviour
         public string username;
         public string firstname;
         public string lastname;
-        public int highScore;
-        public int cityNumber;
-        public int currentScore;
+        public int highscore;
+        public int citynumber;
+        public int currentscore;
     }
 
     // Update is called once per frame
