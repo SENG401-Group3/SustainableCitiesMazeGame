@@ -23,13 +23,13 @@ public class HelperItem : Interactable
     if(Enum.IsDefined(typeof(itemName), id))
       this.id = (itemName)id;
     else
-      this.id = 0;
-
+      this.id = (itemName)0; 
+      
     // TODO: unique sprite for each item
-    if(sprites[id] != null){
-      GetComponent<SpriteRenderer>().sprite = sprites[id];
-      // GetComponent<PickupAnimation>().enabled = false;
-      GetComponent<Transform>().localScale = new Vector3(0.4f, 0.4f, 1f);
+    int safeIndex = (int)this.id;
+    if(sprites != null && safeIndex < sprites.Count && sprites[safeIndex] != null){
+        GetComponent<SpriteRenderer>().sprite = sprites[safeIndex];
+        GetComponent<Transform>().localScale = new Vector3(0.4f, 0.4f, 1f);
     }
   }
 

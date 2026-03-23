@@ -27,9 +27,9 @@ public class PlayerItemController : MonoBehaviour, Subject
     heldItems.Add(id);
 
     // handle telescope and teleporter
-    if(id == HelperItem.itemName.Teleport){
+    if(id == HelperItem.itemName.Teleport && teleporterButton != null){
       teleporterButton.interactable = true;
-    }else if(id == HelperItem.itemName.Telescope){
+    }else if(id == HelperItem.itemName.Telescope && telescopeButton != null){
       telescopeButton.interactable = true;
     }
 
@@ -39,11 +39,11 @@ public class PlayerItemController : MonoBehaviour, Subject
   public void useItem(HelperItem.itemName id){
     heldItems.Remove(id);
 
-    if(id == HelperItem.itemName.Teleport &&
-        !heldItems.Contains(HelperItem.itemName.Teleport)){
+    if(id == HelperItem.itemName.Teleport && teleporterButton != null
+        && !heldItems.Contains(HelperItem.itemName.Teleport)){
       teleporterButton.interactable = false;
-    }else if(id == HelperItem.itemName.Telescope &&
-        !heldItems.Contains(HelperItem.itemName.Telescope)){
+    }else if(id == HelperItem.itemName.Telescope && telescopeButton != null
+        && !heldItems.Contains(HelperItem.itemName.Telescope)){
       telescopeButton.interactable = false;
     }
   }
@@ -72,8 +72,8 @@ public class PlayerItemController : MonoBehaviour, Subject
   void Start()
   {
     heldItems = new List<HelperItem.itemName>();
-    teleporterButton.interactable = false;
-    telescopeButton.interactable = false;
+    if(teleporterButton != null) teleporterButton.interactable = false;
+    if(telescopeButton != null) telescopeButton.interactable = false;
   }
 
   // Update is called once per frame
