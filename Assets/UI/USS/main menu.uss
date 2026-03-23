@@ -109,7 +109,7 @@
     border-bottom-right-radius: 12px;
     border-bottom-left-radius: 12px;
     -unity-text-align: middle-left;
-    color: rgb(26, 26, 26);
+    color: rgb(0, 0, 0);
     -unity-font-style: bold;
     font-size: 200%;
     align-self: auto;
@@ -180,6 +180,20 @@
     background-position: center;
 }
 
-* {
-    unity-font: "UncialAntiqua";
+.login-panel {
+    background-image: url("project://database/Assets/Animations/profile_ZO.png?fileID=-5133253111266843901&guid=5a5af8e733d822740863c38e78eb290c&type=3#profile_ZO_0");
+    background-size: cover;
+    background-position: center;
+}
+
+.reg-panel {
+    background-image: url("project://database/Assets/Animations/profile_2.png?fileID=2800000&guid=06b595aeca6a60640b7e198bd122d1cc&type=3#profile_2");
+    background-size: cover;
+    background-position: center;
+}
+
+.edit-panel {
+    background-image: url("project://database/Assets/Animations/profile_FJ.png?fileID=2913081272523129978&guid=9b3bb1c1316378b428ba952baf73dcb9&type=3#profile_FJ_0");
+    background-size: cover;
+    background-position: center;
 }

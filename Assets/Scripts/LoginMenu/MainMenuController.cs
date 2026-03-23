@@ -6,11 +6,12 @@ public class MainMenuController : MonoBehaviour
 {
     private VisualElement root;
     [SerializeField] private UIManager uiManager;
+    [SerializeField] private TypewriterText typewriter;
     private Button loginButton;
     private Button signUpButton;
     private Button guestButton;
     private Button aboutButton;
-    //private Label welcomeLabel;
+    private Label welcomeLabel;
 
     private void Awake()
     {
@@ -34,10 +35,9 @@ public class MainMenuController : MonoBehaviour
         aboutButton.clicked += OnAboutClicked;
 
         //Typing the heading label
-        //welcomeLabel = root.Q<Label>("WelcomeLabel");
-        /*Debug.Log(TypewriterText.Instance);
-        TypewriterText.Instance.StartTyping(welcomeLabel, welcomeLabel.text);
-        */
+        welcomeLabel = root.Q<Label>("WelcomeLabel");
+        /*Debug.Log(TypewriterText.Instance);*/
+        typewriter.StartTyping(welcomeLabel, welcomeLabel.text);
     }
 
     private void OnLoginClicked()
@@ -52,7 +52,7 @@ public class MainMenuController : MonoBehaviour
 
     private void OnGuestClicked()
     {
-         UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+         UnityEngine.SceneManagement.SceneManager.LoadScene("CitySelection");
     }
 
     private void OnAboutClicked()

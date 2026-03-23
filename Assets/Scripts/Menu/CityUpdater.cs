@@ -65,7 +65,7 @@ public class CityUpdater : MonoBehaviour
     // Reads the current city from PlayerPrefs and updates the local variable
     private void RefreshCurrentCity()
     {
-        currentCity = PlayerPrefs.GetInt("CurrentCity", 1);
+        currentCity = DBManager.cityNumber;
         Debug.Log($"CityUpdater refreshed. Current city: {currentCity}");
     }
 

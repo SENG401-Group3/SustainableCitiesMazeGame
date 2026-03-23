@@ -7,7 +7,7 @@ public class TypewriterText : MonoBehaviour
 {
     public static TypewriterText Instance { get; private set; }
 
-    private float typingSpeed = 0.05f;
+    private float typingSpeed = 0.03f;
 
     /*private void Awake()
     {
