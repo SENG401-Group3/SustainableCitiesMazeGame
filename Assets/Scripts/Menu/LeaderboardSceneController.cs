@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
+using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -18,9 +19,11 @@ public class LeaderboardSceneController : MonoBehaviour
     private Label statusMessage;
 
     private int playerScore;
-    private string playerName = "MAKUO";
+    private string playerName = DBManager.LoggedIn ? DBManager.username : "Player";
     private bool isSubmitting = false;
     private bool scoreSubmitted = false;
+    private string[] playerNames;
+    private int[] playerScores;
 
     void Start()
     {
@@ -152,6 +155,23 @@ public class LeaderboardSceneController : MonoBehaviour
 
     IEnumerator SubmitScoreRoutine()
     {
+        // if (DBManager.LoggedIn)
+        // {
+        //     Debug.Log($"📤 Submitting score for user: {DBManager.username} with score: {playerScore}");
+        // }
+        // else
+        // {
+        //     Debug.Log($"Sorry, you must be logged in to submit your score.");
+        //     if (statusMessage != null)
+        //     {
+        //         statusMessage.text = "Please log in to submit your score.";
+        //         statusMessage.style.color = Color.yellow;
+        //         UIAnimator.Instance.FadeInElement(statusMessage, 0.2f);
+        //         UIAnimator.Instance.PulseElement(statusMessage);
+        //     }
+        //     yield break;
+        // }
+
         isSubmitting = true;
         Debug.Log("⏳ Starting submission routine...");
 
@@ -254,16 +274,26 @@ public class LeaderboardSceneController : MonoBehaviour
 
         Debug.Log($"📊 Showing leaderboard with score: {playerScore}");
 
+        StartCoroutine(FetchLeaderboardData());
+
         // Show the score list
         scoreList.style.display = DisplayStyle.Flex;
         scoreList.Clear();
 
-        // Add player as #1 with HIGHLIGHT using the ACTUAL score
-        AddScoreEntry(playerName, playerScore, 1, true);
-        AddScoreEntry("EcoWarrior", 1500, 2, false);
-        AddScoreEntry("GreenMachine", 1200, 3, false);
-        AddScoreEntry("SolarSam", 900, 4, false);
-        AddScoreEntry("RecycleRex", 750, 5, false);
+        int rank = 1;
+
+        for (int i = 0; i < playerNames.Length && i < playerScores.Length; i++)
+        {
+            if (playerNames[i] == playerName)
+            {
+                AddScoreEntry(playerNames[i], playerScores[i], rank, true);
+            }
+            else
+            {
+                AddScoreEntry(playerNames[i], playerScores[i], rank, false);
+            }
+            rank++;
+        }
 
         // Animate the entries
         StartCoroutine(AnimateScoreEntries());
@@ -383,4 +413,42 @@ public class LeaderboardSceneController : MonoBehaviour
 
         scoreList.Add(entry);
     }
+
+    IEnumerator FetchLeaderboardData()
+    {
+        WWWForm form = new WWWForm();
+
+        using (UnityWebRequest request = UnityWebRequest.Post(DBManager.hostname + "/leaderboard.php", form))
+        {
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                Debug.Log("Leaderboard data fetched:\n" + request.downloadHandler.text);
+                Leaderboard leaderboard = JsonUtility.FromJson<Leaderboard>(request.downloadHandler.text);
+                Debug.Log($"Parsed leaderboard - Username: {leaderboard.username}, Highscore: {leaderboard.highscore}, Error: {leaderboard.error}");
+
+                if (leaderboard.error != null)
+                {
+                    Debug.LogError("Error in leaderboard response: " + leaderboard.error);
+                    yield break;
+                }
+                playerNames = leaderboard.username;
+                playerScores = leaderboard.highscore;
+            }
+            else
+            {
+                Debug.LogError("Error fetching leaderboard: " + request.error);
+            }
+        }
+    }
 }
+
+// helper class for parsing the returned json object from the leaderboard request
+    [System.Serializable]
+    public class Leaderboard
+    {
+        public string[] username;
+        public int[] highscore;
+        public string error;
+    }
