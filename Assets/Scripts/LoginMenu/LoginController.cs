@@ -9,14 +9,13 @@ public class LoginController : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private VisualElement root;
+    private VisualElement loadingSpinner;
     [SerializeField] private UIManager uiManager;
     //private VisualElement welcomePanel;
     private TextField usernameInput;
     private TextField passwordInput;
     private Label successLabel;
     private Toggle passwordToggle;
-
-    //private Button registerButton;
     private Button backButton;
     private Button loginButton;
     private Button forgotPasswordButton;
@@ -45,6 +44,8 @@ public class LoginController : MonoBehaviour
 
         passwordInput = root.Q<TextField>("PasswordField");
         passwordToggle = root.Q<Toggle>("ShowPasswordToggle");
+
+        loadingSpinner = root.Q<VisualElement>("LoadingSpinner");
 
         // Set password field to masked initially
         passwordInput.isPasswordField = true;
@@ -78,6 +79,16 @@ public class LoginController : MonoBehaviour
 
     IEnumerator LoginPlayer()
     {
+        UIAnimator.Instance.FadeInElement(loadingSpinner, 0.2f);
+        UIAnimator.Instance.RotateElement(loadingSpinner, 360f);
+
+        successLabel.text = "Logging in...";
+
+        UIAnimator.Instance.FadeInElement(successLabel, 0.2f);
+        UIAnimator.Instance.PulseElement(successLabel);
+
+        yield return UIAnimator.Instance.AnimateLoading(successLabel, "Logging in", 2f);
+
         WWWForm form = new WWWForm();
         form.AddField("username", usernameInput.value.Trim());
         form.AddField("password", passwordInput.value.Trim());
@@ -91,23 +102,39 @@ public class LoginController : MonoBehaviour
                 Debug.Log("Server response: " + request.downloadHandler.text);
                 UserData data = JsonUtility.FromJson<UserData>(request.downloadHandler.text);
 
-                DBManager.firstname = data.firstname;
-                DBManager.lastname = data.lastname;
-                DBManager.username = data.username;
-                DBManager.highScore = data.highScore;
-                DBManager.cityNumber = data.cityNumber;
-                DBManager.currentScore = data.currentScore;
+                if (data.error != null)
+                {
+                    Debug.Log("Login error: " + data.error);
+                    successLabel.text = data.error;
+                }
 
-                usernameInput.value = "";
-                passwordInput.value = "";
+                else {
+                    Debug.Log("Username is: " + data.username);
 
-                successLabel.text = "Login successful!";
-                successLabel.style.visibility = Visibility.Visible;
+                    DBManager.firstname = data.firstname;
+                    DBManager.lastname = data.lastname;
+                    DBManager.username = data.username;
+                    DBManager.highScore = data.highScore;
+                    DBManager.cityNumber = data.cityNumber;
+                    DBManager.currentScore = data.currentScore;
 
-                yield return new WaitForSeconds(1f);
-                Debug.Log("Saved username: " + DBManager.username);
-                UnityEngine.SceneManagement.SceneManager.LoadScene(0);
-                successLabel.text = "";
+                    usernameInput.value = "";
+                    passwordInput.value = "";
+
+                    UIAnimator.Instance.FadeOutElement(loadingSpinner, 0.2f);
+
+                    successLabel.text = "✓ Login successful!";
+                    UIAnimator.Instance.PulseElement(successLabel);
+                    //successLabel.style.visibility = Visibility.Visible;
+
+                    yield return new WaitForSeconds(1f);
+                    Debug.Log("Saved username: " + DBManager.username);
+
+                    UIAnimator.Instance.FadeOutElement(successLabel, 0.2f);
+
+                    SceneManager.LoadScene("CitySelection");
+                    successLabel.text = "";
+                }
             }
             else
             {
@@ -126,6 +153,7 @@ public class LoginController : MonoBehaviour
         public int highScore;
         public int cityNumber;
         public int currentScore;
+        public string error;
     }
 
     

@@ -1,179 +1,263 @@
 using System.Collections;
-//using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UIElements;
 using System.Text.RegularExpressions;
-
+ 
 public class Registration : MonoBehaviour
 {
     private VisualElement root;
-    [SerializeField] UIManager uiManager;
+    private VisualElement loadingSpinner;
+    [SerializeField] private UIManager uiManager;
+ 
     private TextField firstnameInput;
     private TextField lastnameInput;
     private TextField usernameInput;
     private TextField passwordInput;
+ 
     private Label successLabel;
     private Toggle passwordToggle;
     private Button backButton;
     private Button createButton;
-
+ 
     private void Awake()
     {
-        // Fetch the panel as soon as it is initialized
         root = GetComponent<UIDocument>().rootVisualElement;
     }
-
+ 
     private void OnEnable()
     {
-        // Retrieving and configuring buttons
         backButton = root.Q<Button>("BackButton");
-        backButton.clicked += OnBackClicked;
-
         createButton = root.Q<Button>("CreateAccountButton");
-        createButton.clicked += OnCreateAccountClicked;
-
-        // Retrieve the input fields
+ 
         firstnameInput = root.Q<TextField>("FirstNameField");
         lastnameInput = root.Q<TextField>("LastNameField");
         usernameInput = root.Q<TextField>("UsernameField");
-
         passwordInput = root.Q<TextField>("PasswordField");
+ 
         passwordToggle = root.Q<Toggle>("ShowPasswordToggle");
-
         successLabel = root.Q<Label>("SuccessStatement");
 
-        // Set password field to masked initially
-        passwordInput.isPasswordField = true;
-
-        // Adding listener to toggle
-        passwordToggle.RegisterValueChangedCallback(evt =>
+        loadingSpinner = root.Q<VisualElement>("LoadingSpinner");
+ 
+        if (backButton != null)
+            backButton.clicked += OnBackClicked;
+ 
+        if (createButton != null)
+            createButton.clicked += OnCreateAccountClicked;
+ 
+        if (passwordInput != null)
+            passwordInput.isPasswordField = true;
+ 
+        if (passwordToggle != null)
         {
-            passwordInput.isPasswordField = !evt.newValue; // true = masked, false = visible
-        });
+            passwordToggle.RegisterValueChangedCallback(evt =>
+            {
+                if (passwordInput != null)
+                    passwordInput.isPasswordField = !evt.newValue;
+            });
+        }
+ 
+        if (successLabel != null)
+            successLabel.style.visibility = Visibility.Hidden;
     }
-
+ 
+    private void OnDisable()
+    {
+        if (backButton != null)
+            backButton.clicked -= OnBackClicked;
+ 
+        if (createButton != null)
+            createButton.clicked -= OnCreateAccountClicked;
+    }
+ 
     private void OnBackClicked()
     {
-        uiManager.ShowWelcome();
+        if (uiManager != null)
+            uiManager.ShowWelcome();
     }
-
+ 
     private void OnCreateAccountClicked()
     {
-        bool verified = VerifyInputs();
-        if (verified) CallRegister();
+        if (VerifyInputs())
+        {
+            CallRegister();
+        }
     }
-
+ 
     public void CallRegister()
     {
         StartCoroutine(Register());
     }
-
-    IEnumerator Register()
+ 
+    private IEnumerator Register()
     {
-        WWWForm form = new WWWForm();
-        form.AddField("firstname", firstnameInput.value.Trim());
-        form.AddField("lastname", lastnameInput.value.Trim());
-        form.AddField("username", usernameInput.value.Trim());
-        form.AddField("password", passwordInput.value.Trim());
+        UIAnimator.Instance.FadeInElement(loadingSpinner, 0.2f);
+        UIAnimator.Instance.RotateElement(loadingSpinner, 360f);
 
-        using (UnityWebRequest request = UnityWebRequest.Post(DBManager.hostname + "/register.php", form))
-        {
-            yield return request.SendWebRequest();
+        successLabel.text = "Creating user...";
 
-            if (request.result == UnityWebRequest.Result.Success)
-            {
-                string response = request.downloadHandler.text;
+        UIAnimator.Instance.FadeInElement(successLabel, 0.2f);
+        UIAnimator.Instance.PulseElement(successLabel);
 
-                if (response == "0")
-                {
-                    Debug.Log("User created successfully");
-                    successLabel.text = "Account created successfully!";
-                    successLabel.style.visibility = Visibility.Visible;
+        yield return UIAnimator.Instance.AnimateLoading(successLabel, "Creating user", 2f);
 
-                    firstnameInput.value = "";
-                    lastnameInput.value = "";
-                    usernameInput.value = "";
-                    passwordInput.value = "";
-
-                    yield return new WaitForSeconds(1f);
-                    UnityEngine.SceneManagement.SceneManager.LoadScene(0); //load city selection menu
-                    successLabel.text = "";
-                }
-                else
-                {
-                    Debug.Log("User creation failed. Error #" + response);
-                    successLabel.text = "Failed to create user";
-                    successLabel.style.visibility = Visibility.Visible;
-                }
-            }
-            else
-            {
-                Debug.Log("Network Error: " + request.error);
-                ShowError("Connection failed. Check server.");
-            }
-        }
-    }
-
-    public bool VerifyInputs()
-    {
-        // Placing constraints on input fields, such as length, special characters, and more
         string firstname = firstnameInput.value.Trim();
         string lastname = lastnameInput.value.Trim();
         string username = usernameInput.value.Trim();
         string password = passwordInput.value.Trim();
+ 
+        WWWForm form = new WWWForm();
+        form.AddField("firstname", firstname);
+        form.AddField("lastname", lastname);
+        form.AddField("username", username);
+        form.AddField("password", password);
+ 
+        string url = DBManager.hostname + "/register.php";
+ 
+        Debug.Log("REGISTER URL: " + url);
+        Debug.Log("firstname: " + firstname);
+        Debug.Log("lastname: " + lastname);
+        Debug.Log("username: " + username);
+ 
+        using (UnityWebRequest request = UnityWebRequest.Post(url, form))
+        {
+            request.timeout = 20;
+ 
+            yield return request.SendWebRequest();
+            Debug.Log("Result: " + request.result);
+            Debug.Log("Error: " + request.error);
+            Debug.Log("Response Code: " + request.responseCode);
+            Debug.Log("Raw Response: [" + request.downloadHandler.text + "]");
+ 
+            #if UNITY_2020_1_OR_NEWER
+                bool hasError = request.result == UnityWebRequest.Result.ConnectionError ||
+                request.result == UnityWebRequest.Result.ProtocolError;
+            #else
+                bool hasError = request.isNetworkError || request.isHttpError;
+            #endif
+ 
+            string responseText = request.downloadHandler != null
+                ? request.downloadHandler.text.Trim()
+                : "";
+ 
+            Debug.Log("Register Response Code: " + request.responseCode);
+            Debug.Log("Register Response Text: " + responseText);
+ 
+            if (hasError)
+            {
+                Debug.LogError("Registration request failed.");
+                Debug.LogError("Network/HTTP Error: " + request.error);
+                ShowError("Connection failed. Check server.");
+                yield break;
+            }
+ 
+            if (responseText == "0")
+            {
+                UIAnimator.Instance.FadeOutElement(loadingSpinner, 0.2f);
 
+                successLabel.text = "✓ Created User!";
+                UIAnimator.Instance.PulseElement(successLabel);
+                
+                Debug.Log("User created successfully.");
+ 
+                //successLabel.text = "Account created successfully!";
+                //successLabel.style.visibility = Visibility.Visible;
+ 
+                firstnameInput.value = "";
+                lastnameInput.value = "";
+                usernameInput.value = "";
+                passwordInput.value = "";
+ 
+                yield return new WaitForSeconds(1f);
+                UIAnimator.Instance.FadeOutElement(successLabel, 0.2f);
+ 
+                successLabel.text = "";
+                UnityEngine.SceneManagement.SceneManager.LoadScene("Story");
+            }
+            else
+            {
+                Debug.LogWarning("User creation failed. Server response: " + responseText);
+ 
+                if (string.IsNullOrWhiteSpace(responseText))
+                    ShowError("Failed to create user.");
+                else
+                    ShowError(responseText);
+            }
+        }
+    }
+ 
+    public bool VerifyInputs()
+    {
+        string firstname = firstnameInput.value.Trim();
+        string lastname = lastnameInput.value.Trim();
+        string username = usernameInput.value.Trim();
+        string password = passwordInput.value.Trim();
+ 
         if (string.IsNullOrEmpty(firstname) ||
-        string.IsNullOrEmpty(lastname) ||
-        string.IsNullOrEmpty(username) ||
-        string.IsNullOrEmpty(password))
+            string.IsNullOrEmpty(lastname) ||
+            string.IsNullOrEmpty(username) ||
+            string.IsNullOrEmpty(password))
         {
             ShowError("All fields must be filled!");
             return false;
         }
-
+ 
         if (username.Length < 6 || password.Length < 8 || password.Length > 20)
         {
-            ShowError("Your username should be at least 6 characters long and your password should be 8 - 20 charcters long.");
+            ShowError("Your username should be at least 6 characters long and your password should be 8 - 20 characters long.");
             return false;
         }
-
+ 
         if (!Regex.IsMatch(username, @"^[a-zA-Z0-9_@!]+$"))
         {
             ShowError("Only letters, numbers, and a few special characters (_ @ !)");
             return false;
         }
-
+ 
         if (!Regex.IsMatch(password, @"^(?=.*[A-Z])(?=.*[\W_]).+$"))
         {
             ShowError("Password must contain at least 1 uppercase letter and 1 special character");
             return false;
         }
-
+ 
         return true;
     }
-
+ 
     public bool VerifyInputs(string firstname, string lastname, string username, string password)
     {
-        if (string.IsNullOrEmpty(firstname) || string.IsNullOrEmpty(lastname) ||
-            string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+        if (string.IsNullOrEmpty(firstname) ||
+            string.IsNullOrEmpty(lastname) ||
+            string.IsNullOrEmpty(username) ||
+            string.IsNullOrEmpty(password))
+        {
             return false;
-
+        }
+ 
         if (username.Length < 6 || password.Length < 8 || password.Length > 20)
+        {
             return false;
-
+        }
+ 
         if (!Regex.IsMatch(username, @"^[a-zA-Z0-9_@!]+$"))
+        {
             return false;
-
+        }
+ 
         if (!Regex.IsMatch(password, @"^(?=.*[A-Z])(?=.*[\W_]).+$"))
+        {
             return false;
-
+        }
+ 
         return true;
     }
-    
+ 
     public void ShowError(string message)
     {
-        successLabel.text = message;
-        successLabel.style.visibility = Visibility.Visible;
+        if (successLabel != null)
+        {
+            successLabel.text = message;
+            successLabel.style.visibility = Visibility.Visible;
+        }
     }
 }

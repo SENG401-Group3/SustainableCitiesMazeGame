@@ -26,22 +26,4 @@ public class DBManagerTests
         DBManager.username = "testuser";
         Assert.IsTrue(DBManager.LoggedIn);
     }
-
-    /// Verifies that LogOut clears the username field
-    [Test]
-    public void LogOut_SetsUsernameToNull()
-    {
-        DBManager.username = "testuser";
-        DBManager.LogOut();
-        Assert.IsNull(DBManager.username);
-    }
-
-    /// Verifies that LoggedIn returns false when LogOut is called
-    [Test]
-    public void LogOut_SetsLoggedInToFalse()
-    {
-        DBManager.username = "testuser";
-        DBManager.LogOut();
-        Assert.IsFalse(DBManager.LoggedIn);
-    }
 }

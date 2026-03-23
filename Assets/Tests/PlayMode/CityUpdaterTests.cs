@@ -13,7 +13,6 @@ public class CityUpdaterTests
     [SetUp]
     public void SetUp()
     {
-        // Note: Direct assignment to CityUpdater.Instance was removed because the property has a private setter
         // The singleton's Awake() method handles setting Instance automatically when we add the component
         obj = new GameObject("CityUpdater");
         cityUpdater = obj.AddComponent<CityUpdater>(); // Awake() runs here and sets Instance
@@ -41,8 +40,8 @@ public class CityUpdaterTests
 
     /// Verifies that only one CityUpdater instance exists at a time
     /// A second instance should be destroyed leaving the first as the singleton
-    [Test]
-    public void Singleton_OnlyOneInstanceExists()
+    [UnityTest]
+    public IEnumerator Singleton_OnlyOneInstanceExists()
     {
         // Create a second instance - Awake() will run and see Instance is already set
         var obj2 = new GameObject("CityUpdater2");
@@ -51,8 +50,10 @@ public class CityUpdaterTests
         // Instance should still be the first one since second should be rejected by singleton pattern
         Assert.AreEqual(cityUpdater, CityUpdater.Instance);
 
+        // Wait a frame for Destroy() to actually process
+        yield return null;
+
         // The second object should have been destroyed in Awake()
-        // In EditMode tests, we need to check if the component was destroyed
         Assert.IsTrue(secondUpdater == null || secondUpdater.Equals(null));
 
         // Clean up

@@ -1,22 +1,22 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/USS/main%20menu.uss?fileID=7433441132597879392&amp;guid=0bc041f9531c6b046b460760c2a027b5&amp;type=3#main menu"/>
-    <ui:VisualElement name="Panel" class="panel" style="flex-grow: 1; flex-wrap: wrap; justify-content: space-evenly; align-items: stretch;">
+    <ui:VisualElement name="Panel" class="panel edit-panel" style="flex-grow: 1; flex-wrap: wrap; justify-content: space-evenly; align-items: stretch;">
         <ui:VisualElement name="MainContainer" class="menu" style="flex-grow: 1;">
             <ui:Label text="" name="GreetingLabel" class="text" style="visibility: visible; color: rgb(248, 222, 176); min-height: 10%;"/>
             <ui:VisualElement name="CardHolder" class="profile" style="flex-grow: 1;">
                 <ui:VisualElement name="NameCard" class="card" style="flex-grow: 1;">
-                    <ui:Label text="Player Details:" name="NameLabel" class="sub-text"/>
-                    <ui:Label text="" name="NamesContainer" style="visibility: visible; -unity-font-style: bold; font-size: 20%; color: rgb(248, 222, 176);"/>
+                    <ui:Label text="Player Details:" name="NameLabel" class="sub-text" style="font-size: 40%;"/>
+                    <ui:Label text="" name="NamesContainer" style="visibility: visible; -unity-font-style: bold; font-size: 30%; color: rgb(248, 222, 176);"/>
                 </ui:VisualElement>
                 <ui:VisualElement name="ScoreCard" class="card" style="flex-grow: 1;">
-                    <ui:Label text="Stats:" name="ScoreLabel" class="sub-text"/>
-                    <ui:Label text="" name="ScoreContainer" style="font-size: 20%; color: rgb(248, 222, 176); -unity-font-style: bold;"/>
+                    <ui:Label text="Stats:" name="ScoreLabel" class="sub-text" style="font-size: 40%;"/>
+                    <ui:Label text="" name="ScoreContainer" style="font-size: 30%; color: rgb(248, 222, 176); -unity-font-style: bold;"/>
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="ButtonBar" class="button-bar" style="flex-grow: 1; align-content: stretch; align-self: center; min-width: 40%; align-items: stretch;">
-                <ui:Button text="Menu" name="MenuButton" style="max-width: 50%; min-width: 20%; font-size: 20%; margin-right: 20px; margin-left: 20px;"/>
-                <ui:Button text="Edit Profile" name="EditButton" style="font-size: 20%; max-width: 50%; margin-right: 20px; margin-left: 20px;"/>
-                <ui:Button text="Logout" name="LogoutButton" style="max-width: 50%; min-width: 20%; font-size: 20%; margin-right: 20px; margin-left: 20px;"/>
+                <ui:Button text="Menu" name="MenuButton" style="max-width: 50%; min-width: 20%; font-size: 30%; margin-right: 20px; margin-left: 20px;"/>
+                <ui:Button text="Edit Profile" name="EditButton" style="font-size: 30%; max-width: 50%; margin-right: 20px; margin-left: 20px;"/>
+                <ui:Button text="Logout" name="LogoutButton" style="max-width: 50%; min-width: 20%; font-size: 30%; margin-right: 20px; margin-left: 20px;"/>
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

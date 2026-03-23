@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/USS/main%20menu.uss?fileID=7433441132597879392&amp;guid=0bc041f9531c6b046b460760c2a027b5&amp;type=3#main menu"/>
-    <ui:VisualElement name="Panel" class="panel" style="flex-grow: 1; visibility: visible; background-color: rgba(255, 0, 89, 0.53);">
+    <ui:VisualElement name="Panel" class="panel reg-panel" style="flex-grow: 1; visibility: visible; background-color: rgba(255, 0, 89, 0.53);">
         <ui:VisualElement name="Form" class="menu" style="flex-grow: 1;">
             <ui:Label text="Create Your Account" name="CreateAccountLabel" class="text" style="color: rgb(255, 228, 181);"/>
             <ui:TextField label="first name:" placeholder-text="Enter first name" name="FirstNameField" multiline="true" class="field" style="align-self: auto;"/>
@@ -12,7 +12,8 @@
                 <ui:Button text="Back to Home" name="BackButton"/>
                 <ui:Button text="Create Account" name="CreateAccountButton"/>
             </ui:VisualElement>
-            <ui:Label text="You are now a registered user!" name="SuccessStatement" triple-click-selects-line="false" style="font-size: 60%; align-content: flex-start; align-self: center; color: rgb(255, 228, 181); visibility: hidden;"/>
+            <ui:VisualElement name="LoadingSpinner" style="width: 50px; height: 50px; background-color: rgb(249, 223, 177); border-radius: 25px; margin: 20px; display: none; align-self: center;"/>
+            <ui:Label text="You are now a registered user!" name="SuccessStatement" triple-click-selects-line="false" style="font-size: 60%; align-content: flex-start; align-self: center; color: rgb(255, 228, 181); visibility: visible; display: none;"/>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
