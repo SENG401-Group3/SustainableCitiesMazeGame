@@ -12,12 +12,6 @@ public class PlayerItemController : MonoBehaviour, Subject
   private Button telescopeButton;
   [SerializeField]
   private Button teleporterButton;
-  private List<Observer> observers = new List<Observer>();
-
-  [SerializeField]
-  private Button telescopeButton;
-  [SerializeField]
-  private Button teleporterButton;
 
   // unless we want item persistence, these lists do not matter
   // private List<int> collectedItems;  
@@ -74,11 +68,7 @@ public class PlayerItemController : MonoBehaviour, Subject
   public void onTelescopeClick(){
     useItem(HelperItem.itemName.Telescope);
   }
-
-  public void onTelescopeClick(){
-    useItem(HelperItem.itemName.Telescope);
-  }
-
+  
   // Start is called once before the first execution of Update after the MonoBehaviour is created
   void Start()
   {
