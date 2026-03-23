@@ -65,6 +65,7 @@ public class MessageHandler : MonoBehaviour
   public int getMessageCount() => messageQ.Count;
 
   private void constructTextDisplay(){
+    if(textComponent == null) return;
     // create a copy of the queue and an empty message
     // no copy needed because foreach wont modify
     string message = "";
@@ -88,6 +89,7 @@ public class MessageHandler : MonoBehaviour
   // Update is called once per frame
   void Update()
   {
+    if(textComponent == null) return;
     // start updating when we have messages, and stop if we dont
     if(updating && messageQ.Count == 0){
       CancelInvoke(nameof(updateTextDisplay));
