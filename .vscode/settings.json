@@ -67,5 +67,5 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "MazeGame.slnx"
+    "dotnet.defaultSolution": "SustainableCitiesMazeGame.slnx"
 }
