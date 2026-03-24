@@ -19,14 +19,14 @@ public class CitySelectionMenu : MonoBehaviour
 
     [Header("Static State")]
     private static int pendingCityIndex = -1; // Used to override the current city when returning from another scene
-    private int currentCityIndex = DBManager.cityNumber; // Current city being displayed (1-5)
+    private int currentCityIndex; // Current city being displayed (1-5)
 
     [Header("UI Elements")]
     private VisualElement root; // Root VisualElement of the UIDocument
     private VisualElement backgroundContainer; // Container for the background image
     private Button playButton; // Button to start the game
     private Button tutorialButton; // Button to show tutorial
-    private Button settingsButton; // Button to show settings
+    private Button scoresButton; // Button to show settings
     private Button profileButton; // Button to show profile
     private Button quitButton; // Button to quit the game
 
@@ -67,8 +67,8 @@ public class CitySelectionMenu : MonoBehaviour
         tutorialButton.clicked += ShowTutorial;
 
         // Find and configure the Settings button
-        settingsButton = root.Q<Button>("SettingsButton");
-        settingsButton.clicked += ShowSettings;
+        scoresButton = root.Q<Button>("ScoresButton");
+        scoresButton.clicked += ShowScores;
 
         // Find and configure the Profile button
         profileButton = root.Q<Button>("ProfileButton");
@@ -86,7 +86,7 @@ public class CitySelectionMenu : MonoBehaviour
     {
         playButton.clicked -= StartGame;
         tutorialButton.clicked -= ShowTutorial;
-        settingsButton.clicked -= ShowSettings;
+        scoresButton.clicked -= ShowScores;
         profileButton.clicked -= ShowProfile;
         quitButton.clicked -= QuitGame;
     }
@@ -105,7 +105,7 @@ public class CitySelectionMenu : MonoBehaviour
         }
 
         // Check if there's a pending city index from another scene
-        if (pendingCityIndex != -1)
+        /*if (pendingCityIndex != -1)
         {
             currentCityIndex = pendingCityIndex;
             pendingCityIndex = -1; // Reset after use (one-time override)
@@ -114,9 +114,10 @@ public class CitySelectionMenu : MonoBehaviour
         {
             // Use the saved city index from PlayerPrefs
             currentCityIndex = DBManager.cityNumber;
-        }
+        }*/
 
         // Update the background to match the current city
+        currentCityIndex = DBManager.cityNumber;
         UpdateBackground();
     }
 
@@ -164,10 +165,9 @@ public class CitySelectionMenu : MonoBehaviour
     /*
      * Placeholder for settings button functionality
      */
-    private void ShowSettings()
+    private void ShowScores()
     {
-        Debug.Log("Settings button clicked");
-        // TODO: Implement settings panel
+        SceneManager.LoadScene("LeaderboardScene");
     }
 
     /*

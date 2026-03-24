@@ -60,7 +60,7 @@ public class CityUpdater : MonoBehaviour
     // Unity's Start method - initializes the current city
     private void Start()
     {
-        RefreshCurrentCity();
+        //RefreshCurrentCity();
     }
 
     // Reads the current city from PlayerPrefs and updates the local variable

@@ -91,7 +91,7 @@ public class CityGameManager : MonoBehaviour
         Debug.Log($"➕ Added {points} points. City {currentCity} total now: {sessionScore}");
 
         // Save progress after each addition
-        SaveCityProgress();
+        StartCoroutine(SaveProgress(points));
 
         UpdateUI();
 
@@ -131,12 +131,52 @@ public class CityGameManager : MonoBehaviour
 
     // Saves temporary progress for the current city to PlayerPrefs
     
-    private void SaveCityProgress()
+    IEnumerator SaveProgress(int points)
     {
-        PlayerPrefs.SetInt($"City{currentCity}TempScore", sessionScore);
+
+        /*PlayerPrefs.SetInt($"City{currentCity}TempScore", sessionScore);
         PlayerPrefs.Save();
 
-        Debug.Log($"💾 Saved progress for City {currentCity}: Score={sessionScore}");
+        Debug.Log($"💾 Saved progress for City {currentCity}: Score={sessionScore}");*/
+        Debug.Log("city number after answer: " + DBManager.cityNumber);
+
+        if(DBManager.cityNumber + 1 > 5)
+        {
+            Debug.Log("city number on cycling: " + DBManager.cityNumber);
+            DBManager.cityNumber = 1;
+            DBManager.currentScore = 0;
+        }
+        else
+        {
+            Debug.Log("city number before increment: " + DBManager.cityNumber);
+            DBManager.cityNumber += 1;
+            DBManager.currentScore += points;
+        }
+
+        if (DBManager.currentScore > DBManager.highScore)
+        {
+            DBManager.highScore = DBManager.currentScore;
+        }
+
+        WWWForm form = new WWWForm();
+        form.AddField("username", DBManager.username);
+        form.AddField("highscore", DBManager.highScore);
+        form.AddField("citynumber", DBManager.cityNumber);
+        form.AddField("currentscore", DBManager.currentScore);
+
+        using (UnityWebRequest request = UnityWebRequest.Post(DBManager.hostname + "/saveplayerprogress.php", form))
+        {
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                Debug.Log("Successfully saved!");
+            }
+            else
+            {
+                Debug.Log("Error saving progress: " + request.error);
+            }
+        }
     }
 
 
