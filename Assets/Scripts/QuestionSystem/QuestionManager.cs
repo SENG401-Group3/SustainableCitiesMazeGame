@@ -31,7 +31,7 @@ public class QuestionManager : MonoBehaviour
     private int attemptCount = 0;                  // Current attempt number (1-3)
     private bool questionCompleted = false;        // Whether question has been answered correctly
     private bool hasHint = false;                  // Whether player has collected a hint scroll
-
+    private int DEFAULT_CITY = 1;
     /* Unity's Start method - initializes UI elements and loads the first question.*/
     public void Start()
     {
@@ -129,7 +129,7 @@ public class QuestionManager : MonoBehaviour
     public void Update()
     {
         // Debug: Press F8 to check button status
-        if (Keyboard.current != null && Keyboard.current.f8Key.wasPressedThisFrame)
+        /*if (Keyboard.current != null && Keyboard.current.f8Key.wasPressedThisFrame)
         {
             if (continueButton != null)
             {
@@ -153,7 +153,7 @@ public class QuestionManager : MonoBehaviour
         {
             Debug.Log("🔧 Debug: Manually showing hint");
             ShowHint();
-        }
+        }*/
     }
 
 
@@ -168,20 +168,28 @@ public class QuestionManager : MonoBehaviour
         // Save any pending PlayerPrefs changes
         PlayerPrefs.Save();
 
-        int currentCity = PlayerPrefs.GetInt("CurrentCity", 1);
+        int currentCity = DBManager.cityNumber;
         Debug.Log($"🔄 Current city: {currentCity}");
 
         // Use CityUpdater singleton to handle city completion
-        if (CityUpdater.Instance != null)
+        /*if (CityUpdater.Instance != null)
         {
             Debug.Log("✅ CityUpdater.Instance found");
             CityUpdater.Instance.CompleteCity();
+        }*/
+        //else
+        //{
+        //Debug.LogError("❌ CityUpdater instance not found!");
+        if(DBManager.cityNumber == DEFAULT_CITY)
+        {
+            SceneManager.LoadScene("LeaderboardScene");
+            DBManager.currentScore = 0;
         }
         else
         {
-            Debug.LogError("❌ CityUpdater instance not found!");
             SceneManager.LoadScene("CitySelection");
         }
+        //}
     }
 
 

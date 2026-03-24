@@ -44,7 +44,7 @@ public static class DBManager
         firstname = null;
         lastname = null;
         highScore = 0;
-        cityNumber = 0;
+        cityNumber = 1;
         currentScore = 0;
     }
 }

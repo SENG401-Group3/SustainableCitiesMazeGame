@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
+using System.Collections;
 
 /* Handles city progression logic, score saving, and scene transitions.
  This component persists between scenes to track which city the player is in.*/
@@ -59,7 +60,7 @@ public class CityUpdater : MonoBehaviour
     // Unity's Start method - initializes the current city
     private void Start()
     {
-        RefreshCurrentCity();
+        //RefreshCurrentCity();
     }
 
     // Reads the current city from PlayerPrefs and updates the local variable
@@ -117,7 +118,7 @@ public class CityUpdater : MonoBehaviour
             Debug.Log($"✅ City {currentCity} complete! Moving to City {nextCity}");
 
             // Save all PlayerPrefs changes
-            StartCoroutine(SaveProgress());
+            StartCoroutine(SaveProgress(playerScore));
 
             // Force refresh of current city after saving
             RefreshCurrentCity();
@@ -134,25 +135,25 @@ public class CityUpdater : MonoBehaviour
             PlayerPrefs.SetInt("GameComplete", 1);
 
             // Save the final total
-            StartCoroutine(SaveProgress());
+            StartCoroutine(SaveProgress(playerScore));
 
             // Go to leaderboard scene directly to show final score
             SceneManager.LoadScene("LeaderboardScene");
         }
     }
-
-    IEnumerator SaveProgress()
+    
+    IEnumerator SaveProgress(int score)
     {
-        if (DBManager.currentScore + playerScore > DBManager.highScore)
+        if (DBManager.currentScore + score > DBManager.highScore)
         {
-            DBManager.highScore = DBManager.currentScore + playerScore;
+            DBManager.highScore = DBManager.currentScore + score;
         }
         
         WWWForm form = new WWWForm();
         form.AddField("username", DBManager.username);
         form.AddField("highscore", DBManager.highScore);
         form.AddField("citynumber", currentCity + 1);
-        form.AddField("currentscore", playerScore);
+        form.AddField("currentscore", score);
 
         using (UnityWebRequest request = UnityWebRequest.Post(DBManager.hostname + "/saveplayerprogress.php", form))
         {

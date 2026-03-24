@@ -73,25 +73,34 @@ public class Registration : MonoBehaviour
  
     private void OnBackClicked()
     {
+        firstnameInput.value = "";
+        lastnameInput.value = "";
+        usernameInput.value = "";
+        passwordInput.value = "";
+        
         if (uiManager != null)
             uiManager.ShowWelcome();
     }
  
     private void OnCreateAccountClicked()
     {
+        Debug.Log("Create account clicked!");
         if (VerifyInputs())
         {
+            Debug.Log("Input verified!");
             CallRegister();
         }
     }
  
     public void CallRegister()
     {
+        Debug.Log("Call Register called!");
         StartCoroutine(Register());
     }
  
     private IEnumerator Register()
     {
+        Debug.Log("Register Coroutine started!");
         UIAnimator.Instance.FadeInElement(loadingSpinner, 0.2f);
         UIAnimator.Instance.RotateElement(loadingSpinner, 360f);
 
@@ -160,6 +169,7 @@ public class Registration : MonoBehaviour
                 UIAnimator.Instance.PulseElement(successLabel);
                 
                 Debug.Log("User created successfully.");
+                DBManager.username = usernameInput.text;
  
                 //successLabel.text = "Account created successfully!";
                 //successLabel.style.visibility = Visibility.Visible;
@@ -189,6 +199,7 @@ public class Registration : MonoBehaviour
  
     public bool VerifyInputs()
     {
+        Debug.Log("Verifying input!");
         string firstname = firstnameInput.value.Trim();
         string lastname = lastnameInput.value.Trim();
         string username = usernameInput.value.Trim();
@@ -200,63 +211,43 @@ public class Registration : MonoBehaviour
             string.IsNullOrEmpty(password))
         {
             ShowError("All fields must be filled!");
+            Debug.Log("Verifying done!");
             return false;
         }
  
         if (username.Length < 6 || password.Length < 8 || password.Length > 20)
         {
             ShowError("Your username should be at least 6 characters long and your password should be 8 - 20 characters long.");
+            Debug.Log("Verifying done!");
             return false;
         }
  
         if (!Regex.IsMatch(username, @"^[a-zA-Z0-9_@!]+$"))
         {
             ShowError("Only letters, numbers, and a few special characters (_ @ !)");
+            Debug.Log("Verifying done!");
             return false;
         }
  
         if (!Regex.IsMatch(password, @"^(?=.*[A-Z])(?=.*[\W_]).+$"))
         {
             ShowError("Password must contain at least 1 uppercase letter and 1 special character");
+            Debug.Log("Verifying done!");
             return false;
         }
- 
-        return true;
-    }
- 
-    public bool VerifyInputs(string firstname, string lastname, string username, string password)
-    {
-        if (string.IsNullOrEmpty(firstname) ||
-            string.IsNullOrEmpty(lastname) ||
-            string.IsNullOrEmpty(username) ||
-            string.IsNullOrEmpty(password))
-        {
-            return false;
-        }
- 
-        if (username.Length < 6 || password.Length < 8 || password.Length > 20)
-        {
-            return false;
-        }
- 
-        if (!Regex.IsMatch(username, @"^[a-zA-Z0-9_@!]+$"))
-        {
-            return false;
-        }
- 
-        if (!Regex.IsMatch(password, @"^(?=.*[A-Z])(?=.*[\W_]).+$"))
-        {
-            return false;
-        }
+        Debug.Log("Verifying done!");
  
         return true;
     }
  
     public void ShowError(string message)
     {
+        Debug.Log("Show Error called!");
+        Debug.Log("Success label: " + successLabel);
         if (successLabel != null)
         {
             successLabel.text = message;
+            successLabel.style.display = DisplayStyle.Flex;
             successLabel.style.visibility = Visibility.Visible;
         }
     }
