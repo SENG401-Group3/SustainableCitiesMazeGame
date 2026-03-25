@@ -259,7 +259,7 @@ public class LeaderboardSceneController : MonoBehaviour
 
         Debug.Log($"📊 Showing leaderboard with score: {playerScore}");
 
-        StartCoroutine(FetchLeaderboardData());
+        yield return FetchLeaderboardData();
 
         // Show the score list
         scoreList.style.display = DisplayStyle.Flex;
