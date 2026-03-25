@@ -18,9 +18,11 @@ public class LeaderboardSceneController : MonoBehaviour
     private Label statusMessage;
 
     private int playerScore;
-    private string playerName = "MAKUO";
+    private string playerName = DBManager.LoggedIn ? DBManager.username : "";
     private bool isSubmitting = false;
     private bool scoreSubmitted = false;
+    private string[] playerNames;
+    private int[] playerScores;
 
     void Start()
     {
@@ -264,11 +266,20 @@ public class LeaderboardSceneController : MonoBehaviour
         scoreList.Clear();
 
         // Add player as #1 with HIGHLIGHT using the ACTUAL score
-        AddScoreEntry(playerName, playerScore, 1, true);
-        AddScoreEntry("EcoWarrior", 1500, 2, false);
-        AddScoreEntry("GreenMachine", 1200, 3, false);
-        AddScoreEntry("SolarSam", 900, 4, false);
-        AddScoreEntry("RecycleRex", 750, 5, false);
+        int rank = 1;
+
+        for (int i = 0; i < playerNames.Length && i < playerScores.Length; i++)
+        {
+            if (playerNames[i] == playerName)
+            {
+                AddScoreEntry(playerNames[i], playerScores[i], rank, true);
+            }
+            else
+            {
+                AddScoreEntry(playerNames[i], playerScores[i], rank, false);
+            }
+            rank++;
+        }
 
         // Animate the entries
         StartCoroutine(AnimateScoreEntries());
