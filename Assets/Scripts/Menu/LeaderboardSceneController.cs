@@ -223,7 +223,7 @@ public class LeaderboardSceneController : MonoBehaviour
             }
 
             // NOW show the leaderboard with the score
-            ShowLeaderboardWithScore();
+            yield return ShowLeaderboardWithScore();
 
             // Wait before hiding status
             yield return new WaitForSeconds(1.5f);
@@ -268,13 +268,13 @@ public class LeaderboardSceneController : MonoBehaviour
         isSubmitting = false;
     }
 
-    void ShowLeaderboardWithScore()
+    IEnumerator ShowLeaderboardWithScore()
     {
-        if (scoreList == null) return;
+        if (scoreList == null) yield break;
 
         Debug.Log($"📊 Showing leaderboard with score: {playerScore}");
 
-        StartCoroutine(FetchLeaderboardData());
+        yield return FetchLeaderboardData();
 
         // Show the score list
         scoreList.style.display = DisplayStyle.Flex;
@@ -428,11 +428,11 @@ public class LeaderboardSceneController : MonoBehaviour
                 Leaderboard leaderboard = JsonUtility.FromJson<Leaderboard>(request.downloadHandler.text);
                 Debug.Log($"Parsed leaderboard - Username: {leaderboard.username}, Highscore: {leaderboard.highscore}, Error: {leaderboard.error}");
 
-                if (leaderboard.error != null)
-                {
-                    Debug.LogError("Error in leaderboard response: " + leaderboard.error);
-                    yield break;
-                }
+                // if (leaderboard.error != null)
+                // {
+                //     Debug.LogError("Error in leaderboard response: " + leaderboard.error);
+                //     yield break;
+                // }
                 playerNames = leaderboard.username;
                 playerScores = leaderboard.highscore;
             }
