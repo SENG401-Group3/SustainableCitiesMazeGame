@@ -208,7 +208,7 @@ public class LeaderboardSceneController : MonoBehaviour
             }
 
             // NOW show the leaderboard with the score
-            ShowLeaderboardWithScore();
+            yield return ShowLeaderboardWithScore();
 
             // Wait before hiding status
             yield return new WaitForSeconds(1.5f);
