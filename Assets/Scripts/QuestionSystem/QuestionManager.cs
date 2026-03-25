@@ -172,24 +172,28 @@ public class QuestionManager : MonoBehaviour
         Debug.Log($"🔄 Current city: {currentCity}");
 
         // Use CityUpdater singleton to handle city completion
-        /*if (CityUpdater.Instance != null)
+        if(DBManager.username == "Guest")
         {
-            Debug.Log("✅ CityUpdater.Instance found");
-            CityUpdater.Instance.CompleteCity();
-        }*/
-        //else
-        //{
-        //Debug.LogError("❌ CityUpdater instance not found!");
-        if(DBManager.cityNumber == DEFAULT_CITY)
-        {
-            SceneManager.LoadScene("LeaderboardScene");
-            DBManager.currentScore = 0;
+            if (CityUpdater.Instance != null)
+            {
+                Debug.Log("✅ CityUpdater.Instance found");
+                CityUpdater.Instance.CompleteCity();
+            }
+            else
+            {
+                Debug.LogError("❌ CityUpdater instance not found!");
+            }
+        }else{
+            if(DBManager.cityNumber == DEFAULT_CITY)
+            {
+                SceneManager.LoadScene("LeaderboardScene");
+                DBManager.currentScore = 0;
+            }
+            else
+            {
+                SceneManager.LoadScene("CitySelection");
+            }
         }
-        else
-        {
-            SceneManager.LoadScene("CitySelection");
-        }
-        //}
     }
 
 

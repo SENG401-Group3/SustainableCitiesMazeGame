@@ -105,19 +105,24 @@ public class CitySelectionMenu : MonoBehaviour
         }
 
         // Check if there's a pending city index from another scene
-        /*if (pendingCityIndex != -1)
+        if(DBManager.username == "Guest")
         {
-            currentCityIndex = pendingCityIndex;
-            pendingCityIndex = -1; // Reset after use (one-time override)
-        }
-        else
-        {
-            // Use the saved city index from PlayerPrefs
-            currentCityIndex = DBManager.cityNumber;
-        }*/
+            profileButton.style.display = DisplayStyle.None;
+            if (pendingCityIndex != -1)
+            {
+                currentCityIndex = pendingCityIndex;
+                pendingCityIndex = -1; // Reset after use (one-time override)
+            }
+            else
+            {
+                // Use the saved city index from PlayerPrefs
+                currentCityIndex = PlayerPrefs.GetInt("CurrentCity", 1);
+            }
+        } else{
 
-        // Update the background to match the current city
-        currentCityIndex = DBManager.cityNumber;
+            // Update the background to match the current city
+            currentCityIndex = DBManager.cityNumber;
+        }
         UpdateBackground();
     }
 
@@ -183,10 +188,8 @@ public class CitySelectionMenu : MonoBehaviour
      */
     private void QuitGame()
     {
-        #if UNITY_EDITOR
-                UnityEditor.EditorApplication.isPlaying = false;
-        #else
-                Application.Quit();
-        #endif
+         // clear current user data
+        StartCoroutine(DBManager.LogOut());
+        SceneManager.LoadScene("UI");
     }
 }

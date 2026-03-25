@@ -35,14 +35,14 @@ public class CityUpdater : MonoBehaviour
     private void OnEnable()
     {
         // Subscribe to scene loaded event to update city when scenes change
-        SceneManager.sceneLoaded += OnSceneLoaded;
+        //SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     // Unsubscribes from scene loaded events to prevent memory leaks
     private void OnDisable()
     {
         // Unsubscribe to avoid memory leaks
-        SceneManager.sceneLoaded -= OnSceneLoaded;
+        //SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     /* Called whenever a new scene is loaded
@@ -50,23 +50,23 @@ public class CityUpdater : MonoBehaviour
     
     <param name="scene">The scene that was loaded</param>
     <param name="mode">How the scene was loaded</param> */
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    /*private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         // Update currentCity whenever a new scene loads
         RefreshCurrentCity();
         Debug.Log($"Scene loaded: {scene.name}. Current city updated to: {currentCity}");
-    }
+    }*/
 
     // Unity's Start method - initializes the current city
     private void Start()
     {
-        //RefreshCurrentCity();
+        RefreshCurrentCity();
     }
 
     // Reads the current city from PlayerPrefs and updates the local variable
     private void RefreshCurrentCity()
     {
-        currentCity = DBManager.cityNumber;
+        currentCity = PlayerPrefs.GetInt("CurrentCity", 1);
         Debug.Log($"CityUpdater refreshed. Current city: {currentCity}");
     }
 
@@ -118,7 +118,7 @@ public class CityUpdater : MonoBehaviour
             Debug.Log($"✅ City {currentCity} complete! Moving to City {nextCity}");
 
             // Save all PlayerPrefs changes
-            StartCoroutine(SaveProgress(playerScore));
+            PlayerPrefs.Save();
 
             // Force refresh of current city after saving
             RefreshCurrentCity();
@@ -135,14 +135,14 @@ public class CityUpdater : MonoBehaviour
             PlayerPrefs.SetInt("GameComplete", 1);
 
             // Save the final total
-            StartCoroutine(SaveProgress(playerScore));
+            PlayerPrefs.Save();
 
             // Go to leaderboard scene directly to show final score
             SceneManager.LoadScene("LeaderboardScene");
         }
     }
     
-    IEnumerator SaveProgress(int score)
+    /*IEnumerator SaveProgress(int score)
     {
         if (DBManager.currentScore + score > DBManager.highScore)
         {
@@ -168,5 +168,5 @@ public class CityUpdater : MonoBehaviour
                 Debug.Log("Error updating score: " + request.error);
             }
         }
-    }
+    }*/
 }

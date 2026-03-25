@@ -71,7 +71,10 @@ public class LeaderboardSceneController : MonoBehaviour
             backToMenuButton.clicked += () => {
                 Debug.Log("🔴 Back to Menu button clicked - resetting game...");
                 // Reset everything for a new game
-                //ResetGameForNewPlaythrough();
+                if(DBManager.username == "Guest")
+                {
+                    ResetGameForNewPlaythrough();
+                }
                 Debug.Log("🏁 Returning to main menu - reset to City 1");
                 SceneManager.LoadScene("CitySelection");
             };
@@ -101,7 +104,7 @@ public class LeaderboardSceneController : MonoBehaviour
         Debug.Log($"📊 TotalScore BEFORE reset: {beforeReset}");
 
         // Reset to City 1
-        DBManager.cityNumber = 1;
+        PlayerPrefs.SetInt("CurrentCity", 1);
 
         // Clear game complete flag
         PlayerPrefs.SetInt("GameComplete", 0);
