@@ -59,6 +59,8 @@ public class LoginController : MonoBehaviour
 
     private void OnBackClicked()
     {
+        usernameInput.value = "";
+        passwordInput.value = "";
         uiManager.ShowWelcome();
     }
 
@@ -114,9 +116,9 @@ public class LoginController : MonoBehaviour
                     DBManager.firstname = data.firstname;
                     DBManager.lastname = data.lastname;
                     DBManager.username = data.username;
-                    DBManager.highScore = data.highScore;
-                    DBManager.cityNumber = data.cityNumber;
-                    DBManager.currentScore = data.currentScore;
+                    DBManager.highScore = data.highscore;
+                    DBManager.cityNumber = data.citynumber;
+                    DBManager.currentScore = data.currentscore;
 
                     usernameInput.value = "";
                     passwordInput.value = "";
@@ -145,20 +147,15 @@ public class LoginController : MonoBehaviour
         }
     }
 
+    // helper class to parse user data from JSON response
     public class UserData
     {
         public string username;
         public string firstname;
         public string lastname;
-        public int highScore;
-        public int cityNumber;
-        public int currentScore;
+        public int highscore;
+        public int citynumber;
+        public int currentscore;
         public string error;
     }
-
-    
-    /*public void VerifyInputs()
-    {
-        // place constraints on username and password here, such as length, special characters, etc.
-    }*/
 }

@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Networking;
+using System.Collections;
 
 /* Handles city progression logic, score saving, and scene transitions.
  This component persists between scenes to track which city the player is in.*/
@@ -33,14 +35,14 @@ public class CityUpdater : MonoBehaviour
     private void OnEnable()
     {
         // Subscribe to scene loaded event to update city when scenes change
-        SceneManager.sceneLoaded += OnSceneLoaded;
+        //SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     // Unsubscribes from scene loaded events to prevent memory leaks
     private void OnDisable()
     {
         // Unsubscribe to avoid memory leaks
-        SceneManager.sceneLoaded -= OnSceneLoaded;
+        //SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     /* Called whenever a new scene is loaded
@@ -48,12 +50,12 @@ public class CityUpdater : MonoBehaviour
     
     <param name="scene">The scene that was loaded</param>
     <param name="mode">How the scene was loaded</param> */
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    /*private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         // Update currentCity whenever a new scene loads
         RefreshCurrentCity();
         Debug.Log($"Scene loaded: {scene.name}. Current city updated to: {currentCity}");
-    }
+    }*/
 
     // Unity's Start method - initializes the current city
     private void Start()
@@ -64,7 +66,7 @@ public class CityUpdater : MonoBehaviour
     // Reads the current city from PlayerPrefs and updates the local variable
     private void RefreshCurrentCity()
     {
-        currentCity = DBManager.cityNumber;
+        currentCity = PlayerPrefs.GetInt("CurrentCity", 1);
         Debug.Log($"CityUpdater refreshed. Current city: {currentCity}");
     }
 
@@ -139,4 +141,32 @@ public class CityUpdater : MonoBehaviour
             SceneManager.LoadScene("LeaderboardScene");
         }
     }
+    
+    /*IEnumerator SaveProgress(int score)
+    {
+        if (DBManager.currentScore + score > DBManager.highScore)
+        {
+            DBManager.highScore = DBManager.currentScore + score;
+        }
+        
+        WWWForm form = new WWWForm();
+        form.AddField("username", DBManager.username);
+        form.AddField("highscore", DBManager.highScore);
+        form.AddField("citynumber", currentCity + 1);
+        form.AddField("currentscore", score);
+
+        using (UnityWebRequest request = UnityWebRequest.Post(DBManager.hostname + "/saveplayerprogress.php", form))
+        {
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                Debug.Log("Successfully saved progress!");
+            }
+            else
+            {
+                Debug.Log("Error updating score: " + request.error);
+            }
+        }
+    }*/
 }

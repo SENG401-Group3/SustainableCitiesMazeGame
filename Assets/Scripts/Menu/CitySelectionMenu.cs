@@ -17,13 +17,16 @@ public class CitySelectionMenu : MonoBehaviour
     [SerializeField] private Sprite[] cityBackgrounds; // Array of background images for cities 1-5 (assigned in Inspector)
 
     private int currentCityIndex = 1; // Current city being displayed (1-5)
+    [Header("Static State")]
+    private static int pendingCityIndex = -1; // Used to override the current city when returning from another scene
+    private int currentCityIndex; // Current city being displayed (1-5)
 
     [Header("UI Elements")]
     private VisualElement root; // Root VisualElement of the UIDocument
     private VisualElement backgroundContainer; // Container for the background image
     private Button playButton; // Button to start the game
     private Button tutorialButton; // Button to show tutorial
-    private Button settingsButton; // Button to show settings
+    private Button scoresButton; // Button to show settings
     private Button profileButton; // Button to show profile
     private Button quitButton; // Button to quit the game
 
@@ -66,6 +69,8 @@ public class CitySelectionMenu : MonoBehaviour
         settingsButton = root.Q<Button>("SettingsButton");
         if (settingsButton != null)
             settingsButton.clicked += ShowSettings;
+        scoresButton = root.Q<Button>("ScoresButton");
+        scoresButton.clicked += ShowScores;
 
         // Find and configure the Profile button
         profileButton = root.Q<Button>("ProfileButton");
@@ -88,6 +93,11 @@ public class CitySelectionMenu : MonoBehaviour
         if (settingsButton != null) settingsButton.clicked -= ShowSettings;
         if (profileButton != null) profileButton.clicked -= ShowProfile;
         if (quitButton != null) quitButton.clicked -= QuitGame;
+        playButton.clicked -= StartGame;
+        tutorialButton.clicked -= ShowTutorial;
+        scoresButton.clicked -= ShowScores;
+        profileButton.clicked -= ShowProfile;
+        quitButton.clicked -= QuitGame;
     }
 
     /*
@@ -107,6 +117,25 @@ public class CitySelectionMenu : MonoBehaviour
         currentCityIndex = PlayerPrefs.GetInt("CurrentCity", 1);
 
         // Update the background to match the current city
+        // Check if there's a pending city index from another scene
+        if(DBManager.username == "Guest")
+        {
+            profileButton.style.display = DisplayStyle.None;
+            if (pendingCityIndex != -1)
+            {
+                currentCityIndex = pendingCityIndex;
+                pendingCityIndex = -1; // Reset after use (one-time override)
+            }
+            else
+            {
+                // Use the saved city index from PlayerPrefs
+                currentCityIndex = PlayerPrefs.GetInt("CurrentCity", 1);
+            }
+        } else{
+
+            // Update the background to match the current city
+            currentCityIndex = DBManager.cityNumber;
+        }
         UpdateBackground();
     }
 
@@ -171,10 +200,11 @@ public class CitySelectionMenu : MonoBehaviour
     /*
      * Placeholder for settings button functionality
      */
-    private void ShowSettings()
+    private void ShowScores()
     {
         Debug.Log("⚙️ Settings button clicked");
         // TODO: Implement settings functionality later
+        SceneManager.LoadScene("LeaderboardScene");
     }
 
     /*
@@ -198,5 +228,8 @@ public class CitySelectionMenu : MonoBehaviour
 #else
         Application.Quit();
 #endif
+         // clear current user data
+        StartCoroutine(DBManager.LogOut());
+        SceneManager.LoadScene("UI");
     }
 }
