@@ -864,7 +864,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &374299072
 Transform:
   m_ObjectHideFlags: 0
@@ -911,7 +911,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcc44fe9042ac4c4196e704062ae4e6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LeaderboardManager
-  document: {fileID: 1094860892}
 --- !u!1 &383249815
 GameObject:
   m_ObjectHideFlags: 0
@@ -949,12 +948,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 383249815}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.80999, y: -0.13055, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -105.77969, y: -101.38106, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1740431008}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &389517819
 GameObject:
@@ -3441,6 +3440,7 @@ Transform:
   - {fileID: 1922614684}
   - {fileID: 771437417}
   - {fileID: 389517820}
+  - {fileID: 383249817}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1740431009
@@ -3672,4 +3672,3 @@ SceneRoots:
   - {fileID: 374299072}
   - {fileID: 654695104}
   - {fileID: 1740431008}
-  - {fileID: 383249817}
