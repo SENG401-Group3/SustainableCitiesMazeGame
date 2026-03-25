@@ -253,9 +253,9 @@ public class LeaderboardSceneController : MonoBehaviour
         isSubmitting = false;
     }
 
-    void ShowLeaderboardWithScore()
+    IEnumerator ShowLeaderboardWithScore()
     {
-        if (scoreList == null) return;
+        if (scoreList == null) yield break;
 
         Debug.Log($"📊 Showing leaderboard with score: {playerScore}");
 
