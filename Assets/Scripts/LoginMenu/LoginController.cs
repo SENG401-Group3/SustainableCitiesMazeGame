@@ -59,6 +59,8 @@ public class LoginController : MonoBehaviour
 
     private void OnBackClicked()
     {
+        usernameInput.value = "";
+        passwordInput.value = "";
         uiManager.ShowWelcome();
     }
 

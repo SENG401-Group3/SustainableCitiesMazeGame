@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
-using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -19,11 +18,9 @@ public class LeaderboardSceneController : MonoBehaviour
     private Label statusMessage;
 
     private int playerScore;
-    private string playerName = DBManager.LoggedIn ? DBManager.username : "Player";
+    private string playerName = "MAKUO";
     private bool isSubmitting = false;
     private bool scoreSubmitted = false;
-    private string[] playerNames;
-    private int[] playerScores;
 
     void Start()
     {
@@ -74,7 +71,10 @@ public class LeaderboardSceneController : MonoBehaviour
             backToMenuButton.clicked += () => {
                 Debug.Log("🔴 Back to Menu button clicked - resetting game...");
                 // Reset everything for a new game
-                ResetGameForNewPlaythrough();
+                if(DBManager.username == "Guest")
+                {
+                    ResetGameForNewPlaythrough();
+                }
                 Debug.Log("🏁 Returning to main menu - reset to City 1");
                 SceneManager.LoadScene("CitySelection");
             };
@@ -155,23 +155,6 @@ public class LeaderboardSceneController : MonoBehaviour
 
     IEnumerator SubmitScoreRoutine()
     {
-        // if (DBManager.LoggedIn)
-        // {
-        //     Debug.Log($"📤 Submitting score for user: {DBManager.username} with score: {playerScore}");
-        // }
-        // else
-        // {
-        //     Debug.Log($"Sorry, you must be logged in to submit your score.");
-        //     if (statusMessage != null)
-        //     {
-        //         statusMessage.text = "Please log in to submit your score.";
-        //         statusMessage.style.color = Color.yellow;
-        //         UIAnimator.Instance.FadeInElement(statusMessage, 0.2f);
-        //         UIAnimator.Instance.PulseElement(statusMessage);
-        //     }
-        //     yield break;
-        // }
-
         isSubmitting = true;
         Debug.Log("⏳ Starting submission routine...");
 
@@ -280,20 +263,12 @@ public class LeaderboardSceneController : MonoBehaviour
         scoreList.style.display = DisplayStyle.Flex;
         scoreList.Clear();
 
-        int rank = 1;
-
-        for (int i = 0; i < playerNames.Length && i < playerScores.Length; i++)
-        {
-            if (playerNames[i] == playerName)
-            {
-                AddScoreEntry(playerNames[i], playerScores[i], rank, true);
-            }
-            else
-            {
-                AddScoreEntry(playerNames[i], playerScores[i], rank, false);
-            }
-            rank++;
-        }
+        // Add player as #1 with HIGHLIGHT using the ACTUAL score
+        AddScoreEntry(playerName, playerScore, 1, true);
+        AddScoreEntry("EcoWarrior", 1500, 2, false);
+        AddScoreEntry("GreenMachine", 1200, 3, false);
+        AddScoreEntry("SolarSam", 900, 4, false);
+        AddScoreEntry("RecycleRex", 750, 5, false);
 
         // Animate the entries
         StartCoroutine(AnimateScoreEntries());

@@ -5,12 +5,12 @@
             <ui:Label text="" name="GreetingLabel" class="text" style="visibility: visible; color: rgb(248, 222, 176); min-height: 10%;"/>
             <ui:VisualElement name="CardHolder" class="profile" style="flex-grow: 1;">
                 <ui:VisualElement name="NameCard" class="card" style="flex-grow: 1;">
-                    <ui:Label text="Player Details:" name="NameLabel" class="sub-text" style="font-size: 40%;"/>
-                    <ui:Label text="" name="NamesContainer" style="visibility: visible; -unity-font-style: bold; font-size: 30%; color: rgb(248, 222, 176);"/>
+                    <ui:Label text="Player Details:" name="NameLabel" class="sub-text" style="font-size: 30%;"/>
+                    <ui:Label text="" name="NamesContainer" style="visibility: visible; -unity-font-style: bold; font-size: 25%; color: rgb(248, 222, 176);"/>
                 </ui:VisualElement>
                 <ui:VisualElement name="ScoreCard" class="card" style="flex-grow: 1;">
-                    <ui:Label text="Stats:" name="ScoreLabel" class="sub-text" style="font-size: 40%;"/>
-                    <ui:Label text="" name="ScoreContainer" style="font-size: 30%; color: rgb(248, 222, 176); -unity-font-style: bold;"/>
+                    <ui:Label text="Stats:" name="ScoreLabel" class="sub-text" style="font-size: 30%;"/>
+                    <ui:Label text="" name="ScoreContainer" style="font-size: 25%; color: rgb(248, 222, 176); -unity-font-style: bold;"/>
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="ButtonBar" class="button-bar" style="flex-grow: 1; align-content: stretch; align-self: center; min-width: 40%; align-items: stretch;">
