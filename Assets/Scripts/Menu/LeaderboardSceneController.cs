@@ -399,13 +399,19 @@ public class LeaderboardSceneController : MonoBehaviour
         var rankLabel = new Label(rank.ToString());
         rankLabel.style.width = 40;
         rankLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
+        rankLabel.style.color = highlight ? Color.green : Color.white;
 
         var nameLabel = new Label(name);
         nameLabel.style.width = 150;
+        nameLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
+        nameLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
+        nameLabel.style.color = highlight ? Color.green : Color.white;
 
         var scoreLabel = new Label(score.ToString());
         scoreLabel.style.width = 80;
         scoreLabel.style.unityTextAlign = TextAnchor.MiddleRight;
+        scoreLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
+        scoreLabel.style.color = highlight ? Color.green : Color.white;
 
         entry.Add(rankLabel);
         entry.Add(nameLabel);
