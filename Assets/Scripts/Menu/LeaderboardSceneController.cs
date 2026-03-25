@@ -18,9 +18,11 @@ public class LeaderboardSceneController : MonoBehaviour
     private Label statusMessage;
 
     private int playerScore;
-    private string playerName = "MAKUO";
+    private string playerName = DBManager.LoggedIn ? DBManager.username : "";
     private bool isSubmitting = false;
     private bool scoreSubmitted = false;
+    private string[] playerNames;
+    private int[] playerScores;
 
     void Start()
     {
@@ -206,7 +208,7 @@ public class LeaderboardSceneController : MonoBehaviour
             }
 
             // NOW show the leaderboard with the score
-            yield return ShowLeaderboardWithScore();
+            ShowLeaderboardWithScore();
 
             // Wait before hiding status
             yield return new WaitForSeconds(1.5f);
@@ -251,24 +253,33 @@ public class LeaderboardSceneController : MonoBehaviour
         isSubmitting = false;
     }
 
-    IEnumerator ShowLeaderboardWithScore()
+    void ShowLeaderboardWithScore()
     {
-        if (scoreList == null) yield break;
+        if (scoreList == null) return;
 
         Debug.Log($"📊 Showing leaderboard with score: {playerScore}");
 
-        yield return FetchLeaderboardData();
+        StartCoroutine(FetchLeaderboardData());
 
         // Show the score list
         scoreList.style.display = DisplayStyle.Flex;
         scoreList.Clear();
 
         // Add player as #1 with HIGHLIGHT using the ACTUAL score
-        AddScoreEntry(playerName, playerScore, 1, true);
-        AddScoreEntry("EcoWarrior", 1500, 2, false);
-        AddScoreEntry("GreenMachine", 1200, 3, false);
-        AddScoreEntry("SolarSam", 900, 4, false);
-        AddScoreEntry("RecycleRex", 750, 5, false);
+        int rank = 1;
+
+        for (int i = 0; i < playerNames.Length && i < playerScores.Length; i++)
+        {
+            if (playerNames[i] == playerName)
+            {
+                AddScoreEntry(playerNames[i], playerScores[i], rank, true);
+            }
+            else
+            {
+                AddScoreEntry(playerNames[i], playerScores[i], rank, false);
+            }
+            rank++;
+        }
 
         // Animate the entries
         StartCoroutine(AnimateScoreEntries());
@@ -374,19 +385,13 @@ public class LeaderboardSceneController : MonoBehaviour
         var rankLabel = new Label(rank.ToString());
         rankLabel.style.width = 40;
         rankLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
-        rankLabel.style.color = highlight ? Color.green : Color.white;
 
         var nameLabel = new Label(name);
         nameLabel.style.width = 150;
-        nameLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
-        nameLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
-        nameLabel.style.color = highlight ? Color.green : Color.white;
 
         var scoreLabel = new Label(score.ToString());
         scoreLabel.style.width = 80;
         scoreLabel.style.unityTextAlign = TextAnchor.MiddleRight;
-        scoreLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
-        scoreLabel.style.color = highlight ? Color.green : Color.white;
 
         entry.Add(rankLabel);
         entry.Add(nameLabel);
@@ -394,42 +399,4 @@ public class LeaderboardSceneController : MonoBehaviour
 
         scoreList.Add(entry);
     }
-
-    IEnumerator FetchLeaderboardData()
-    {
-        WWWForm form = new WWWForm();
-
-        using (UnityWebRequest request = UnityWebRequest.Post(DBManager.hostname + "/leaderboard.php", form))
-        {
-            yield return request.SendWebRequest();
-
-            if (request.result == UnityWebRequest.Result.Success)
-            {
-                Debug.Log("Leaderboard data fetched:\n" + request.downloadHandler.text);
-                Leaderboard leaderboard = JsonUtility.FromJson<Leaderboard>(request.downloadHandler.text);
-                Debug.Log($"Parsed leaderboard - Username: {leaderboard.username}, Highscore: {leaderboard.highscore}, Error: {leaderboard.error}");
-
-                // if (leaderboard.error != null)
-                // {
-                //     Debug.LogError("Error in leaderboard response: " + leaderboard.error);
-                //     yield break;
-                // }
-                playerNames = leaderboard.username;
-                playerScores = leaderboard.highscore;
-            }
-            else
-            {
-                Debug.LogError("Error fetching leaderboard: " + request.error);
-            }
-        }
-    }
 }
-
-// helper class for parsing the returned json object from the leaderboard request
-    [System.Serializable]
-    public class Leaderboard
-    {
-        public string[] username;
-        public int[] highscore;
-        public string error;
-    }
