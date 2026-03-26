@@ -76,13 +76,12 @@ public class PlayerController : MonoBehaviour, Observer
 
     private void updateVelocity(Vector2 mouseClickPosition){
       float curDist = Vector2.Distance(mouseClickPosition, (Vector2)player.transform.position);
-      if(curDist < 1E-3){
+      if(curDist < 1E-2){
         targetPosition.x = (float)invalidPos;
         targetPosition.y = (float)invalidPos;
         return;
       }
-      float velocityScalar = Math.Abs((float)(-4*maxVel*curDist*(curDist-targetDistance)/(Math.Pow(targetDistance,2)))) + minVel;
-      velocity = velocityScalar*(mouseClickPosition - (Vector2)player.transform.position)/curDist;
+      velocity = maxVel*(mouseClickPosition - (Vector2)player.transform.position)/curDist;
 
       rb.linearVelocity = velocity;
     }
@@ -94,6 +93,8 @@ public class PlayerController : MonoBehaviour, Observer
         if(!teleporting){
           targetPosition.x = worldPos.x;
           targetPosition.y = worldPos.y;
+
+          // record the starting velocity so that clicking again doesnt slow down the character
           targetDistance = Vector2.Distance(targetPosition, (Vector2)player.transform.position);
         }else if(worldPos.x >= 0 && worldPos.y >= 0){
           // make sure we are teleporting on an open tile
@@ -195,6 +196,7 @@ public class PlayerController : MonoBehaviour, Observer
     // Update is called once per frame
     void Update()
     {
+      timeslice = Time.deltaTime;
       handleInputs();
     }
 
