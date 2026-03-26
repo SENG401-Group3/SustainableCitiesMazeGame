@@ -82,8 +82,7 @@ public class PlayerController : MonoBehaviour, Observer
         targetPosition.y = (float)invalidPos;
         return;
       }
-      float velocityScalar = Math.Abs((float)(-4*maxVel*curDist*(curDist-targetDistance)/(Math.Pow(targetDistance,2)))) + minVel;
-      velocityScalar += Math.Abs(startingVelocity * (targetDistance - curDist*2));
+      float velocityScalar = maxVel;
       velocity = velocityScalar*(mouseClickPosition - (Vector2)player.transform.position)/curDist;
 
       rb.linearVelocity = velocity;
