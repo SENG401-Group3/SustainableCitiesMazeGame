@@ -99,41 +99,11 @@ public class CityGameManager : MonoBehaviour
         // StartCoroutine(UpdateScore(points));
     }
 
-    /*
-   
-    // Coroutine to update score on remote server (currently disabled)
-   
-    private IEnumerator UpdateScore(int score)
-    {
-        Debug.Log("Sending score update...");
-
-        WWWForm form = new WWWForm();
-        form.AddField("username", DBManager.username);
-        form.AddField("points", score);
-
-        using (UnityWebRequest www = UnityWebRequest.Post("http://localhost/SQLConnect/updatescore.php", form))
-        {
-            yield return www.SendWebRequest();
-
-            Debug.Log("Server returned: " + www.downloadHandler.text);
-
-            if (www.result != UnityWebRequest.Result.Success)
-            {
-                Debug.LogError($"❌ Failed to update score: {www.error}");
-            }
-            else
-            {
-                Debug.Log($"✅ Score updated successfully on server: {score}");
-            }
-        }
-    }
-    */
-
     // Saves temporary progress for the current city to PlayerPrefs
     
     IEnumerator SaveProgress(int points)
     {
-
+        DBManager.currentScore += points;
         /*PlayerPrefs.SetInt($"City{currentCity}TempScore", sessionScore);
         PlayerPrefs.Save();
 
@@ -144,18 +114,23 @@ public class CityGameManager : MonoBehaviour
         {
             Debug.Log("city number on cycling: " + DBManager.cityNumber);
             DBManager.cityNumber = 1;
+
+            if (DBManager.currentScore > DBManager.highScore)
+            {
+                DBManager.highScore = DBManager.currentScore;
+            }
+
             DBManager.currentScore = 0;
         }
         else
         {
             Debug.Log("city number before increment: " + DBManager.cityNumber);
             DBManager.cityNumber += 1;
-            DBManager.currentScore += points;
-        }
 
-        if (DBManager.currentScore > DBManager.highScore)
-        {
-            DBManager.highScore = DBManager.currentScore;
+            if (DBManager.currentScore > DBManager.highScore)
+            {
+                DBManager.highScore = DBManager.currentScore;
+            }
         }
 
         WWWForm form = new WWWForm();

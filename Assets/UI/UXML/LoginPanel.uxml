@@ -7,7 +7,6 @@
             <ui:TextField label="password:" placeholder-text="Enter password" name="PasswordField" password="true" multiline="true" class="field" style="align-self: auto;"/>
             <ui:Toggle label="Show Password" name="ShowPasswordToggle" toggle-on-label-click="false" class="field" style="width: auto; max-width: none; align-self: stretch; font-size: 60%; min-width: 10%;"/>
             <ui:VisualElement name="ButtonBar" class="button-bar" style="flex-grow: 1; flex-direction: row; justify-content: center; height: auto; max-height: 20%; min-height: 20%; align-content: stretch;">
-                <ui:Button text="ForgotPassword?" name="ForgotPasswordButton"/>
                 <ui:Button text="Back to Home" name="BackButton"/>
                 <ui:Button text="Log back in" name="LoginButton"/>
             </ui:VisualElement>

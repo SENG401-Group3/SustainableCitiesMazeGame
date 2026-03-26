@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using System.Collections;
-using System.Collections.Generic;
+using UnityEngine.Networking;
 
 public class LeaderboardSceneController : MonoBehaviour
 {
@@ -16,9 +16,11 @@ public class LeaderboardSceneController : MonoBehaviour
     private Button backToMenuButton;
     private VisualElement loadingSpinner;
     private Label statusMessage;
+    private Label completeLabel;
+    private Label expertLabel;
 
     private int playerScore;
-    private string playerName = DBManager.LoggedIn ? DBManager.username : "";
+    private string playerName;
     private bool isSubmitting = false;
     private bool scoreSubmitted = false;
     private string[] playerNames;
@@ -28,6 +30,8 @@ public class LeaderboardSceneController : MonoBehaviour
     {
         root = GetComponent<UIDocument>().rootVisualElement;
 
+        //gameComplete = false;
+
         // Get UI elements
         leaderboardContainer = root.Q<VisualElement>("LeaderboardContainer");
         scoreList = root.Q<VisualElement>("ScoreList");
@@ -36,6 +40,12 @@ public class LeaderboardSceneController : MonoBehaviour
         backToMenuButton = root.Q<Button>("BackToMenuButton");
         loadingSpinner = root.Q<VisualElement>("LoadingSpinner");
         statusMessage = root.Q<Label>("StatusMessage");
+        completeLabel = root.Q<Label>("CompletionLabel");
+        expertLabel = root.Q<Label>("ExpertLabel");
+
+        //Hide labels until game complete
+        completeLabel.style.display = DisplayStyle.None;
+        expertLabel.style.display = DisplayStyle.None;
 
         // Get the final score with detailed debugging
         playerScore = PlayerPrefs.GetInt("TotalScore", 0);
@@ -93,6 +103,13 @@ public class LeaderboardSceneController : MonoBehaviour
         }
 
         // Animate the leaderboard entrance
+        playerName = DBManager.LoggedIn ? DBManager.username : "";
+
+        if(DBManager.gameComplete)
+        {
+            completeLabel.style.display = DisplayStyle.Flex;
+            expertLabel.style.display = DisplayStyle.Flex;
+        }
         UIAnimator.Instance.AnimateEntrance(leaderboardContainer);
     }
 
@@ -306,49 +323,6 @@ public class LeaderboardSceneController : MonoBehaviour
             index++;
         }
     }
-
-    /*IEnumerator AnimateSpinner()
-    {
-        float rotation = 0;
-        while (loadingSpinner != null && loadingSpinner.style.display == DisplayStyle.Flex)
-        {
-            rotation += 360 * Time.deltaTime;
-            loadingSpinner.style.rotate = new StyleRotate(new Rotate(Angle.Degrees(rotation % 360)));
-            yield return null;
-        }
-    }
-
-    IEnumerator AnimatePulseText()
-    {
-        float elapsed = 0;
-        while (statusMessage != null && statusMessage.style.display == DisplayStyle.Flex)
-        {
-            elapsed += Time.deltaTime;
-            float pulse = 1 + Mathf.Sin(elapsed * 8) * 0.05f;
-            statusMessage.style.scale = new StyleScale(new Scale(new Vector2(pulse, pulse)));
-            yield return null;
-        }
-    }
-
-    IEnumerator AnimateHighlight()
-    {
-        yield return new WaitForSeconds(0.1f);
-
-        var firstEntry = scoreList.ElementAt(0);
-        if (firstEntry != null)
-        {
-            // Pulse animation
-            float elapsed = 0;
-            while (elapsed < 1f)
-            {
-                elapsed += Time.deltaTime;
-                float pulse = 1 + Mathf.Sin(elapsed * 10) * 0.05f;
-                firstEntry.style.scale = new StyleScale(new Scale(new Vector2(pulse, pulse)));
-                yield return null;
-            }
-            firstEntry.style.scale = new StyleScale(new Scale(Vector2.one));
-        }
-    }*/
 
     void AddScoreEntry(string name, int score, int rank, bool highlight)
     {

@@ -100,7 +100,9 @@ public class ProfileManager : MonoBehaviour
 
                 namesLabel.text = "Full Name: " + data.firstname + " " + data.lastname + "\n"
                 + "Username: " + data.username;
-                scoreLabel.text = "Your Score: " + data.currentscore;
+                scoreLabel.text = "Current City: " + data.citynumber + "\n" +
+                "Your High Score: " + data.highscore + "\n" +
+                "Your Score: " + data.currentscore;
             }
         }
     }

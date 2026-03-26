@@ -35,9 +35,6 @@ public class LoginController : MonoBehaviour
         loginButton = root.Q<Button>("LoginButton");
         loginButton.clicked += OnLoginClicked;
 
-        forgotPasswordButton = root.Q<Button>("ForgotPasswordButton");
-        forgotPasswordButton.clicked += OnForgotPasswordClicked;
-
         // Retrieve the input fields
         usernameInput = root.Q<TextField>("UsernameField");
         successLabel = root.Q<Label>("SuccessStatement");
@@ -62,11 +59,6 @@ public class LoginController : MonoBehaviour
         usernameInput.value = "";
         passwordInput.value = "";
         uiManager.ShowWelcome();
-    }
-
-    private void OnForgotPasswordClicked()
-    {
-        uiManager.ShowResetPassword();
     }
 
     private void OnLoginClicked()

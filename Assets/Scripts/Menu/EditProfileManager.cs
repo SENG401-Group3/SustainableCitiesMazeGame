@@ -13,6 +13,7 @@ public class EditProfileManager : MonoBehaviour
     private TextField lastnameInput;
     private TextField usernameInput;
     private TextField passwordInput;
+    private TextField confirmPasswordInput;
     private Label successLabel;
     private Toggle passwordToggle;
     private Button backButton;
@@ -39,22 +40,31 @@ public class EditProfileManager : MonoBehaviour
         usernameInput = root.Q<TextField>("UsernameField");
 
         passwordInput = root.Q<TextField>("PasswordField");
+        confirmPasswordInput = root.Q<TextField>("ConfirmPasswordField");
         passwordToggle = root.Q<Toggle>("ShowPasswordToggle");
 
         successLabel = root.Q<Label>("SuccessStatement");
 
         // Set password field to masked initially
         passwordInput.isPasswordField = true;
+        confirmPasswordInput.isPasswordField = true;
 
         // Adding listener to toggle
         passwordToggle.RegisterValueChangedCallback(evt =>
         {
             passwordInput.isPasswordField = !evt.newValue; // true = masked, false = visible
+            confirmPasswordInput.isPasswordField = !evt.newValue;
         });
     }
 
     private void OnCancelClicked()
     {
+        firstnameInput.value = "";
+        lastnameInput.value = "";
+        usernameInput.value = "";
+        passwordInput.value = "";
+        confirmPasswordInput.value = "";
+
         gameUIManager.ShowProfile();
     }
 
@@ -96,9 +106,10 @@ public class EditProfileManager : MonoBehaviour
                     lastnameInput.value = "";
                     usernameInput.value = "";
                     passwordInput.value = "";
+                    confirmPasswordInput.value = "";
 
                     yield return new WaitForSeconds(1f);
-                    UnityEngine.SceneManagement.SceneManager.LoadScene(0); //load city selection menu
+                    UnityEngine.SceneManagement.SceneManager.LoadScene("UI"); //load city selection menu
                     successLabel.text = "";
                 }
                 else
@@ -119,36 +130,61 @@ public class EditProfileManager : MonoBehaviour
     public bool VerifyInputs()
     {
         // Placing constraints on input fields, such as length, special characters, and more
-        string firstname = firstnameInput.value.Trim();
-        string lastname = lastnameInput.value.Trim();
+        //string firstname = firstnameInput.value.Trim();
+        //string lastname = lastnameInput.value.Trim();
         string username = usernameInput.value.Trim();
         string password = passwordInput.value.Trim();
+        string confirmPassword = confirmPasswordInput.value.Trim();
 
-        if (string.IsNullOrEmpty(firstname) ||
+        /*if (string.IsNullOrEmpty(firstname) ||
         string.IsNullOrEmpty(lastname) ||
         string.IsNullOrEmpty(username) ||
         string.IsNullOrEmpty(password))
         {
             ShowError("All fields must be filled!");
             return false;
+        }*/
+
+        if (!string.IsNullOrEmpty(username))
+        {
+            if (username.Length < 6)
+            {
+                ShowError("Your username should be at least 6 characters long");
+                return false;
+            }
+
+            if (!Regex.IsMatch(username, @"^[a-zA-Z0-9_@!]+$"))
+            {
+                ShowError("Only letters, numbers, and a few special characters (_ @ !)");
+                return false;
+            }
         }
 
-        if (username.Length < 6 || password.Length < 8 || password.Length > 20)
+        if(!string.IsNullOrEmpty(password))
         {
-            ShowError("Your username should be at least 6 characters long and your password should be 8 - 20 charcters long.");
-            return false;
-        }
+            if(password.Length < 8 || password.Length > 20)
+            {
+                ShowError("Your password should be 8 - 20 charcters long.");
+                return false;
+            }
 
-        if (!Regex.IsMatch(username, @"^[a-zA-Z0-9_@!]+$"))
-        {
-            ShowError("Only letters, numbers, and a few special characters (_ @ !)");
-            return false;
-        }
+            if (!Regex.IsMatch(password, @"^(?=.*[A-Z])(?=.*[\W_]).+$"))
+            {
+                ShowError("Password must contain at least 1 uppercase letter and 1 special character");
+                return false;
+            }
 
-        if (!Regex.IsMatch(password, @"^(?=.*[A-Z])(?=.*[\W_]).+$"))
-        {
-            ShowError("Password must contain at least 1 uppercase letter and 1 special character");
-            return false;
+            if(string.IsNullOrEmpty(confirmPassword))
+            {
+                ShowError("Must confirm new Password!");
+                return false;
+            }
+
+            if(confirmPassword != password)
+            {
+                ShowError("Passwords must match!");
+                return false;
+            }
         }
 
         return true;

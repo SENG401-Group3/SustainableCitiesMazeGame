@@ -171,8 +171,12 @@ public class Registration : MonoBehaviour
                 Debug.Log("User created successfully.");
                 DBManager.username = usernameInput.text;
  
-                //successLabel.text = "Account created successfully!";
-                //successLabel.style.visibility = Visibility.Visible;
+                DBManager.firstname = firstnameInput.value;
+                DBManager.lastname = lastnameInput.value;
+                DBManager.username = usernameInput.value;
+                DBManager.highScore = 0;
+                DBManager.cityNumber = 1;
+                DBManager.currentScore = 0;
  
                 firstnameInput.value = "";
                 lastnameInput.value = "";
