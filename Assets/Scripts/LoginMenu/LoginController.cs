@@ -147,6 +147,7 @@ public class LoginController : MonoBehaviour
         }
     }
 
+    // helper class to parse user data from JSON response
     public class UserData
     {
         public string username;
@@ -157,10 +158,4 @@ public class LoginController : MonoBehaviour
         public int currentscore;
         public string error;
     }
-
-    
-    /*public void VerifyInputs()
-    {
-        // place constraints on username and password here, such as length, special characters, etc.
-    }*/
 }
