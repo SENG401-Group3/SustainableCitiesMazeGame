@@ -12,7 +12,6 @@ public class LeaderboardSceneController : MonoBehaviour
     private VisualElement leaderboardContainer;
     private VisualElement scoreList;
     private Button submitButton;
-    private Button retryButton;
     private Button backToMenuButton;
     private VisualElement loadingSpinner;
     private Label statusMessage;
@@ -36,7 +35,6 @@ public class LeaderboardSceneController : MonoBehaviour
         leaderboardContainer = root.Q<VisualElement>("LeaderboardContainer");
         scoreList = root.Q<VisualElement>("ScoreList");
         submitButton = root.Q<Button>("SubmitButton");
-        retryButton = root.Q<Button>("RetryButton");
         backToMenuButton = root.Q<Button>("BackToMenuButton");
         loadingSpinner = root.Q<VisualElement>("LoadingSpinner");
         statusMessage = root.Q<Label>("StatusMessage");
@@ -76,9 +74,6 @@ public class LeaderboardSceneController : MonoBehaviour
         if (submitButton != null)
             submitButton.clicked += OnSubmitClicked;
 
-        if (retryButton != null)
-            retryButton.clicked += OnRetryClicked;
-
         if (backToMenuButton != null)
             backToMenuButton.clicked += () => {
                 Debug.Log("🔴 Back to Menu button clicked - resetting game...");
@@ -92,7 +87,6 @@ public class LeaderboardSceneController : MonoBehaviour
             };
 
         // Hide elements initially
-        if (retryButton != null) retryButton.style.display = DisplayStyle.None;
         if (loadingSpinner != null) loadingSpinner.style.display = DisplayStyle.None;
         if (statusMessage != null) statusMessage.style.display = DisplayStyle.None;
 
@@ -162,16 +156,6 @@ public class LeaderboardSceneController : MonoBehaviour
         StartCoroutine(SubmitScoreRoutine());
     }
 
-    void OnRetryClicked()
-    {
-        if (isSubmitting) return;
-        Debug.Log("🔄 Retry button clicked");
-
-        // Hide retry button with animation
-        UIAnimator.Instance.FadeOutElement(retryButton, 0.2f);
-        StartCoroutine(SubmitScoreRoutine());
-    }
-
     IEnumerator SubmitScoreRoutine()
     {
         isSubmitting = true;
@@ -199,9 +183,11 @@ public class LeaderboardSceneController : MonoBehaviour
         // Simulate network delay (2 seconds)
         yield return UIAnimator.Instance.AnimateLoading(statusMessage, "Submitting score", 2f);
 
+        bool success = true;
+
         // Simulate success/failure (80% success rate)
-        bool success = Random.Range(0, 10) > 2;
-        Debug.Log($"📊 Submission result: {(success ? "SUCCESS" : "FAILURE")}");
+        //bool success = Random.Range(0, 10) > 2;
+        //Debug.Log($"📊 Submission result: {(success ? "SUCCESS" : "FAILURE")}");
 
         // Hide spinner
         if (loadingSpinner != null)
@@ -241,30 +227,6 @@ public class LeaderboardSceneController : MonoBehaviour
             {
                 submitButton.style.display = DisplayStyle.None;
             }
-        }
-        else
-        {
-            // FAILURE ANIMATION
-            Debug.Log("❌ Submission failed - showing retry option");
-
-            if (statusMessage != null)
-            {
-                statusMessage.text = "✗ SUBMISSION FAILED";
-                statusMessage.style.color = Color.red;
-
-                // Shake animation
-                UIAnimator.Instance.ShakeElement(statusMessage, 0.5f, 5f, 2f);
-            }
-
-            // Show retry button with pop animation
-            if (retryButton != null)
-            {
-                retryButton.style.display = DisplayStyle.Flex;
-                UIAnimator.Instance.AnimateEntrance(retryButton, 0.3f);
-            }
-
-            // Re-enable submit button for retry
-            if (submitButton != null) submitButton.SetEnabled(true);
         }
 
         isSubmitting = false;

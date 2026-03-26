@@ -9,7 +9,6 @@
             <ui:Label name="StatusMessage" text="" style="font-size: 18px; color: white; margin: 10px; display: none;"/>
             <ui:VisualElement name="ButtonBar" style="flex-grow: 1; max-width: 100%; max-height: 30%; align-content: stretch; justify-content: center; margin-top: 5%;">
                 <ui:Button name="SubmitButton" text="SUBMIT MY SCORE" class="unity-button" style="width: auto; height: auto; background-color: green; color: white; font-size: 20%; margin: 5px; max-width: none; max-height: none; min-width: 35%; min-height: 10%; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; flex-shrink: 0;"/>
-                <ui:Button name="RetryButton" text="RETRY" style="width: 200px; height: 50px; background-color: orange; color: white; font-size: 16px; margin: 5px; display: none; align-self: center;"/>
                 <ui:Button name="BackToMenuButton" text="BACK TO MENU" class="unity-button" style="width: auto; height: auto; background-color: gray; color: white; font-size: 20%; margin: 5px; max-width: none; min-width: 35%; min-height: 10%; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px;"/>
             </ui:VisualElement>
         </ui:VisualElement>
