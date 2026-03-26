@@ -36,7 +36,6 @@ public class PlayerController : MonoBehaviour, Observer
 
   private Vector2 targetPosition;
   private float targetDistance;
-  private float startingVelocity;
   private bool teleporting;
 
   Rigidbody2D rb;
@@ -82,9 +81,7 @@ public class PlayerController : MonoBehaviour, Observer
         targetPosition.y = (float)invalidPos;
         return;
       }
-      float velocityScalar = Math.Abs((float)(-4*maxVel*curDist*(curDist-targetDistance)/(Math.Pow(targetDistance,2)))) + minVel;
-      velocityScalar += Math.Abs(startingVelocity * (targetDistance - curDist*2));
-      velocity = velocityScalar*(mouseClickPosition - (Vector2)player.transform.position)/curDist;
+      velocity = maxVel*(mouseClickPosition - (Vector2)player.transform.position)/curDist;
 
       rb.linearVelocity = velocity;
     }
@@ -98,7 +95,6 @@ public class PlayerController : MonoBehaviour, Observer
           targetPosition.y = worldPos.y;
 
           // record the starting velocity so that clicking again doesnt slow down the character
-          startingVelocity = rb.linearVelocity.magnitude;
           targetDistance = Vector2.Distance(targetPosition, (Vector2)player.transform.position);
         }else if(worldPos.x >= 0 && worldPos.y >= 0){
           // make sure we are teleporting on an open tile
@@ -200,6 +196,7 @@ public class PlayerController : MonoBehaviour, Observer
     // Update is called once per frame
     void Update()
     {
+      timeslice = Time.deltaTime;
       handleInputs();
     }
 
