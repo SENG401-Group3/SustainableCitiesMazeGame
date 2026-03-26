@@ -5,7 +5,7 @@
             <ui:Label text="" name="PromptText" style="font-size: 30%; -unity-text-align: middle-center; margin-bottom: 10px; opacity: 0.9;"/>
             <ui:Label text="Question will appear here" name="QuestionText" style="font-size: 30%; -unity-text-align: middle-center; white-space: normal; font-weight: bold;"/>
         </ui:VisualElement>
-        <ui:VisualElement name="AnswerContainer" style="flex-grow: 1; align-items: center; max-height: 30%;">
+        <ui:VisualElement name="AnswerContainer" style="flex-grow: 1; align-items: center; max-height: 30%; margin-top: 100px;">
             <ui:Button text="Answer A" name="AnswerButton0" style="font-size: 35%; width: 30%; height: 20%; margin-bottom: 15px;"/>
             <ui:Button text="Answer B" name="AnswerButton1" style="color: rgb(255, 255, 255); display: flex; font-size: 35%; width: 30%; height: 20%; margin-bottom: 15px;"/>
             <ui:Button text="Answer C" name="AnswerButton2" style="font-size: 35%; width: 30%; height: 20%; margin-bottom: 15px;"/>
