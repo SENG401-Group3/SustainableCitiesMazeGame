@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
-using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -19,7 +18,7 @@ public class LeaderboardSceneController : MonoBehaviour
     private Label statusMessage;
 
     private int playerScore;
-    private string playerName = DBManager.LoggedIn ? DBManager.username : "Player";
+    private string playerName = DBManager.LoggedIn ? DBManager.username : "";
     private bool isSubmitting = false;
     private bool scoreSubmitted = false;
     private string[] playerNames;
@@ -74,7 +73,10 @@ public class LeaderboardSceneController : MonoBehaviour
             backToMenuButton.clicked += () => {
                 Debug.Log("🔴 Back to Menu button clicked - resetting game...");
                 // Reset everything for a new game
-                ResetGameForNewPlaythrough();
+                if(DBManager.username == "Guest")
+                {
+                    ResetGameForNewPlaythrough();
+                }
                 Debug.Log("🏁 Returning to main menu - reset to City 1");
                 SceneManager.LoadScene("CitySelection");
             };
@@ -155,23 +157,6 @@ public class LeaderboardSceneController : MonoBehaviour
 
     IEnumerator SubmitScoreRoutine()
     {
-        // if (DBManager.LoggedIn)
-        // {
-        //     Debug.Log($"📤 Submitting score for user: {DBManager.username} with score: {playerScore}");
-        // }
-        // else
-        // {
-        //     Debug.Log($"Sorry, you must be logged in to submit your score.");
-        //     if (statusMessage != null)
-        //     {
-        //         statusMessage.text = "Please log in to submit your score.";
-        //         statusMessage.style.color = Color.yellow;
-        //         UIAnimator.Instance.FadeInElement(statusMessage, 0.2f);
-        //         UIAnimator.Instance.PulseElement(statusMessage);
-        //     }
-        //     yield break;
-        // }
-
         isSubmitting = true;
         Debug.Log("⏳ Starting submission routine...");
 
@@ -223,7 +208,7 @@ public class LeaderboardSceneController : MonoBehaviour
             }
 
             // NOW show the leaderboard with the score
-            ShowLeaderboardWithScore();
+            yield return ShowLeaderboardWithScore();
 
             // Wait before hiding status
             yield return new WaitForSeconds(1.5f);
@@ -268,18 +253,19 @@ public class LeaderboardSceneController : MonoBehaviour
         isSubmitting = false;
     }
 
-    void ShowLeaderboardWithScore()
+    IEnumerator ShowLeaderboardWithScore()
     {
-        if (scoreList == null) return;
+        if (scoreList == null) yield break;
 
         Debug.Log($"📊 Showing leaderboard with score: {playerScore}");
 
-        StartCoroutine(FetchLeaderboardData());
+        yield return FetchLeaderboardData();
 
         // Show the score list
         scoreList.style.display = DisplayStyle.Flex;
         scoreList.Clear();
 
+        // Add player as #1 with HIGHLIGHT using the ACTUAL score
         int rank = 1;
 
         for (int i = 0; i < playerNames.Length && i < playerScores.Length; i++)
@@ -399,13 +385,19 @@ public class LeaderboardSceneController : MonoBehaviour
         var rankLabel = new Label(rank.ToString());
         rankLabel.style.width = 40;
         rankLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
+        rankLabel.style.color = highlight ? Color.green : Color.white;
 
         var nameLabel = new Label(name);
         nameLabel.style.width = 150;
+        nameLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
+        nameLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
+        nameLabel.style.color = highlight ? Color.green : Color.white;
 
         var scoreLabel = new Label(score.ToString());
         scoreLabel.style.width = 80;
         scoreLabel.style.unityTextAlign = TextAnchor.MiddleRight;
+        scoreLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
+        scoreLabel.style.color = highlight ? Color.green : Color.white;
 
         entry.Add(rankLabel);
         entry.Add(nameLabel);
@@ -428,11 +420,11 @@ public class LeaderboardSceneController : MonoBehaviour
                 Leaderboard leaderboard = JsonUtility.FromJson<Leaderboard>(request.downloadHandler.text);
                 Debug.Log($"Parsed leaderboard - Username: {leaderboard.username}, Highscore: {leaderboard.highscore}, Error: {leaderboard.error}");
 
-                if (leaderboard.error != null)
-                {
-                    Debug.LogError("Error in leaderboard response: " + leaderboard.error);
-                    yield break;
-                }
+                // if (leaderboard.error != null)
+                // {
+                //     Debug.LogError("Error in leaderboard response: " + leaderboard.error);
+                //     yield break;
+                // }
                 playerNames = leaderboard.username;
                 playerScores = leaderboard.highscore;
             }
