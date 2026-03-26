@@ -965,7 +965,7 @@ MonoBehaviour:
   timeslice: 0.1
   maxVel: 5
   minVel: 1
-  acceleration: 0.5
+  acceleration: 25
   velDecay: 1.1
   itemController: {fileID: 1989048485}
 --- !u!212 &1576454046
