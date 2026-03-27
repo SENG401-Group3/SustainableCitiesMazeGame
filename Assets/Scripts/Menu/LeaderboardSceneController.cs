@@ -3,7 +3,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using UnityEngine.Networking;
 using System.Collections;
-using UnityEngine.Networking;
 
 public class LeaderboardSceneController : MonoBehaviour
 {
