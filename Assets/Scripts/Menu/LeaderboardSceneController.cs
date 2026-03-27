@@ -83,6 +83,7 @@ public class LeaderboardSceneController : MonoBehaviour
                     ResetGameForNewPlaythrough();
                 }
                 Debug.Log("🏁 Returning to main menu - reset to City 1");
+                DBManager.gameComplete = false;
                 SceneManager.LoadScene("CitySelection");
             };
 

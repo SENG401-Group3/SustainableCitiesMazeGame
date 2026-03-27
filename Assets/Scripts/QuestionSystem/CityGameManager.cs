@@ -114,11 +114,12 @@ public class CityGameManager : MonoBehaviour
         {
             Debug.Log("city number on cycling: " + DBManager.cityNumber);
             DBManager.cityNumber = 1;
+            DBManager.highScore += DBManager.currentScore;
 
-            if (DBManager.currentScore > DBManager.highScore)
+            /*if (DBManager.currentScore > DBManager.highScore)
             {
                 DBManager.highScore = DBManager.currentScore;
-            }
+            }*/
 
             DBManager.currentScore = 0;
         }
@@ -127,10 +128,10 @@ public class CityGameManager : MonoBehaviour
             Debug.Log("city number before increment: " + DBManager.cityNumber);
             DBManager.cityNumber += 1;
 
-            if (DBManager.currentScore > DBManager.highScore)
+            /*if (DBManager.currentScore > DBManager.highScore)
             {
                 DBManager.highScore = DBManager.currentScore;
-            }
+            }*/
         }
 
         WWWForm form = new WWWForm();

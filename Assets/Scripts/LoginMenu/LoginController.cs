@@ -18,7 +18,6 @@ public class LoginController : MonoBehaviour
     private Toggle passwordToggle;
     private Button backButton;
     private Button loginButton;
-    private Button forgotPasswordButton;
 
     private void Awake()
     {
