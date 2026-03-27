@@ -30,6 +30,7 @@ public class HelperItem : Interactable
     if(sprites != null && safeIndex < sprites.Count && sprites[safeIndex] != null){
         GetComponent<SpriteRenderer>().sprite = sprites[safeIndex];
         GetComponent<Transform>().localScale = new Vector3(0.4f, 0.4f, 1f);
+        GetComponent<SpriteRenderer>().color = new Color(255, 255, 255);
     }
   }
 
