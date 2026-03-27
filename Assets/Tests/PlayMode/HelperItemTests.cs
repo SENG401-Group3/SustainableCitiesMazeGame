@@ -16,6 +16,7 @@ public class HelperItemTests
     {
         obj = new GameObject("HelperItem");
         helperItem = obj.AddComponent<HelperItem>();
+        obj.AddComponent<SpriteRenderer>();
 
         var messageObj = new GameObject("MessageHandler");
         messageHandler = messageObj.AddComponent<MessageHandler>();
