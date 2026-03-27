@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using Patterns;
 using UnityEngine.UI;
-using UnityEngine.UI;
 
 public class PlayerItemController : MonoBehaviour, Subject
 {

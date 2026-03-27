@@ -53,7 +53,7 @@ public class MainMenuController : MonoBehaviour
     private void OnGuestClicked()
     {
         DBManager.username = "Guest";
-        UnityEngine.SceneManagement.SceneManager.LoadScene("CitySelection");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Story");
     }
 
     private void OnAboutClicked()

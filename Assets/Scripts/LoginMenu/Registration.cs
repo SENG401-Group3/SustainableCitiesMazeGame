@@ -92,7 +92,7 @@ public class Registration : MonoBehaviour
         }
     }
  
-    public void CallRegister()
+    private void CallRegister()
     {
         Debug.Log("Call Register called!");
         StartCoroutine(Register());
