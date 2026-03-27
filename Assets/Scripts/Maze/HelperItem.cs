@@ -29,8 +29,12 @@ public class HelperItem : Interactable
     int safeIndex = (int)this.id;
     if(sprites != null && safeIndex < sprites.Count && sprites[safeIndex] != null){
         GetComponent<SpriteRenderer>().sprite = sprites[safeIndex];
-        GetComponent<Transform>().localScale = new Vector3(0.4f, 0.4f, 1f);
-        GetComponent<SpriteRenderer>().color = new Color(255, 255, 255);
+        if(id == (int)itemName.Teleport)
+          GetComponent<Transform>().localScale = new Vector3(0.2f, 0.3f, 1f);
+        else
+          GetComponent<Transform>().localScale = new Vector3(0.4f, 0.4f, 1f);
+    }else{
+        GetComponent<SpriteRenderer>().color = new Color(255, 255, 0, 255);
     }
   }
 
