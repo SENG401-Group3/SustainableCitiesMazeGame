@@ -30,6 +30,7 @@ public class QuestionManager : MonoBehaviour
     private bool questionCompleted = false;        // Whether question has been answered correctly
     private bool hasHint = false;                  // Whether player has collected a hint scroll
     private int DEFAULT_CITY = 1;
+    private int MAX_TIME = 500;
     /* Unity's Start method - initializes UI elements and loads the first question.*/
     public void Start()
     {
@@ -242,9 +243,8 @@ public class QuestionManager : MonoBehaviour
 
             // Award points based on attempt count (10, 5, or 3 points)
             int points = (attemptCount == 1) ? 10 : (attemptCount == 2 ? 5 : 3);
-            int time = PlayerPrefs.GetInt("Time");
-            Debug.Log(time);
-            points = (int)(Math.Exp(-0.000693841021582*time)*points); // adjust points based on time taken
+            int time = Math.Min(PlayerPrefs.GetInt("Time"), MAX_TIME);
+            points = (int)(Math.Exp(-0.6931471806/MAX_TIME*time)*points); // adjust points based on time taken, number is ln(2) just to fit the function
 
             Debug.Log($"✅ CORRECT! Awarding {points} points on attempt {attemptCount}");
 

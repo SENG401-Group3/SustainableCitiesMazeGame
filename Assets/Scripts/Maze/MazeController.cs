@@ -43,12 +43,12 @@ public class MazeController : MonoBehaviour
   private int wallThickness;
 
   private Wall[,] mazeWalls = null;
-  private Wall[,] boundaries = new Wall[2,2];
 
   public MazeGrid getMazeGrid(){
     return maze;
   }
 
+  // get the size of the wall tile in unity units for spawning calculations and such
   public Vector2 GetRoomSize(){
     SpriteRenderer[] spriteRenderers = wallPrefab.GetComponentsInChildren<SpriteRenderer>();
 
@@ -63,6 +63,7 @@ public class MazeController : MonoBehaviour
     return new Vector2(maxBounds.x - minBounds.x, maxBounds.y - minBounds.y);
   }
 
+  // set the zoom of the camera based on serialized field
   private void setCamera(){
     Vector2 dims = GetRoomSize();
 
@@ -70,6 +71,7 @@ public class MazeController : MonoBehaviour
     cam.SetCameraSize(minValue * 0.75f);
   }
 
+  // spawn all of the wall prefabs to construct the maze scene
   private void renderMaze(int[,] mazeGrid){
     Vector2 dims = GetRoomSize();
     for(int i = -wallThickness; i < mazeDimsX+wallThickness; i++){
@@ -87,6 +89,7 @@ public class MazeController : MonoBehaviour
     }
   }
 
+  // spawn the artifact in the maze
   private void spawnArtifact(){
     // create the artifact and get the interactable component
     GameObject artifact = Instantiate(art,
@@ -101,6 +104,7 @@ public class MazeController : MonoBehaviour
     interactable.spawn(new Vector2Int((int)(maxDist * 0.5), (int)(maxDist * 0.8)), maze, GetRoomSize());
   }
 
+  // spawn the helper items in teh maze
   private void spawnHelperItems(){
     // get the maximum distance found in the maze
     int maxDist = maze.getMaxDistance();

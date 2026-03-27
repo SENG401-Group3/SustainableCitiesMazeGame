@@ -111,6 +111,7 @@ public class MazeGrid : MonoBehaviour
     return spawnableTiles;
   }
 
+  // get the distance of the furthest tile in the maze
   public int getMaxDistance(){
     int maxDist = 0;
 

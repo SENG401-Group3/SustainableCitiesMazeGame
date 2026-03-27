@@ -19,10 +19,12 @@ public class PlayerItemController : MonoBehaviour, Subject
   // this one does
   private List<HelperItem.itemName> heldItems;  
 
+  // if the controller has tracked a player pickup for this item
   public bool hasItem(HelperItem.itemName id){
     return heldItems.Contains(id);
   }
 
+  // pickup and item
   public void collectItem(HelperItem.itemName id){
     heldItems.Add(id);
 
@@ -36,6 +38,7 @@ public class PlayerItemController : MonoBehaviour, Subject
     notifyObservers();
   }
 
+  // remove an item from the inventory
   public void useItem(HelperItem.itemName id){
     heldItems.Remove(id);
 
@@ -64,6 +67,7 @@ public class PlayerItemController : MonoBehaviour, Subject
     }
   }
 
+  // handle a telescope press, as the player controller doesnt care about the item
   public void onTelescopeClick(){
     useItem(HelperItem.itemName.Telescope);
   }

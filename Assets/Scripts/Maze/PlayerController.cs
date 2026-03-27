@@ -51,6 +51,7 @@ public class PlayerController : MonoBehaviour, Observer
     private Vector2  velocity;
     List<Directions> pressedDirections;
 
+    // given a set of keys pressed, acceleratre the player
     private void updateVelocity(List<Directions> pressedKeys){
       if(pressedKeys.Contains(Directions.DOWN))
         velocity.y -= acceleration*timeslice;
@@ -74,6 +75,7 @@ public class PlayerController : MonoBehaviour, Observer
       rb.linearVelocity = velocity;
     }
 
+    // accelerate the player given a click-to-go point
     private void updateVelocity(Vector2 mouseClickPosition){
       float curDist = Vector2.Distance(mouseClickPosition, (Vector2)player.transform.position);
       if(curDist < 1E-2){
@@ -86,6 +88,7 @@ public class PlayerController : MonoBehaviour, Observer
       rb.linearVelocity = velocity;
     }
   
+    // convert the screen click pos to a 2d pos in the scene
     private void handletouch(Vector3 clickPos){
         // ignore clicks on buttons
         Vector2 worldPos = Camera.main.ScreenToWorldPoint(clickPos);
@@ -115,6 +118,7 @@ public class PlayerController : MonoBehaviour, Observer
 
     }
 
+    // handle user clicks and keypresses
     private void handleInputs(){
       pressedDirections.Clear();
 
@@ -159,6 +163,7 @@ public class PlayerController : MonoBehaviour, Observer
         updateVelocity(pressedDirections);
     }
 
+    // observer method for when speed boosts or teleports are picked up
     public void notify(){
       // if notified, check if we have to update properties based on the items picked up
       // this works for the item pickup system
@@ -168,6 +173,7 @@ public class PlayerController : MonoBehaviour, Observer
       }
     }
 
+    // handle a teleport
     public void onTeleportClick(){
       if(!teleporting && itemController.hasItem(HelperItem.itemName.Teleport)){
         itemController.useItem(HelperItem.itemName.Teleport);

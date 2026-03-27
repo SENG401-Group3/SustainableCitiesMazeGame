@@ -13,9 +13,9 @@ public class HelperItem : Interactable
   [SerializeField]
   private List<Sprite> sprites;
 
-  // c# does weird things with accessors so these attributes have to be public
   private itemName id;
 
+  // has to be public for c# to hande the get/set properly for some reason
   public PlayerItemController itemController {get; set;} = null;
 
   public void setId(int id){
