@@ -59,7 +59,7 @@ public class Registration : MonoBehaviour
         }
  
         if (successLabel != null)
-            successLabel.style.visibility = Visibility.Hidden;
+            successLabel.style.display = DisplayStyle.None;
     }
  
     private void OnDisable()
@@ -169,7 +169,7 @@ public class Registration : MonoBehaviour
                 UIAnimator.Instance.PulseElement(successLabel);
                 
                 Debug.Log("User created successfully.");
-                DBManager.username = usernameInput.text;
+                //DBManager.username = usernameInput.text;
  
                 DBManager.firstname = firstnameInput.value;
                 DBManager.lastname = lastnameInput.value;
