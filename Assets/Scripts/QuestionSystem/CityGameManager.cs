@@ -103,6 +103,8 @@ public class CityGameManager : MonoBehaviour
     
     IEnumerator SaveProgress(int points)
     {
+        if (!Application.isPlaying) yield break;
+        
         DBManager.currentScore += points;
         /*PlayerPrefs.SetInt($"City{currentCity}TempScore", sessionScore);
         PlayerPrefs.Save();
