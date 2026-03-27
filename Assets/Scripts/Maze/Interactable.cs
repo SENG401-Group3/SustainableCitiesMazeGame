@@ -10,13 +10,16 @@ public abstract class Interactable : MonoBehaviour
   private Vector2 offset;
   protected bool collided = false;
   
+  // allows us to send a pickup or interaction message when the player collides
   public MessageHandler messageHandler = null;
+
   public void setMessageHandler(MessageHandler mh){
     messageHandler = mh;
   }
 
   public MessageHandler getMessageHandler() => messageHandler;
 
+  // spawn the interactable on a valid tile
   public void spawn(Vector2Int depth, MazeGrid tiles, Vector2 roomSize){
     // get a valid spawning tile from the maze grid
     List<Vector2Int> spawnableTiles = tiles.getSpawnableTiles(depth);

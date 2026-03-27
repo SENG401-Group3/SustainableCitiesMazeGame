@@ -8,12 +8,14 @@ public class Timer : MonoBehaviour
   [SerializeField]
   private int fontSize;
 
+  // unity fields
   private TextMeshProUGUI textComponent;
   RectTransform trans;
   private Transform parentCanvas;
   private Vector2 baseAnchorPosition;
 
   private float time;
+
   // Start is called once before the first execution of Update after the MonoBehaviour is created
   void Start()
   {

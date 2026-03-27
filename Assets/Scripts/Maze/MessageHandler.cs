@@ -9,8 +9,9 @@ public class MessageHandler : MonoBehaviour
   private float messageLifetimeSeconds;
   [SerializeField]
   private int fontSize;
-
   private Queue<string> messageQ;
+
+  // unity fields
   private TextMeshProUGUI textComponent;
   RectTransform trans;
   private Transform parentCanvas;
@@ -35,6 +36,7 @@ public class MessageHandler : MonoBehaviour
     updating = false;
   }
 
+  // creation of the acutal text object with some default string
   public TextMeshProUGUI CreateTextObject(string textString)
   {
     GameObject textGO = new GameObject("DynamicText");
@@ -55,6 +57,7 @@ public class MessageHandler : MonoBehaviour
     return textComponent;
   }
 
+  // add a message to the queue
   public void addMessage(string textString)
   {
     // add a message to the queue and reconstruct the text display
@@ -64,6 +67,7 @@ public class MessageHandler : MonoBehaviour
 
   public int getMessageCount() => messageQ.Count;
 
+  // create the actual string based on the messages we have
   private void constructTextDisplay(){
     if(textComponent == null) return;
     // create a copy of the queue and an empty message
@@ -79,6 +83,7 @@ public class MessageHandler : MonoBehaviour
     trans.anchoredPosition = baseAnchorPosition + new Vector2(0, (fontSize + 3) * messageQ.Count);
   }
 
+  // remove a message after it has been displayed for n seconds
   private void updateTextDisplay(){
     // dequeue a message
     messageQ.Dequeue();
