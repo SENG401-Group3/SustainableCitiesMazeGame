@@ -1,9 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.InputSystem;
 using System;
 
 /* Manages the question UI flow, including displaying questions,
@@ -17,7 +15,7 @@ public class QuestionManager : MonoBehaviour
     private VisualElement root;
 
     [Header("UI Elements")]
-    private Label promptText;        // The static prompt text (e.g., "The city is changing...")
+    //private Label promptText;        // The static prompt text (e.g., "The city is changing...")
     private Label questionText;       // The specific question text
     private Label feedbackText;       // Text showing correct/incorrect feedback
     private Label hintText;           // Text showing hint for the question
@@ -46,7 +44,7 @@ public class QuestionManager : MonoBehaviour
         root = document.rootVisualElement;
 
         // Find all UI elements by their names
-        promptText = root.Q<Label>("PromptText");
+        //promptText = root.Q<Label>("PromptText");
         questionText = root.Q<Label>("QuestionText");
         feedbackText = root.Q<Label>("FeedbackText");
         hintText = root.Q<Label>("HintText");
@@ -128,32 +126,7 @@ public class QuestionManager : MonoBehaviour
     /* Unity's Update method - handles debug input for testing.*/
     public void Update()
     {
-        // Debug: Press F8 to check button status
-        /*if (Keyboard.current != null && Keyboard.current.f8Key.wasPressedThisFrame)
-        {
-            if (continueButton != null)
-            {
-                Debug.Log($"🔍 Button display: {continueButton.style.display.value}");
-                Debug.Log($"🔍 Button enabled: {continueButton.enabledSelf}");
-            }
-        }
-
-        // Debug: Press F9 to simulate button click
-        if (Keyboard.current != null && Keyboard.current.f9Key.wasPressedThisFrame)
-        {
-            if (continueButton != null && continueButton.style.display.value == DisplayStyle.Flex)
-            {
-                Debug.Log("🟢 SIMULATING BUTTON CLICK");
-                OnContinueClicked();
-            }
-        }
-
-        // Debug: Press H to manually show hint (for testing)
-        if (Keyboard.current != null && Keyboard.current.hKey.wasPressedThisFrame && currentQuestion != null)
-        {
-            Debug.Log("🔧 Debug: Manually showing hint");
-            ShowHint();
-        }*/
+        
     }
 
 
@@ -186,6 +159,7 @@ public class QuestionManager : MonoBehaviour
         }else{
             if(DBManager.cityNumber == DEFAULT_CITY)
             {
+                DBManager.gameComplete = true;
                 SceneManager.LoadScene("LeaderboardScene");
                 DBManager.currentScore = 0;
             }

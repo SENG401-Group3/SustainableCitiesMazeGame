@@ -29,11 +29,11 @@ public class StoryController : MonoBehaviour
         Debug.Log(storyLabel);
         Debug.Log(typewriter);
 
-        string story = "Good day Mayor! We have been appointed to assist you in putting your knowledge of sustainable cities to the test. "+
-        "It is highly important that you get familiar with running a city, as the good people of Alberta need a new place to call home. "+
+        string story = "Good day Chief! We have been appointed to assist you in putting your knowledge of sustainable cities to the test. "+
+        "It is highly important that you get familiar with running a city, as the good people of Alberta need a new place to call home. "+ "\n\n" +
         "To guide your journey, you must explore ancient mazes left behind by a past civilization. "+
-        "Within these mazes lie hidden artifacts and knowledge about sustainability that will help you build a thriving and resilient city. "+
-        "You will navigate these paths and solve real-world challenges that could arise in your city. Good luck, Mayor, and may the odds be ever in your favour. \n\n"+
+        "Within these mazes lie hidden artifacts and knowledge about sustainability that will help you build a thriving and resilient city. "+ "\n\n" +
+        "You will navigate these paths and solve real-world challenges that could arise in your city. Good luck, Chief, and may the odds be ever in your favour. \n\n"+
         "Click Next to get started..."; // add something to point towards sustainability goals about the city failing
 
         typewriter.StartTyping(storyLabel, story, () =>

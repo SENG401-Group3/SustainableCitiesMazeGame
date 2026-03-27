@@ -7,10 +7,11 @@
             <ui:TextField label="last name:" placeholder-text="Enter last name" name="LastNameField" multiline="true" class="field" style="flex-shrink: 0; align-self: auto;"/>
             <ui:TextField label="username:" placeholder-text="Enter username" name="UsernameField" multiline="true" emoji-fallback-support="true" class="unity-text-field__input field" style="align-self: auto;"/>
             <ui:TextField label="password:" placeholder-text="Enter password" name="PasswordField" password="true" multiline="true" class="field" style="align-self: auto;"/>
+            <ui:TextField label="confirm password:" placeholder-text="Confirm password" name="ConfirmPasswordField" password="true" multiline="true" readonly="false" class="field" style="align-self: auto;"/>
             <ui:Toggle label="Show Password" name="ShowPasswordToggle" toggle-on-label-click="false" class="field" style="width: auto; max-width: 40%; align-self: auto; font-size: 45%; min-height: auto; max-height: 10%; margin-top: 7px; margin-bottom: 7px;"/>
             <ui:VisualElement name="ButtonBar" class="button-bar" style="flex-grow: 1; flex-direction: row; justify-content: center; width: auto; height: auto; max-height: 20%; min-height: 20%;">
                 <ui:Button text="Cancel" name="CancelButton"/>
-                <ui:Button text="Edit" name="EditButton"/>
+                <ui:Button text="Save" name="EditButton"/>
             </ui:VisualElement>
             <ui:Label text="Your profile has been updated" name="SuccessStatement" triple-click-selects-line="false" style="font-size: 30%; align-content: flex-start; align-self: center; color: rgb(255, 228, 181); visibility: hidden;"/>
         </ui:VisualElement>

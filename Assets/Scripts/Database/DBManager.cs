@@ -12,6 +12,7 @@ public static class DBManager
     public static int highScore;
     public static int cityNumber;
     public static int currentScore;
+    public static bool gameComplete;
     public static bool LoggedIn { get {return username != null;}}
     public static IEnumerator LogOut()
     {

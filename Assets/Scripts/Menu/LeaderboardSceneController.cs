@@ -3,7 +3,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using UnityEngine.Networking;
 using System.Collections;
-using System.Collections.Generic;
 
 public class LeaderboardSceneController : MonoBehaviour
 {
@@ -13,13 +12,14 @@ public class LeaderboardSceneController : MonoBehaviour
     private VisualElement leaderboardContainer;
     private VisualElement scoreList;
     private Button submitButton;
-    private Button retryButton;
     private Button backToMenuButton;
     private VisualElement loadingSpinner;
     private Label statusMessage;
+    private Label completeLabel;
+    private Label expertLabel;
 
     private int playerScore;
-    private string playerName = DBManager.LoggedIn ? DBManager.username : "";
+    private string playerName;
     private bool isSubmitting = false;
     private bool scoreSubmitted = false;
     private string[] playerNames;
@@ -29,14 +29,21 @@ public class LeaderboardSceneController : MonoBehaviour
     {
         root = GetComponent<UIDocument>().rootVisualElement;
 
+        //gameComplete = false;
+
         // Get UI elements
         leaderboardContainer = root.Q<VisualElement>("LeaderboardContainer");
         scoreList = root.Q<VisualElement>("ScoreList");
         submitButton = root.Q<Button>("SubmitButton");
-        retryButton = root.Q<Button>("RetryButton");
         backToMenuButton = root.Q<Button>("BackToMenuButton");
         loadingSpinner = root.Q<VisualElement>("LoadingSpinner");
         statusMessage = root.Q<Label>("StatusMessage");
+        completeLabel = root.Q<Label>("CompletionLabel");
+        expertLabel = root.Q<Label>("ExpertLabel");
+
+        //Hide labels until game complete
+        completeLabel.style.display = DisplayStyle.None;
+        expertLabel.style.display = DisplayStyle.None;
 
         // Get the final score with detailed debugging
         playerScore = PlayerPrefs.GetInt("TotalScore", 0);
@@ -67,9 +74,6 @@ public class LeaderboardSceneController : MonoBehaviour
         if (submitButton != null)
             submitButton.clicked += OnSubmitClicked;
 
-        if (retryButton != null)
-            retryButton.clicked += OnRetryClicked;
-
         if (backToMenuButton != null)
             backToMenuButton.clicked += () => {
                 Debug.Log("🔴 Back to Menu button clicked - resetting game...");
@@ -83,7 +87,6 @@ public class LeaderboardSceneController : MonoBehaviour
             };
 
         // Hide elements initially
-        if (retryButton != null) retryButton.style.display = DisplayStyle.None;
         if (loadingSpinner != null) loadingSpinner.style.display = DisplayStyle.None;
         if (statusMessage != null) statusMessage.style.display = DisplayStyle.None;
 
@@ -94,6 +97,13 @@ public class LeaderboardSceneController : MonoBehaviour
         }
 
         // Animate the leaderboard entrance
+        playerName = DBManager.LoggedIn ? DBManager.username : "";
+
+        if(DBManager.gameComplete)
+        {
+            completeLabel.style.display = DisplayStyle.Flex;
+            expertLabel.style.display = DisplayStyle.Flex;
+        }
         UIAnimator.Instance.AnimateEntrance(leaderboardContainer);
     }
 
@@ -146,16 +156,6 @@ public class LeaderboardSceneController : MonoBehaviour
         StartCoroutine(SubmitScoreRoutine());
     }
 
-    void OnRetryClicked()
-    {
-        if (isSubmitting) return;
-        Debug.Log("🔄 Retry button clicked");
-
-        // Hide retry button with animation
-        UIAnimator.Instance.FadeOutElement(retryButton, 0.2f);
-        StartCoroutine(SubmitScoreRoutine());
-    }
-
     IEnumerator SubmitScoreRoutine()
     {
         isSubmitting = true;
@@ -183,9 +183,11 @@ public class LeaderboardSceneController : MonoBehaviour
         // Simulate network delay (2 seconds)
         yield return UIAnimator.Instance.AnimateLoading(statusMessage, "Submitting score", 2f);
 
+        bool success = true;
+
         // Simulate success/failure (80% success rate)
-        bool success = Random.Range(0, 10) > 2;
-        Debug.Log($"📊 Submission result: {(success ? "SUCCESS" : "FAILURE")}");
+        //bool success = Random.Range(0, 10) > 2;
+        //Debug.Log($"📊 Submission result: {(success ? "SUCCESS" : "FAILURE")}");
 
         // Hide spinner
         if (loadingSpinner != null)
@@ -225,30 +227,6 @@ public class LeaderboardSceneController : MonoBehaviour
             {
                 submitButton.style.display = DisplayStyle.None;
             }
-        }
-        else
-        {
-            // FAILURE ANIMATION
-            Debug.Log("❌ Submission failed - showing retry option");
-
-            if (statusMessage != null)
-            {
-                statusMessage.text = "✗ SUBMISSION FAILED";
-                statusMessage.style.color = Color.red;
-
-                // Shake animation
-                UIAnimator.Instance.ShakeElement(statusMessage, 0.5f, 5f, 2f);
-            }
-
-            // Show retry button with pop animation
-            if (retryButton != null)
-            {
-                retryButton.style.display = DisplayStyle.Flex;
-                UIAnimator.Instance.AnimateEntrance(retryButton, 0.3f);
-            }
-
-            // Re-enable submit button for retry
-            if (submitButton != null) submitButton.SetEnabled(true);
         }
 
         isSubmitting = false;
@@ -307,49 +285,6 @@ public class LeaderboardSceneController : MonoBehaviour
             index++;
         }
     }
-
-    /*IEnumerator AnimateSpinner()
-    {
-        float rotation = 0;
-        while (loadingSpinner != null && loadingSpinner.style.display == DisplayStyle.Flex)
-        {
-            rotation += 360 * Time.deltaTime;
-            loadingSpinner.style.rotate = new StyleRotate(new Rotate(Angle.Degrees(rotation % 360)));
-            yield return null;
-        }
-    }
-
-    IEnumerator AnimatePulseText()
-    {
-        float elapsed = 0;
-        while (statusMessage != null && statusMessage.style.display == DisplayStyle.Flex)
-        {
-            elapsed += Time.deltaTime;
-            float pulse = 1 + Mathf.Sin(elapsed * 8) * 0.05f;
-            statusMessage.style.scale = new StyleScale(new Scale(new Vector2(pulse, pulse)));
-            yield return null;
-        }
-    }
-
-    IEnumerator AnimateHighlight()
-    {
-        yield return new WaitForSeconds(0.1f);
-
-        var firstEntry = scoreList.ElementAt(0);
-        if (firstEntry != null)
-        {
-            // Pulse animation
-            float elapsed = 0;
-            while (elapsed < 1f)
-            {
-                elapsed += Time.deltaTime;
-                float pulse = 1 + Mathf.Sin(elapsed * 10) * 0.05f;
-                firstEntry.style.scale = new StyleScale(new Scale(new Vector2(pulse, pulse)));
-                yield return null;
-            }
-            firstEntry.style.scale = new StyleScale(new Scale(Vector2.one));
-        }
-    }*/
 
     void AddScoreEntry(string name, int score, int rank, bool highlight)
     {

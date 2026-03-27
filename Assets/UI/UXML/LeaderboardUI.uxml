@@ -2,13 +2,13 @@
     <Style src="project://database/Assets/UI/USS/leaderboard.uss?fileID=7433441132597879392&amp;guid=660070899ceb8874585aa640f2409664&amp;type=3#leaderboard"/>
     <ui:VisualElement name="Panel" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.9); align-items: center; justify-content: center;">
         <ui:VisualElement name="LeaderboardContainer" style="width: 60%; background-color: rgba(30, 30, 30, 0.95); border-radius: 20px; padding: 30px; align-items: center; height: auto;">
-            <ui:Label text="🏆 GAME COMPLETE! 🏆" name="CompletionLabel" style="font-size: 36%; color: gold; margin-bottom: 20px; -unity-text-align: middle-center;"/>
+            <ui:Label text="🏆 GAME COMPLETE! 🏆" name="CompletionLabel" style="font-size: 20px; color: gold; margin-bottom: 8px; -unity-text-align: middle-center;"/>
+            <ui:Label text="YOU HAVE NOW COMPLETED THE TRAINING AND HAVE BECOME A SUSTAINABILITY EXPERT!" name="ExpertLabel" style="font-size: 20px; color: gold; margin-bottom: 25px; -unity-text-align: middle-center; white-space: normal; padding-left: 20px; padding-right: 20px;"/>
             <ui:VisualElement name="ScoreList" style="width: 100%; margin-bottom: 20px;"/>
             <ui:VisualElement name="LoadingSpinner" style="width: 50px; height: 50px; background-color: white; border-radius: 25px; margin: 20px; display: none;"/>
             <ui:Label name="StatusMessage" text="" style="font-size: 18px; color: white; margin: 10px; display: none;"/>
             <ui:VisualElement name="ButtonBar" style="flex-grow: 1; max-width: 100%; max-height: 30%; align-content: stretch; justify-content: center; margin-top: 5%;">
                 <ui:Button name="SubmitButton" text="SUBMIT MY SCORE" class="unity-button" style="width: auto; height: auto; background-color: green; color: white; font-size: 20%; margin: 5px; max-width: none; max-height: none; min-width: 35%; min-height: 10%; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; flex-shrink: 0;"/>
-                <ui:Button name="RetryButton" text="RETRY" style="width: 200px; height: 50px; background-color: orange; color: white; font-size: 16px; margin: 5px; display: none; align-self: center;"/>
                 <ui:Button name="BackToMenuButton" text="BACK TO MENU" class="unity-button" style="width: auto; height: auto; background-color: gray; color: white; font-size: 20%; margin: 5px; max-width: none; min-width: 35%; min-height: 10%; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px;"/>
             </ui:VisualElement>
         </ui:VisualElement>
