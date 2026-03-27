@@ -247,7 +247,10 @@ public class LeaderboardSceneController : MonoBehaviour
         // Add player as #1 with HIGHLIGHT using the ACTUAL score
         int rank = 1;
 
-        for (int i = 0; i < playerNames.Length && i < playerScores.Length; i++)
+        // Max number of players to display
+        int max_players = (playerNames.Length < 10) ? playerNames.Length : 10;
+
+        for (int i = 0; i < max_players; i++)
         {
             if (playerNames[i] == playerName)
             {
