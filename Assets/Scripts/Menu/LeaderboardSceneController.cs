@@ -175,14 +175,14 @@ public class LeaderboardSceneController : MonoBehaviour
         // Show status message
         if (statusMessage != null)
         {
-            statusMessage.text = "Submitting score...";
+            statusMessage.text = "Loading scores...";
             statusMessage.style.color = Color.white;
             UIAnimator.Instance.FadeInElement(statusMessage, 0.2f);
             UIAnimator.Instance.PulseElement(statusMessage);
         }
 
         // Simulate network delay (2 seconds)
-        yield return UIAnimator.Instance.AnimateLoading(statusMessage, "Submitting score", 2f);
+        yield return UIAnimator.Instance.AnimateLoading(statusMessage, "Loading scores", 2f);
 
         bool success = true;
 
@@ -204,7 +204,7 @@ public class LeaderboardSceneController : MonoBehaviour
 
             if (statusMessage != null)
             {
-                statusMessage.text = "✓ SCORE SUBMITTED!";
+                statusMessage.text = "✓ SCORES LOADED!";
                 statusMessage.style.color = Color.green;
 
                 // Pop animation
